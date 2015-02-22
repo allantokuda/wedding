@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="build/bootstrap.min.css">
+<script src="build/react.js"></script>
+<script src="build/JSXTransformer.js"></script>
+<script src="person.jsx" type="text/jsx"></script>
+<script src="invitation.jsx" type="text/jsx"></script>
+</head>
+<body>
+
+<div class="description panel">
+  <div class="panel-body">
+  You are invited to Stacy and Allan's wedding!
+  <p>Sunday, May 24 (day before Memorial Day)</p>
+  </div>
+</div>
+
+  <div id="example"></div>
+  <script type="text/jsx">
+
+    var match,
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function(s) { return decodeURIComponent(s.replace(/\+/g, " ")); },
+        query  = window.location.search.substring(1),
+        params = {};
+
+    while (match = search.exec(query))
+       params[decode(match[1])] = decode(match[2]);
+
+    people = params['people'].split(',');
+
+    React.render(<Invitation names={people} />, document.getElementById('example'));
+  </script>
+
+<div class="rsvp">
+  <a class="btn btn-lg btn-default" href="mailto:praetis@gmail.com?subject=Stacy%20and%20Allan%20wedding&body=Yes, we gladly accept your invitation!%0D%0A%0D%0ADietary restrictions:">RSVP</a>
+</div>
+
+</body>
+</html>
+
