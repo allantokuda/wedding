@@ -2,12 +2,19 @@ body {
   text-align: center;
   background: url('DSC_4485.JPG');
   background-position: 30% 20%;
+  padding-top: 350px;
+  padding-bottom: 100px;
 }
-div.description { text-align: center; margin-top: 350px; }
+div.description { text-align: center; }
 div.person { text-align: left; }
 
-div.panel {  max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.7; }
+div.panel { max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.7; }
 h3 { margin-top: 0px; }
 
 div.response { text-align: left; }
 div.rsvp { text-align: center; }
+
+/* http://stackoverflow.com/a/14942294 */
+/* Add some space between input and label, and ensure label stays inside a box */
+label input { float: left; }
+label span { display: block; margin-left: 1.5em; font-weight: normal; }
