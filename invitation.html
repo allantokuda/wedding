@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="build/bootstrap.min.css">
-<script src="build/react.js"></script>
-<script src="build/JSXTransformer.js"></script>
-<script src="person.jsx" type="text/jsx"></script>
-<script src="invitation.jsx" type="text/jsx"></script>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="build/bootstrap.min.css">
+  <script src="build/react.js"></script>
+  <script src="build/JSXTransformer.js"></script>
+  <script src="person.jsx" type="text/jsx"></script>
+  <script src="invitation.jsx" type="text/jsx"></script>
 </head>
 <body>
 
-<div class="description panel">
-  <div class="panel-body">
-    <h1>You're invited</h1>
-    <p>to Stacy and Allan's wedding reception!</p>
+  <div class="description panel">
+    <div class="panel-body">
+      <h1>You're invited</h1>
+      <p>to Stacy and Allan's wedding reception!</p>
 
-    <p>Sunday, May 24 (day before Memorial Day)</p>
+      <p>Sunday, May 24 (day before Memorial Day)</p>
 
-    <p>4:00pm</p>
+      <p>4:00pm</p>
 
-    <p>Theodore Wirth Park Pavilion
-    (<a href="https://www.google.com/maps/dir//3275 Glenwood Ave, Minneapolis, MN 55405/">Map</a>)
-    (<a href="http://www.minneapolisparks.org/default.asp?PageID=554">Website</a>)
-    </p>
+      <p>Theodore Wirth Park Pavilion
+      (<a href="https://www.google.com/maps/dir//3275 Glenwood Ave, Minneapolis, MN 55405/">Map</a>)
+      (<a href="http://www.minneapolisparks.org/default.asp?PageID=554">Website</a>)
+      </p>
 
+    </div>
   </div>
-</div>
 
-  <div id="example"></div>
+  <form id="main-form"></form>
+
   <script type="text/jsx">
 
     var match,
@@ -42,13 +43,12 @@
 
     people = params['people'].split(',');
 
-    React.render(<Invitation names={people} />, document.getElementById('example'));
+    React.render(<Invitation names={people} />, document.getElementById('main-form'));
   </script>
 
-<div class="rsvp">
-  <a class="btn btn-lg btn-default" href="mailto:praetis@gmail.com?subject=Stacy%20and%20Allan%20wedding&body=Yes, we gladly accept your invitation!%0D%0A%0D%0ADietary restrictions:">RSVP</a>
-</div>
+  <div class="rsvp">
+    <a class="btn btn-lg btn-default" href="mailto:praetis@gmail.com?subject=Stacy%20and%20Allan%20wedding&body=Yes, we gladly accept your invitation!%0D%0A%0D%0ADietary restrictions:">RSVP</a>
+  </div>
 
 </body>
 </html>
-
