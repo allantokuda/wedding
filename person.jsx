@@ -1,10 +1,11 @@
 var Person = React.createClass({
   getInitialState: function() {
-    return { accept: undefined, drinks: false, comments: "" }
+    return null;
   },
 
-  yes: function() { this.setState({ accept: true  }); },
-  no:  function() { this.setState({ accept: false }); },
+  yes: function() { this.props.changeCallback(this.props.personNumber, 'accept', true ); },
+  no:  function() { this.props.changeCallback(this.props.personNumber, 'accept', false ); },
+  drinks: function(e) { console.log(this.refs.drinks); this.props.changeCallback(this.props.personNumber, 'drinks', e ); },
 
   render: function() {
     return (
@@ -12,7 +13,7 @@ var Person = React.createClass({
         <div className="panel-body">
           <div className="row">
             <div className="name col-sm-4">
-              <h3>{ this.props.name }</h3>
+              <input value={ this.props.name }></input>
             </div>
             <div className="response col-sm-4">
               <label>
@@ -27,7 +28,7 @@ var Person = React.createClass({
             <div className="response col-sm-4">
               <br />
               <label>
-                <input type="checkbox" name={ "late" + this.props.personNumber } value="yes" />
+                <input type="checkbox" name={ "late" + this.props.personNumber } ref="drinks" onChange={ this.drinks } value="yes" defaultChecked="no" />
                 <span>Will join for drinks after reception</span>
               </label><br />
             </div>
