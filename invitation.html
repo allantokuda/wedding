@@ -7,6 +7,7 @@
   <script src="build/react.js"></script>
   <script src="build/JSXTransformer.js"></script>
   <script src="build/firebase.js"></script>
+  <script src="config.js" type="text/jsx"></script>
   <script src="person.jsx" type="text/jsx"></script>
   <script src="invitation.jsx" type="text/jsx"></script>
 </head>
@@ -41,9 +42,7 @@
     while (match = search.exec(query))
        params[decode(match[1])] = decode(match[2]);
 
-    people = params['people'].split(',');
-
-    React.render(<Invitation names={people} />, document.getElementById('main-form'));
+    React.render(<Invitation id={params.inviteId} />, document.getElementById('main-form'));
   </script>
 
 </body>

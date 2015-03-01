@@ -19,12 +19,13 @@ var Guestbook = React.createClass({
   },
 
   render: function() {
-    var result = [];
-
-    console.log(this.state);
-    console.log(_.each);
     var result = _.map(this.state.items, function(item, inviteId) {
-      var emailLink = <a href={ "mailto:" + item.email + "?body=" + inviteId }>{ item.email }</a>
+      var inviteLink = window.siteLocation + "invitation.html?inviteId=" + inviteId
+      // TODO remove 'disabled-' later when ready
+      var emailLink = "mailto:disabled-" + item.email + "?subject=" + window.emailSubject + "&body=" + inviteLink
+
+      var emailTag = <a href={emailLink}>{ item.email }</a>
+      var inviteTag = <a href={inviteLink}>Invitation</a>
 
       people = _.map(item.people, function(person, i) {
         return (
@@ -32,7 +33,8 @@ var Guestbook = React.createClass({
             <td>{ person.name || '+1' }</td>
             <td>{ person.accept || '-' }</td>
             <td>{ person.drinks || '-' }</td>
-            <td>{ i == 0 ? emailLink : null }</td>
+            <td>{ i == 0 ? emailTag : null }</td>
+            <td>{ i == 0 ? inviteTag : null }</td>
           </tr>
         );
       });
@@ -46,6 +48,8 @@ var Guestbook = React.createClass({
           <th>Name</th>
           <th>Accept?</th>
           <th>Drinks?</th>
+          <th>Invitation email</th>
+          <th>Invitation</th>
         </thead>
         <tbody>
           { result }

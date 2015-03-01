@@ -1,34 +1,17 @@
 var Invitation = React.createClass({
   getInitialState: function() {
-    var match,
-        search = /([^&=]+)=?([^&]*)/g,
-        decode = function(s) { return decodeURIComponent(s.replace(/\+/g, " ")); },
-        query  = window.location.search.substring(1),
-        params = {};
-
-    while (match = search.exec(query))
-       params[decode(match[1])] = decode(match[2]);
-
-    return { inviteId: params['inviteId'] };
+    return { people: [] };
   },
 
   componentWillMount: function() {
-    this.firebaseRef = new Firebase(window.firebaseLocation);
-    this.firebaseRef.on("child_changed", function(dataSnapshot) {
-      console.log(dataSnapshot.val());
-      this.items.push(dataSnapshot.val());
-      this.setState({
-        items: this.items
-      });
+    this.firebaseRef = new Firebase(window.firebaseLocation + this.props.id);
+    this.firebaseRef.on("value", function(dataSnapshot) {
+      this.setState(dataSnapshot.val());
     }.bind(this));
   },
 
   componentWillUnmount: function() {
     this.firebaseRef.off();
-  },
-
-  go: function() {
-    console.log(this.state.people[0], this.state.people[1]);
   },
 
   render: function() {
@@ -50,9 +33,8 @@ var Invitation = React.createClass({
     return (
       <div className="invitation">
         {peopleSections}
-        <a href="#" onClick={this.go}>Test</a>
         <div className="rsvp">
-          <a className="btn btn-lg btn-default" href="mailto:praetis@gmail.com?subject=Stacy%20and%20Allan%20wedding&body=Yes, we gladly accept your invitation!%0D%0A%0D%0ADietary restrictions:">RSVP</a>
+          <a className="btn btn-lg btn-default" href="">RSVP</a>
         </div>
       </div>
     );

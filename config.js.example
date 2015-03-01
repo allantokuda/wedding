@@ -1,1 +1,3 @@
 window.firebaseLocation="https://your-firebase-address.firebaseio.com/"
+window.siteLocation="http://your-static-host.com/path/to/project"
+window.emailSubject="Allan and Stacy's wedding invitation"
