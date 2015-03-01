@@ -1,6 +1,6 @@
 var Invitation = React.createClass({
   getInitialState: function() {
-    return { people: [] };
+    return { };
   },
 
   componentWillMount: function() {
@@ -16,27 +16,32 @@ var Invitation = React.createClass({
 
   render: function() {
     console.log(this.state);
-    updatePerson = function(personNumber, attribute, value) {
-      var updatedPeople = this.state.people.slice();
-      updatedPeople[personNumber][attribute] = value;
-      this.setState({ people: updatedPeople });
-    }.bind(this);
+    if (this.state.people) {
+      updatePerson = function(personNumber, attribute, value) {
+        var updatedPeople = this.state.people.slice();
+        updatedPeople[personNumber][attribute] = value;
+        this.setState({ people: updatedPeople });
+      }.bind(this);
 
-    peopleSections = this.state.people.map(function(person, i) {
+      peopleSections = this.state.people.map(function(person, i) {
+        return (
+          <div>
+            <Person key={i} personNumber={i} name={person.name} changeCallback={this.updatePerson} />;
+          </div>
+        );
+      });
+
       return (
-        <div>
-          <Person key={i} personNumber={i} name={person.name} changeCallback={this.updatePerson} />;
+        <div className="invitation">
+          {peopleSections}
+          <div className="rsvp">
+            <a className="btn btn-lg btn-default" href="#">RSVP</a>
+          </div>
         </div>
       );
-    });
+    } else {
+      return null;
+    }
 
-    return (
-      <div className="invitation">
-        {peopleSections}
-        <div className="rsvp">
-          <a className="btn btn-lg btn-default" href="">RSVP</a>
-        </div>
-      </div>
-    );
   }
 });
