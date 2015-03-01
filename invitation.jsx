@@ -9,11 +9,22 @@ var Invitation = React.createClass({
     while (match = search.exec(query))
        params[decode(match[1])] = decode(match[2]);
 
-    var people = params['people'].split(',').map(function(name) {
-      return { name: name, accept: null, drinks: null };
-    });
+    return { inviteId: params['inviteId'] };
+  },
 
-    return { people: people };
+  componentWillMount: function() {
+    this.firebaseRef = new Firebase(window.firebaseLocation);
+    this.firebaseRef.on("child_changed", function(dataSnapshot) {
+      console.log(dataSnapshot.val());
+      this.items.push(dataSnapshot.val());
+      this.setState({
+        items: this.items
+      });
+    }.bind(this));
+  },
+
+  componentWillUnmount: function() {
+    this.firebaseRef.off();
   },
 
   go: function() {
@@ -21,6 +32,7 @@ var Invitation = React.createClass({
   },
 
   render: function() {
+    console.log(this.state);
     updatePerson = function(personNumber, attribute, value) {
       var updatedPeople = this.state.people.slice();
       updatedPeople[personNumber][attribute] = value;

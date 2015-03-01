@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="build/bootstrap.min.css">
   <script src="build/react.js"></script>
   <script src="build/JSXTransformer.js"></script>
+  <script src="build/firebase.js"></script>
   <script src="person.jsx" type="text/jsx"></script>
   <script src="invitation.jsx" type="text/jsx"></script>
 </head>
@@ -31,7 +32,6 @@
   <form id="main-form"></form>
 
   <script type="text/jsx">
-
     var match,
         search = /([^&=]+)=?([^&]*)/g,
         decode = function(s) { return decodeURIComponent(s.replace(/\+/g, " ")); },

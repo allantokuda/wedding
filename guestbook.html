@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <link rel="stylesheet" href="build/bootstrap.min.css">
+  <script src="build/react.js"></script>
+  <script src="build/JSXTransformer.js"></script>
+  <script src="build/firebase.js"></script>
+  <script src="build/underscore-min.js"></script>
+  <script src="config.js"></script>
+  <script src="guestbook.jsx" type="text/jsx"></script>
+</head>
+<body>
+
+  <div id="guestbook"></div>
+  <script type="text/jsx">
+    React.render(<Guestbook />, document.getElementById('guestbook'));
+  </script>
+
+</body>
+</html>
