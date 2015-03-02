@@ -1,5 +1,6 @@
 body {
   text-align: center;
+  background-color: #ccc !important;
   background: url('background.jpg');
   background-position: 30% 20%;
   padding-top: 350px;
