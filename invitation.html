@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <form id="main-form"></form>
+  <div id="root-element"></div>
 
   <script type="text/jsx">
     var match,
@@ -42,7 +42,7 @@
     while (match = search.exec(query))
        params[decode(match[1])] = decode(match[2]);
 
-    React.render(<Invitation id={params.inviteId} />, document.getElementById('main-form'));
+    React.render(<Invitation id={params.inviteId} />, document.getElementById('root-element'));
   </script>
 
 </body>

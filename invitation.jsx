@@ -14,28 +14,33 @@ var Invitation = React.createClass({
     this.firebaseRef.off();
   },
 
+  send: function(e) {
+    e.preventDefault();
+    this.firebaseRef.set(this.state);
+  },
+
+  updatePerson: function(personNumber, attribute, value) {
+    var updatedPeople = this.state.people.slice();
+    updatedPeople[personNumber][attribute] = value;
+    this.setState({ people: updatedPeople });
+  },
+
   render: function() {
     console.log(this.state);
     if (this.state.people) {
-      updatePerson = function(personNumber, attribute, value) {
-        var updatedPeople = this.state.people.slice();
-        updatedPeople[personNumber][attribute] = value;
-        this.setState({ people: updatedPeople });
-      }.bind(this);
-
+      console.log(this.state.people[0]);
+      console.log(this.state.people[1]);
       peopleSections = this.state.people.map(function(person, i) {
         return (
-          <div>
-            <Person key={i} personNumber={i} name={person.name} changeCallback={this.updatePerson} />;
-          </div>
+          <Person key={i} personNumber={i} name={person.name} changeCallback={this.updatePerson} />
         );
-      });
+      }, this);
 
       return (
         <div className="invitation">
           {peopleSections}
           <div className="rsvp">
-            <a className="btn btn-lg btn-default" href="#">RSVP</a>
+            <a className="btn btn-lg btn-default" href="#" onClick={this.send}>RSVP</a>
           </div>
         </div>
       );
