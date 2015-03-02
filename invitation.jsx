@@ -5,6 +5,7 @@ var Invitation = React.createClass({
 
   componentWillMount: function() {
     this.firebaseRef = new Firebase(window.firebaseLocation + this.props.id);
+
     this.firebaseRef.on("value", function(dataSnapshot) {
       this.setState(dataSnapshot.val());
     }.bind(this));
@@ -26,13 +27,12 @@ var Invitation = React.createClass({
   },
 
   render: function() {
-    console.log(this.state);
     if (this.state.people) {
       console.log(this.state.people[0]);
       console.log(this.state.people[1]);
       peopleSections = this.state.people.map(function(person, i) {
         return (
-          <Person key={i} personNumber={i} name={person.name} changeCallback={this.updatePerson} />
+          <Person key={i} personNumber={i} data={person} changeCallback={this.updatePerson} />
         );
       }, this);
 
