@@ -2,19 +2,18 @@
 <html>
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <link rel="stylesheet" href="build/bootstrap.min.css">
-  <script src="build/react.js"></script>
-  <script src="build/JSXTransformer.js"></script>
-  <script src="build/firebase.js"></script>
-  <script src="build/underscore-min.js"></script>
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
+  <script src="vendor/react.min.js"></script>
+  <script src="vendor/firebase.js"></script>
+  <script src="vendor/underscore-min.js"></script>
   <script src="config.js"></script>
-  <script src="guestbook.jsx" type="text/jsx"></script>
+  <script src="build/guestbook.js"></script>
 </head>
 <body>
 
   <div id="guestbook"></div>
-  <script type="text/jsx">
-    React.render(<Guestbook />, document.getElementById('guestbook'));
+  <script>
+    React.render(React.createElement(Guestbook), document.getElementById('guestbook'));
   </script>
 
 </body>

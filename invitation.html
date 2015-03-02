@@ -3,15 +3,14 @@
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="build/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <title>Wedding invitation</title>
-  <script src="build/react.js"></script>
-  <script src="build/JSXTransformer.js"></script>
-  <script src="build/firebase.js"></script>
-  <script src="build/underscore-min.js"></script>
-  <script src="config.js" type="text/jsx"></script>
-  <script src="person.jsx" type="text/jsx"></script>
-  <script src="invitation.jsx" type="text/jsx"></script>
+  <script src="vendor/react.min.js"></script>
+  <script src="vendor/firebase.js"></script>
+  <script src="vendor/underscore-min.js"></script>
+  <script src="config.js"></script>
+  <script src="build/person.js"></script>
+  <script src="build/invitation.js"></script>
 </head>
 <body>
 
@@ -36,7 +35,7 @@
 
   <div id="root-element"></div>
 
-  <script type="text/jsx">
+  <script>
     var match,
         search = /([^&=]+)=?([^&]*)/g,
         decode = function(s) { return decodeURIComponent(s.replace(/\+/g, " ")); },
@@ -46,7 +45,7 @@
     while (match = search.exec(query))
        params[decode(match[1])] = decode(match[2]);
 
-    React.render(<Invitation id={params.inviteId} />, document.getElementById('root-element'));
+    React.render(React.createElement(Invitation, {id:params.inviteId}), document.getElementById('root-element'));
   </script>
 
 </body>

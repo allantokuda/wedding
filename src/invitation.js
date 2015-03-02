@@ -42,7 +42,6 @@ var Invitation = React.createClass({
         );
       }, this);
 
-
       var reactionTag;
       if (this.state.responseDate) {
         reactionTag = <div className="reaction panel"><div className="panel-body">Thank you for responding!</div></div>;
