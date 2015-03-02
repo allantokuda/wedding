@@ -3,10 +3,7 @@ var Description = React.createClass({
     var result = [];
     result.push(<p>{place.time}</p>);
     result.push(
-      <p>{place.name}
-        (<a href={"https://www.google.com/maps/dir//" + place.address + "/"}>Map</a>)
-        (<a href={place.website}>Website</a>)
-      </p>
+      <p>{place.name} (<a href={"https://www.google.com/maps/dir//" + place.address + "/"}>Map</a>) (<a href={place.website}>Website</a>)</p>
     );
 
     if (place.details) {
@@ -25,26 +22,26 @@ var Description = React.createClass({
       time: '10:30am',
       name: 'Minnesota Landscape Arboretum',
       address: '3675 Arboretum Drive, Chaska MN 55318',
-      website: 'http://http://www.arboretum.umn.edu/'
+      website: 'http://www.arboretum.umn.edu/'
     };
 
     var reception = {
       time: '4:00pm',
       name: 'Theodore Wirth Park Pavilion',
       address: '3275 Glenwood Ave, Minneapolis, MN 55405',
-      website: 'http://www.minneapolisparks.org/default.asp?PageID=554',
+      website: 'https://www.minneapolisparks.org/rentals__permits/reception__event_sites/events_at_wirth_pavilion/',
       details: 'Alcohol is not allowed at the pavilion, but we will be going for drinks around 9pm (location to be determined).'
     };
 
     switch(this.props.group) {
-      case 1:
+      case "1":
         content = (
           <div className="panel-body">
             <h1>You're invited</h1>
             <p>to Stacy and Allan's wedding ceremony and reception!</p>
             <p>{ date }</p>
 
-            <h1>Ceremony</h1>
+            <h2>Ceremony</h2>
             { this.renderPlace(ceremony) }
 
             <h2>Reception</h2>
