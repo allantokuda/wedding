@@ -53,6 +53,7 @@ var Invitation = React.createClass({
 
       return (
         <div className="invitation">
+          <Description group={this.state.group} />
           {peopleSections}
           <div className="comments panel">
             <div className="panel-body">
@@ -67,7 +68,13 @@ var Invitation = React.createClass({
         </div>
       );
     } else {
-      return null;
+      return (
+        <div className="comments panel">
+          <div className="panel-body">
+            <p>Sorry, this seems to be the wrong link.</p>
+          </div>
+        </div>
+      );
     }
 
   }
