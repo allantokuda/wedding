@@ -21,8 +21,7 @@ var Guestbook = React.createClass({
   render: function() {
     var result = _.map(this.state.items, function(item, inviteId) {
       var inviteLink = window.siteLocation + "invitation.html?inviteId=" + inviteId
-      // TODO remove 'disabled-' later when ready
-      var emailLink = "mailto:disabled-" + item.email + "?subject=" + window.emailSubject + "&body=" + inviteLink
+      var emailLink = "mailto:" + item.email + "?subject=" + window.emailSubject + "&body=" + inviteLink
 
       var emailTag = <a href={emailLink}>{ item.email }</a>
       var inviteTag = <a href={inviteLink}>Invitation</a>
