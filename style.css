@@ -12,7 +12,7 @@ div.panel { max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.
 h3 { margin-top: 0px; }
 
 div.response { text-align: left; }
-div.rsvp { text-align: center; }
+div.rsvp { text-align: center; margin-bottom: 2em; }
 
 /* http://stackoverflow.com/a/14942294 */
 /* Add some space between input and label, and ensure label stays inside a box */
