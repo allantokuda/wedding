@@ -32,6 +32,7 @@ var Guestbook = React.createClass({
             <td>{ person.name || '+1' }</td>
             <td>{ person.accept || '-' }</td>
             <td>{ person.drinks || '-' }</td>
+            <td>{ i == 0 ? item.comments : '-' }</td>
             <td>{ i == 0 ? emailTag : null }</td>
             <td>{ i == 0 ? inviteTag : null }</td>
           </tr>
@@ -47,6 +48,7 @@ var Guestbook = React.createClass({
           <th>Name</th>
           <th>Accept?</th>
           <th>Drinks?</th>
+          <th>Comments</th>
           <th>Invitation email</th>
           <th>Invitation</th>
         </thead>

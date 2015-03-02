@@ -31,6 +31,10 @@ var Invitation = React.createClass({
     this.setState({ people: updatedPeople });
   },
 
+  comment: function(e) {
+    this.setState({ comments: e.target.value });
+  },
+
   render: function() {
     console.log(this.state);
     if (this.state.people) {
@@ -50,6 +54,12 @@ var Invitation = React.createClass({
       return (
         <div className="invitation">
           {peopleSections}
+          <div className="comments panel">
+            <div className="panel-body">
+              <label>Comments:</label>
+              <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} />
+            </div>
+          </div>
           <div className="rsvp">
             <a className="btn btn-lg btn-default" href="#" onClick={this.send}>RSVP</a>
           </div>
