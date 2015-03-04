@@ -9,6 +9,14 @@ var Invitation = React.createClass({
     this.firebaseRef.on("value", function(dataSnapshot) {
       this.setState(dataSnapshot.val());
     }.bind(this));
+
+    setTimeout(this.checkValidInvitation, 3000);
+  },
+
+  checkValidInvitation: function() {
+    if (!this.state.people) {
+      this.setState({ loadError: 'Sorry, this seems to be the wrong link.' });
+    }
   },
 
   componentWillUnmount: function() {
@@ -36,10 +44,7 @@ var Invitation = React.createClass({
   },
 
   render: function() {
-    console.log(this.state);
     if (this.state.people) {
-      console.log(this.state.people[0]);
-      console.log(this.state.people[1]);
       peopleSections = this.state.people.map(function(person, i) {
         return (
           <Person key={i} personNumber={i} data={person} changeCallback={this.updatePerson} />
@@ -67,11 +72,19 @@ var Invitation = React.createClass({
           { reactionTag }
         </div>
       );
+    } else if (this.state.loadError) {
+      return (
+        <div className="comments panel">
+          <div className="panel-body">
+            <p>{ this.state.loadError }</p>
+          </div>
+        </div>
+      );
     } else {
       return (
         <div className="comments panel">
           <div className="panel-body">
-            <p>Sorry, this seems to be the wrong link.</p>
+            <p>Loading...</p>
           </div>
         </div>
       );
