@@ -16,13 +16,14 @@ var Description = React.createClass({
   render: function() {
     var content;
 
-    var date = 'Sunday, May 24 (day before Memorial Day), 2015';
+    var date = 'Sunday, May 24, 2015 (day before Memorial Day)';
 
     var ceremony = {
       time: '10:30am',
       name: 'Minnesota Landscape Arboretum',
       address: '3675 Arboretum Drive, Chaska MN 55318',
-      website: 'http://www.arboretum.umn.edu/'
+      website: 'http://www.arboretum.umn.edu/',
+      details: 'Follow the Three Mile Drive loop, and park either at the Prairie Garden or the Weeping Trees (500 feet past Prairie Garden).'
     };
 
     var reception = {

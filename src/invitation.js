@@ -74,7 +74,7 @@ var Invitation = React.createClass({
             </div>
           </div>
           <div className="rsvp">
-            <a className="btn btn-lg btn-default" href="#" onClick={this.send}>RSVP</a>
+            <a className="btn btn-lg btn-default" href="#" onClick={this.send}>RSVP by March 31</a>
           </div>
           { reactionTag }
         </div>
