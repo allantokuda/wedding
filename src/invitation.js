@@ -53,7 +53,14 @@ var Invitation = React.createClass({
 
       var reactionTag;
       if (this.state.responseDate) {
-        reactionTag = <div className="reaction panel"><div className="panel-body">Thank you for responding!</div></div>;
+        reactionTag = <div className="reaction panel">
+          <div className="panel-body">
+            <p>Thank you for responding!</p>
+            <div className="backdrop">
+            <video className="dancing" src="dancing.webm" autoplay loop controls width="550"></video>
+            </div>
+          </div>
+        </div>;
       }
 
       return (
