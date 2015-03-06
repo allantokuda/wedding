@@ -1,4 +1,8 @@
 var Person = React.createClass({
+  getInitialState: function() {
+    return { plusOne: this.props.data.name == "" };
+  },
+
   change: function(e) {
     this.props.changeCallback(this.props.personNumber, e.target.name, e.target.value );
   },
@@ -8,6 +12,7 @@ var Person = React.createClass({
   },
 
   render: function() {
+    var plusOne = (this.state.plusOne) ? <label style={{fontWeight: "normal", fontStyle: "italic" }}>+1 guest</label> : null;
     return (
       <form>
         <div className="person panel panel-default">
@@ -15,6 +20,7 @@ var Person = React.createClass({
             <div className="row">
               <div className="name col-sm-4">
                 <input type="text" name="name" onChange={this.change} value={ this.props.data.name }></input>
+                { plusOne }
               </div>
               <div className="response col-sm-4">
                 <label>
