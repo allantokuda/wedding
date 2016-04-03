@@ -1,4 +1,4 @@
-var Guestbook = React.createClass({
+var Event = React.createClass({
   getInitialState: function() {
     return { items: {} };
   },
