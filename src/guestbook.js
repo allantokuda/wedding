@@ -21,7 +21,7 @@ var Guestbook = React.createClass({
   render: function() {
     var body = "Stacy and I are getting married! Please follow this link to RSVP by March 31. Hope to see you there!";
     var result = _.map(this.state.items, function(item, inviteId) {
-      var inviteLink = window.siteLocation + "invitation.html?inviteId=" + inviteId
+      var inviteLink = "invitation.html?inviteId=" + inviteId
       var emailLink = "mailto:" + item.email + "?subject=" + window.emailSubject + "&body=" + body + "%0A%0A" + inviteLink
 
       var emailTag = <a href={emailLink}>{ item.email }</a>
