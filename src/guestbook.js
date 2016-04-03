@@ -6,6 +6,15 @@ var Guestbook = React.createClass({
   componentWillMount: function() {
     var items;
     this.firebaseRef = new Firebase(window.firebaseLocation);
+
+    this.firebaseRef.authWithOAuthPopup("google", function(error, authData) {
+      if (error) {
+        console.log("Authentication Failed!", error);
+      } else {
+        console.log("Authenticated successfully with payload:", authData);
+      }
+    });
+
     this.firebaseRef.on("value", function(dataSnapshot) {
       items = dataSnapshot.val();
       this.setState({
