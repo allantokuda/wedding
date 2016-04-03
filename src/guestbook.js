@@ -5,7 +5,7 @@ var Guestbook = React.createClass({
 
   componentWillMount: function() {
     var items;
-    this.firebaseRef = new Firebase(window.firebaseLocation);
+    this.firebaseRef = new Firebase(window.firebaseLocation + '/invitation');
 
     this.firebaseRef.authWithOAuthPopup("google", function(error, authData) {
       if (error) {

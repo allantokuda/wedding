@@ -4,7 +4,7 @@ var Invitation = React.createClass({
   },
 
   componentWillMount: function() {
-    this.firebaseRef = new Firebase(window.firebaseLocation + this.props.id);
+    this.firebaseRef = new Firebase(window.firebaseLocation + '/invitation/' + this.props.id);
 
     this.firebaseRef.on("value", function(dataSnapshot) {
       this.setState(dataSnapshot.val());
