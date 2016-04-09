@@ -9,6 +9,7 @@
   <script src="vendor/firebase.js"></script>
   <script src="vendor/underscore-min.js"></script>
   <script src="config.js"></script>
+  <script src="build/params.js"></script>
   <script src="build/person.js"></script>
   <script src="build/invitation.js"></script>
   <script src="build/description.js"></script>
@@ -18,16 +19,7 @@
   <div id="root-element"></div>
 
   <script>
-    var match,
-        search = /([^&=]+)=?([^&]*)/g,
-        decode = function(s) { return decodeURIComponent(s.replace(/\+/g, " ")); },
-        query  = window.location.search.substring(1),
-        params = {};
-
-    while (match = search.exec(query))
-       params[decode(match[1])] = decode(match[2]);
-
-    React.render(React.createElement(Invitation, {id:params.inviteId}), document.getElementById('root-element'));
+    React.render(React.createElement(Invitation, {id:window.params.inviteId}), document.getElementById('root-element'));
   </script>
 
 </body>
