@@ -4,10 +4,14 @@ var Invitation = React.createClass({
   },
 
   componentWillMount: function() {
-    this.firebaseRef = new Firebase(window.firebaseLocation + '/invitation/' + this.props.id);
-
-    this.firebaseRef.on("value", function(dataSnapshot) {
-      this.setState(dataSnapshot.val());
+    this.invitationRef = new Firebase(window.firebaseLocation + '/invitation/' + this.props.id);
+    this.invitationRef.on("value", function(invitationSnapshot) {
+      invitation = invitationSnapshot.val();
+      this.eventRef = new Firebase(window.firebaseLocation + '/event/' + this.state.event_id);
+      this.eventRef.on("value", function(eventSnapshot) {
+        invitation.event = eventSnapshot.val();
+        this.setState(invitation);
+      }.bind(this));
     }.bind(this));
 
     setTimeout(this.checkValidInvitation, 3000);
@@ -20,7 +24,7 @@ var Invitation = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.firebaseRef.off();
+    this.invitationRef.off();
   },
 
   send: function(e) {
@@ -30,7 +34,7 @@ var Invitation = React.createClass({
     this.state.responseDate = Firebase.ServerValue.TIMESTAMP;
     this.forceUpdate();
 
-    this.firebaseRef.set(this.state);
+    this.invitationRef.set(this.state);
   },
 
   updatePerson: function(personNumber, attribute, value) {
