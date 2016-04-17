@@ -67,7 +67,7 @@ export default React.createClass({
           <div className="panel-body">
             <p>Thank you for responding!</p>
             <div className="backdrop">
-            <video className="dancing" src="dancing.webm" autoplay loop controls width="550"></video>
+            <video className="dancing" src="/dancing.webm" autoplay loop controls width="550"></video>
             </div>
           </div>
         </div>;
