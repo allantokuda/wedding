@@ -1,13 +1,19 @@
-var Invitation = React.createClass({
+import React from 'react';
+import Firebase from 'firebase';
+import { firebaseLocation } from '../config';
+import Description from './description';
+import Person from './person';
+
+export default React.createClass({
   getInitialState: function() {
     return { };
   },
 
   componentWillMount: function() {
-    this.invitationRef = new Firebase(window.firebaseLocation + '/invitation/' + this.props.id);
+    this.invitationRef = new Firebase(firebaseLocation + '/invitation/' + this.props.params.invitationId);
     this.invitationRef.on("value", function(invitationSnapshot) {
-      invitation = invitationSnapshot.val();
-      this.eventRef = new Firebase(window.firebaseLocation + '/event/' + this.state.event_id);
+      let invitation = invitationSnapshot.val();
+      this.eventRef = new Firebase(firebaseLocation + '/event/' + this.state.event_id);
       this.eventRef.on("value", function(eventSnapshot) {
         invitation.event = eventSnapshot.val();
         this.setState(invitation);
@@ -38,7 +44,7 @@ var Invitation = React.createClass({
   },
 
   updatePerson: function(personNumber, attribute, value) {
-    var updatedPeople = this.state.people.slice();
+    let updatedPeople = this.state.people.slice();
     updatedPeople[personNumber][attribute] = value;
     this.setState({ people: updatedPeople });
   },
@@ -49,13 +55,13 @@ var Invitation = React.createClass({
 
   render: function() {
     if (this.state.people) {
-      peopleSections = this.state.people.map(function(person, i) {
+      let peopleSections = this.state.people.map(function(person, i) {
         return (
           <Person key={i} personNumber={i} data={person} changeCallback={this.updatePerson} />
         );
       }, this);
 
-      var reactionTag;
+      let reactionTag;
       if (this.state.responseDate) {
         reactionTag = <div className="reaction panel">
           <div className="panel-body">

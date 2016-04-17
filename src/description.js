@@ -1,4 +1,6 @@
-var Description = React.createClass({
+import React from 'react';
+
+export default React.createClass({
   renderPlace: function(place) {
     var result = [];
     result.push(<p>{place.time}</p>);

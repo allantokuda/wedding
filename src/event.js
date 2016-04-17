@@ -1,11 +1,16 @@
-var Event = React.createClass({
+import React from 'react';
+import Firebase from 'firebase';
+import _ from 'lodash';
+import { firebaseLocation, emailSubject } from '../config';
+
+export default React.createClass({
   getInitialState: function() {
     return { items: {} };
   },
 
   componentWillMount: function() {
     var items;
-    this.firebaseRef = new Firebase(window.firebaseLocation + '/invitation');
+    this.firebaseRef = new Firebase(firebaseLocation + '/invitation');
 
     this.firebaseRef.authWithOAuthPopup("google", function(error, authData) {
       if (error) {
@@ -31,12 +36,12 @@ var Event = React.createClass({
     var body = "Stacy and I are getting married! Please follow this link to RSVP by March 31. Hope to see you there!";
     var result = _.map(this.state.items, function(item, inviteId) {
       var inviteLink = "invitation.html?inviteId=" + inviteId
-      var emailLink = "mailto:" + item.email + "?subject=" + window.emailSubject + "&body=" + body + "%0A%0A" + inviteLink
+      var emailLink = "mailto:" + item.email + "?subject=" + emailSubject + "&body=" + body + "%0A%0A" + inviteLink
 
       var emailTag = <a href={emailLink}>{ item.email }</a>
       var inviteTag = <a href={inviteLink}>Invitation</a>
 
-      people = _.map(item.people, function(person, i) {
+      var people = _.map(item.people, function(person, i) {
         return (
           <tr style={ i == 0 ? { fontWeight: 'bold' } : {} }>
             <td>{ person.name || '+1' }</td>
@@ -55,12 +60,14 @@ var Event = React.createClass({
     return (
       <table className="table">
         <thead>
-          <th>Name</th>
-          <th>Invitation email</th>
-          <th>Invitation</th>
-          <th>Accept?</th>
-          <th>Drinks?</th>
-          <th>Comments</th>
+          <tr>
+            <th>Name</th>
+            <th>Invitation email</th>
+            <th>Invitation</th>
+            <th>Accept?</th>
+            <th>Drinks?</th>
+            <th>Comments</th>
+          </tr>
         </thead>
         <tbody>
           { result }

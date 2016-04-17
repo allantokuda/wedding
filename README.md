@@ -1,15 +1,15 @@
 # Install dependencies
 
 ```
-sh ./install.sh
+npm install
 ```
 
-Development: "jsx" precompilation command line tool, that continuously
-compiles JSX in "src" directory into JS in "build" directory
+
+# Development
 
 ```
-sudo npm install -g react-tools
-jsx --watch src build
+webpack --watch
+
 ```
 
 # Google setup

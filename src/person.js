@@ -1,4 +1,6 @@
-var Person = React.createClass({
+import React from 'react';
+
+export default React.createClass({
   getInitialState: function() {
     return { plusOne: this.props.data.name == "" };
   },
