@@ -9,10 +9,13 @@ app.use(compression())
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')))
 
-// send all requests to index.html so browserHistory in React Router works
-app.get('*', function (req, res) {
+var renderApp = function(req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+};
+
+// send all requests to index.html so browserHistory in React Router works
+app.get('/invitation*', function (req, res) { renderApp(req, res); })
+app.get('/event*'     , function (req, res) { renderApp(req, res); })
 
 var PORT = process.env.PORT || 8080
 app.listen(PORT, function() {
