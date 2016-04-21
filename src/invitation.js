@@ -1,7 +1,7 @@
 import React from 'react';
 import Firebase from 'firebase';
 import { firebaseLocation } from '../config';
-import Description from './description';
+import Location from './location';
 import Person from './person';
 
 export default React.createClass({
@@ -81,6 +81,7 @@ export default React.createClass({
             <div className="panel-body">
               <h1>You're invited</h1>
               {description_lines.map(line => <p>{line}</p>)}
+              {this.state.event.locations.map((location, i) => <Location key={i} location={location}/>)}
             </div>
           </div>
           {peopleSections}
