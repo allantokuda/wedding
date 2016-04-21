@@ -13,7 +13,7 @@ export default React.createClass({
     this.invitationRef = new Firebase(firebaseLocation + '/invitation/' + this.props.params.invitationId);
     this.invitationRef.on("value", function(invitationSnapshot) {
       let invitation = invitationSnapshot.val();
-      this.eventRef = new Firebase(firebaseLocation + '/event/' + this.state.event_id);
+      this.eventRef = new Firebase(firebaseLocation + '/event/' + invitation.event_id);
       this.eventRef.on("value", function(eventSnapshot) {
         invitation.event = eventSnapshot.val();
         this.setState(invitation);
@@ -73,9 +73,16 @@ export default React.createClass({
         </div>;
       }
 
+      let description_lines = this.state.event && this.state.event.description.split("\n");
+
       return (
         <div className="invitation">
-          <Description group={this.state.group} />
+          <div className="description panel">
+            <div className="panel-body">
+              <h1>You're invited</h1>
+              {description_lines.map(line => <p>{line}</p>)}
+            </div>
+          </div>
           {peopleSections}
           <div className="comments panel">
             <div className="panel-body">
