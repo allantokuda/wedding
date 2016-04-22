@@ -1,7 +1,7 @@
 import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
-import { firebaseLocation, emailSubject } from '../config';
+import { firebaseLocation } from '../config';
 
 export default React.createClass({
   getInitialState: function() {
@@ -9,22 +9,25 @@ export default React.createClass({
   },
 
   componentWillMount: function() {
-    var items;
-    this.firebaseRef = new Firebase(firebaseLocation + '/invitation');
-
-    this.firebaseRef.authWithOAuthPopup("google", function(error, authData) {
+    this.eventRef = new Firebase(firebaseLocation + '/event/' + this.props.params.eventId);
+    this.eventRef.authWithOAuthPopup("google", (error, authData) => {
       if (error) {
-        console.log("Authentication Failed!", error);
+        console.error("Authentication Failed!", error);
       } else {
-        console.log("Authenticated successfully with payload:", authData);
+        console.log("Authentication success!", authData);
+        
       }
     });
 
-    this.firebaseRef.on("value", function(dataSnapshot) {
-      items = dataSnapshot.val();
-      this.setState({
-        items: dataSnapshot.val()
-      });
+    this.eventRef.on("value", function(eventSnapshot) {
+      let event = eventSnapshot.val();
+      console.log('event:', event);
+      this.invitationRef = new Firebase(firebaseLocation + '/invitation');
+      // TODO: only get invitations for the current event
+      this.invitationRef.on("value", function(invitationSnapshot) {
+        event.items = invitationSnapshot.val();
+        this.setState(event);
+      }.bind(this));
     }.bind(this));
   },
 
@@ -33,10 +36,9 @@ export default React.createClass({
   },
 
   render: function() {
-    var body = "Stacy and I are getting married! Please follow this link to RSVP by March 31. Hope to see you there!";
-    var result = _.map(this.state.items, function(item, inviteId) {
-      var inviteLink = "invitation.html?inviteId=" + inviteId
-      var emailLink = "mailto:" + item.email + "?subject=" + emailSubject + "&body=" + body + "%0A%0A" + inviteLink
+    var result = _.map(this.state.items, (item, inviteId) => {
+      var inviteLink = "/invitation/" + inviteId
+      var emailLink = "mailto:" + item.email + "?subject=" + this.state.emailSubject + "&body=" + this.state.emailBody + "%0A%0A" + inviteLink
 
       var emailTag = <a href={emailLink}>{ item.email }</a>
       var inviteTag = <a href={inviteLink}>Invitation</a>
