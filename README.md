@@ -1,6 +1,7 @@
 # Install dependencies
 
 ```
+nvm use 5
 npm install
 ```
 
