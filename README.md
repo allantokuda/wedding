@@ -8,8 +8,13 @@ npm install
 # Development
 
 ```
-webpack --watch
+DATABASE_LOCATION="your-firebase-address.firebaseio.com" npm run start
+```
 
+# Production config
+
+```
+heroku config:set DATABASE_LOCATION=your-firebase-address.firebaseio.com
 ```
 
 # Google setup

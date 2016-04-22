@@ -1,7 +1,6 @@
 import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
-import { firebaseLocation } from '../config';
 
 export default React.createClass({
   getInitialState: function() {
@@ -9,7 +8,7 @@ export default React.createClass({
   },
 
   componentWillMount: function() {
-    this.eventRef = new Firebase(firebaseLocation + '/event/' + this.props.params.eventId);
+    this.eventRef = new Firebase(__DATABASE_LOCATION__ + '/event/' + this.props.params.eventId);
     this.eventRef.authWithOAuthPopup("google", (error, authData) => {
       if (error) {
         console.error("Authentication Failed!", error);

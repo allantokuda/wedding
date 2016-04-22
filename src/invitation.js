@@ -1,6 +1,5 @@
 import React from 'react';
 import Firebase from 'firebase';
-import { firebaseLocation } from '../config';
 import Location from './location';
 import Person from './person';
 
@@ -10,10 +9,10 @@ export default React.createClass({
   },
 
   componentWillMount: function() {
-    this.invitationRef = new Firebase(firebaseLocation + '/invitation/' + this.props.params.invitationId);
+    this.invitationRef = new Firebase(__DATABASE_LOCATION__ + '/invitation/' + this.props.params.invitationId);
     this.invitationRef.on("value", function(invitationSnapshot) {
       let invitation = invitationSnapshot.val();
-      this.eventRef = new Firebase(firebaseLocation + '/event/' + invitation.event_id);
+      this.eventRef = new Firebase(__DATABASE_LOCATION__ + '/event/' + invitation.event_id);
       this.eventRef.on("value", function(eventSnapshot) {
         invitation.event = eventSnapshot.val();
         this.setState(invitation);

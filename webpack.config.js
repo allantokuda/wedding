@@ -1,5 +1,9 @@
 var webpack = require('webpack')
 
+var definePlugin = new webpack.DefinePlugin({
+  __DATABASE_LOCATION__: JSON.stringify(process.env.DATABASE_LOCATION)
+});
+
 module.exports = {
   entry: "./app.js",
   output: {
@@ -25,9 +29,9 @@ module.exports = {
       }
     ]
   },
-  plugins: process.env.NODE_ENV === 'production' ? [
+  plugins: [definePlugin].concat(process.env.NODE_ENV === 'production' ? [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin()
-  ] : []
+  ] : [])
 };

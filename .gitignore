@@ -1,5 +1,4 @@
 build
 vendor
-config.js
 bundle.js
 node_modules
