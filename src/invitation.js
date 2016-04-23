@@ -56,7 +56,7 @@ export default React.createClass({
     if (this.state.people) {
       let peopleSections = this.state.people.map(function(person, i) {
         return (
-          <Person key={i} personNumber={i} data={person} changeCallback={this.updatePerson} />
+          <Person key={i} personNumber={i} data={person} questions={this.state.event.individualQuestions} changeCallback={this.updatePerson} />
         );
       }, this);
 
