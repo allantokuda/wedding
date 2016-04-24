@@ -69,19 +69,17 @@ export default React.createClass({
   render: function() {
     var plusOne = (this.state.plusOne) ? <label style={{fontWeight: "normal", fontStyle: "italic" }}>+1 guest</label> : null;
     return (
-      <form>
-        <div className="person panel panel-default">
-          <div className="panel-body">
-            <div className="row">
-              <div className="name col-sm-4">
-                <input type="text" name="name" onChange={this.change} value={ this.props.data.name } disabled={this.props.disabled}></input>
-                { plusOne }
-              </div>
-              {this.renderOptions()}
+      <div className="panel-body invitation-part">
+        <form>
+          <div className="row">
+            <div className="name col-sm-4">
+              <input type="text" name="name" onChange={this.change} value={ this.props.data.name } disabled={this.props.disabled}></input>
+              { plusOne }
             </div>
+            {this.renderOptions()}
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     );
   }
 });

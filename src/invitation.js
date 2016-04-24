@@ -88,14 +88,14 @@ export default React.createClass({
               {rsvpLine}
             </div>
           </div>
-          {peopleSections}
           <div className="comments panel">
+            {peopleSections}
+
             <div className="panel-body">
               <label>Comments:</label>
               <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} disabled={!this.state.edit} />
             </div>
-          </div>
-          <div className="reaction panel">
+
             <div className="panel-body">
               {this.state.edit ? (
                 <div>

@@ -24,6 +24,10 @@ h3 { margin-top: 0px; }
 div.response { text-align: left; }
 div.rsvp { text-align: center; margin-bottom: 2em; }
 
+div.invitation-part {
+  border-bottom: 1px solid #aaa;
+}
+
 /* http://stackoverflow.com/a/14942294 */
 /* Add some space between input and label, and ensure label stays inside a box */
 label input { float: left; }
