@@ -44,6 +44,14 @@ export default React.createClass({
     this.invitationRef.set(this.state);
   },
 
+  anyYesOnThisInvitation() {
+    let result = false;
+    this.state.people.forEach(person => {
+      result = result || person.accept === 'yes';
+    });
+    return result;
+  },
+
   updatePerson: function(personNumber, attribute, value) {
     let updatedPeople = this.state.people.slice();
     updatedPeople[personNumber][attribute] = value;
@@ -68,13 +76,11 @@ export default React.createClass({
   },
 
   renderFlier: function() {
-    let description_lines = this.state.event && this.state.event.description.split("\n");
-
     return (
       <div className="description panel" key={1}>
         <div className="panel-body">
-          <h1>You're invited</h1>
-          {description_lines.map(line => <p>{line}</p>)}
+          <h1>{this.state.event.title}</h1>
+          <p>{this.state.event.date}</p>
           {this.state.event.locations.map((location, i) => <Location key={i} location={location}/>)}
           {this.renderRsvpLine()}
         </div>
@@ -108,10 +114,17 @@ export default React.createClass({
         </div>
       );
     } else {
+      let response;
+      if (this.anyYesOnThisInvitation()) {
+        response = 'Looking forward to seeing you!';
+      } else {
+        response = "Sorry you can't make it!";
+      }
+
       return (
         <div className="description panel">
           <div className="panel-body">
-            <p>Thank you for responding!</p>
+            <p><b>{response}</b></p>
             {this.state.event.thankYou}
             <p>If things change between now and {this.state.event.rsvp_date}, you may <a href="#" onClick={this.reEnableForm}>update your answers</a>.</p>
             <br/>
