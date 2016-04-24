@@ -18,8 +18,8 @@ export default React.createClass({
       <div className="response col-sm-4" key={formIndex}>
         {radio.options.map((option, i) => {
           return (
-            <label key={i}>
-              <input type="radio" name={option.name} onChange={ this.change.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} disabled={this.props.disabled} />
+            <label key={i} className="checkbox-radio">
+              <input type="radio" name={option.name} onChange={ this.change.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} />
               <span>{option.label}</span>
             </label>
           )
@@ -32,8 +32,8 @@ export default React.createClass({
     return (
       <div className="response col-sm-4" key={formIndex}>
         <br />
-        <label>
-          <input type="checkbox" name={checkbox.name} onChange={ this.changeCheckbox.bind(this, checkbox.name) } checked={ this.props.data[checkbox.name] == 'yes' } disabled={this.props.disabled} />
+        <label className="checkbox-radio">
+          <input type="checkbox" name={checkbox.name} onChange={ this.changeCheckbox.bind(this, checkbox.name) } checked={ this.props.data[checkbox.name] == 'yes' } />
           <span>{checkbox.label}</span>
         </label><br />
       </div>
@@ -41,13 +41,15 @@ export default React.createClass({
   },
 
   renderText(textField, formIndex) {
+    // TODO make text field wrap
+    let minWidth = 100; //Math.max((textField.placeholder || '').length*6, 200);
+
     return (
       <div className="response col-sm-4" key={formIndex}>
-        <br />
         <label>
           <span>{textField.label}</span>
-          <input type="text" name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } disabled={this.props.disabled}/>
-        </label><br />
+          <input type="text" name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } placeholder={textField.placeholder} style={{minWidth}}/>
+        </label>
       </div>
     );
   },
@@ -61,7 +63,7 @@ export default React.createClass({
       } else if (question.type == 'text') {
         return this.renderText(question, i);
       } else {
-        console.error('unknown qusetion type', question);
+        console.error('unknown question type', question);
       }
     });
   },
@@ -73,7 +75,7 @@ export default React.createClass({
         <form>
           <div className="row">
             <div className="name col-sm-4">
-              <input type="text" name="name" onChange={this.change} value={ this.props.data.name } disabled={this.props.disabled}></input>
+              <input type="text" name="name" onChange={this.change} value={ this.props.data.name }></input>
               { plusOne }
             </div>
             {this.renderOptions()}

@@ -15,8 +15,8 @@ export default React.createClass({
       this.eventRef = new Firebase(__DATABASE_LOCATION__ + '/event/' + invitation.event_id);
       this.eventRef.on("value", function(eventSnapshot) {
         invitation.event = eventSnapshot.val();
+        invitation.edit = invitation.responseDates === undefined;
         this.setState(invitation);
-        this.setState({ edit: invitation.event.responseDate !== undefined });
       }.bind(this));
     }.bind(this));
 
@@ -33,14 +33,13 @@ export default React.createClass({
     this.invitationRef.off();
   },
 
-  send: function(e) {
+  send(e) {
     e.preventDefault();
 
     // add timestamp to state and immediately send it to Firebase (requires direct manipulation and force update)
-    this.state.responseDate = Firebase.ServerValue.TIMESTAMP;
+    this.state.responseDates = this.state.responseDates || [];
+    this.state.responseDates.push(Firebase.ServerValue.TIMESTAMP);
     this.forceUpdate();
-
-    this.setState({ edit: false });
 
     this.invitationRef.set(this.state);
   },
@@ -60,58 +59,79 @@ export default React.createClass({
     this.setState({ edit: true });
   },
 
-  render: function() {
-    if (this.state.people) {
+  renderRsvpLine() {
+    return this.state.edit ? (
+      <p><b>RSVP by {this.state.event.rsvp_date}</b></p>
+    ) : (
+      <p>&nbsp;</p>
+    );
+  },
+
+  renderFlier: function() {
+    let description_lines = this.state.event && this.state.event.description.split("\n");
+
+    return (
+      <div className="description panel" key={1}>
+        <div className="panel-body">
+          <h1>You're invited</h1>
+          {description_lines.map(line => <p>{line}</p>)}
+          {this.state.event.locations.map((location, i) => <Location key={i} location={location}/>)}
+          {this.renderRsvpLine()}
+        </div>
+      </div>
+    );
+  },
+
+  renderForm: function() {
+    if (this.state.edit) {
       let peopleSections = this.state.people.map(function(person, i) {
         return (
-          <Person key={i} personNumber={i} data={person} questions={this.state.event.individualQuestions} changeCallback={this.updatePerson} disabled={!this.state.edit} />
+          <Person key={i} personNumber={i} data={person} questions={this.state.event.individualQuestions} changeCallback={this.updatePerson} />
         );
       }, this);
 
-      let description_lines = this.state.event && this.state.event.description.split("\n");
+      return (
+        <div className="comments panel" key={2}>
+          {peopleSections}
 
+          <div className="panel-body">
+            <label>Comments:</label>
+            <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} />
+          </div>
+
+          <div className="panel-body">
+            <div>
+              {this.renderRsvpLine()}
+              <a className="btn btn-lg btn-default btn-primary" href="#" onClick={this.send}>Send</a>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="description panel">
+          <div className="panel-body">
+            <p>Thank you for responding!</p>
+            {this.state.event.thankYou}
+            <p>If things change between now and {this.state.event.rsvp_date}, you may <a href="#" onClick={this.reEnableForm}>update your answers</a>.</p>
+            <br/>
+          </div>
+        </div>
+      );
+    }
+  },
+
+  render: function() {
+    if (this.state.event) {
       let backgroundStyle = {
         backgroundImage: 'url(' + this.state.event.backgroundImage + ')',
         backgroundPosition: this.state.event.backgroundPosition
       };
-      let rsvpLine = this.state.edit ? (
-        <p><b>RSVP by {this.state.event.rsvp_date}</b></p>
-      ) : <p>&nbsp;</p>
 
       return (
         <div className="invitation" style={backgroundStyle}>
-          <div className="description panel">
-            <div className="panel-body">
-              <h1>You're invited</h1>
-              {description_lines.map(line => <p>{line}</p>)}
-              {this.state.event.locations.map((location, i) => <Location key={i} location={location}/>)}
-              {rsvpLine}
-            </div>
-          </div>
-          <div className="comments panel">
-            {peopleSections}
-
-            <div className="panel-body">
-              <label>Comments:</label>
-              <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} disabled={!this.state.edit} />
-            </div>
-
-            <div className="panel-body">
-              {this.state.edit ? (
-                <div>
-                  {rsvpLine}
-                  <a className="btn btn-lg btn-default btn-primary" href="#" onClick={this.send}>Send</a>
-                </div>
-              ) : (
-                <div>
-                  <p>Thank you for responding!</p>
-                  {this.state.event.thankYou}
-                  <p>If things change between now and {this.state.event.rsvp_date}, you may <a href="#" onClick={this.reEnableForm}>update your answers</a>.</p>
-                  <br/>
-                </div>
-              )}
-            </div>
-          </div>
+          {this.renderFlier()}
+          {this.renderForm()}
         </div>
       );
     } else if (this.state.loadError) {
