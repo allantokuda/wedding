@@ -74,8 +74,13 @@ export default React.createClass({
 
       let description_lines = this.state.event && this.state.event.description.split("\n");
 
+      let backgroundStyle = {
+        backgroundImage: 'url(' + this.state.event.backgroundImage + ')',
+        backgroundPosition: this.state.event.backgroundPosition
+      };
+
       return (
-        <div className="invitation">
+        <div className="invitation" style={backgroundStyle}>
           <div className="description panel">
             <div className="panel-body">
               <h1>You're invited</h1>
