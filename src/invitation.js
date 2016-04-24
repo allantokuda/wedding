@@ -137,7 +137,7 @@ export default React.createClass({
   render: function() {
     if (this.state.event) {
       let backgroundStyle = {
-        backgroundImage: 'url(' + this.state.event.backgroundImage + ')',
+        backgroundImage: this.state.event.backgroundImage,
         backgroundPosition: this.state.event.backgroundPosition
       };
 

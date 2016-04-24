@@ -1,23 +1,36 @@
+body {
+  background-color: #bbb !important;
+}
+
 body div.invitation {
   text-align: center;
-  background-color: #ccc !important;
   background: url('background.jpg');
   background-position: 30% 32%;
   background-repeat: no-repeat;
+  background-size: 1024px auto;
   padding-top: 350px;
   padding-bottom: 100px;
+  font-size: 14pt;
+  height: 600px;
+  box-shadow: 0px -100px 50px #bbb inset;
 }
 
 div.description { text-align: center; }
 div.person { text-align: left; }
 
 p.details {
-  width: 60%;
   margin: auto;
   font-style: italic;
 }
 
-div.panel { max-width: 600px; margin-left: auto; margin-right: auto; background-color: rgba(255, 255, 255, 0.8) !important; }
+div.panel {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0;
+  background: rgba(255,255,255, 0.8);
+}
+
 h1 { font-size: 18pt !important; }
 h2 { font-size: 14pt !important; margin-top: 2em !important; }
 h3 { margin-top: 0px; }
@@ -37,4 +50,4 @@ label.checkbox-radio input { float: left; }
 label.checkbox-radio span { display: block; margin-left: 1.5em; margin-right: 1.5em; font-weight: normal; }
 
 label.textarea span { display: block; }
-label.textarea textarea { font-weight: normal; min-width: 400px; }
+label.textarea textarea { font-weight: normal; }
