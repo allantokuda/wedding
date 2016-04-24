@@ -4,8 +4,6 @@ body {
 
 body div.invitation {
   text-align: center;
-  background: url('background.jpg');
-  background-position: 30% 32%;
   background-repeat: no-repeat;
   background-size: 1024px auto;
   padding-top: 350px;

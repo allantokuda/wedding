@@ -125,7 +125,6 @@ export default React.createClass({
         <div className="description panel">
           <div className="panel-body">
             <p><b>{response}</b></p>
-            {this.state.event.thankYou}
             <p>If things change between now and {this.state.event.rsvp_date}, you may <a href="#" onClick={this.reEnableForm}>update your answers</a>.</p>
             <br/>
           </div>
