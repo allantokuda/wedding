@@ -22,16 +22,19 @@ h1 { font-size: 18pt !important; }
 h2 { font-size: 14pt !important; margin-top: 2em !important; }
 h3 { margin-top: 0px; }
 
-div.response { text-align: left; }
+div.response { display: inline-block; text-align: left; margin: 15px; margin-top: 0; float: left; }
 div.rsvp { text-align: center; margin-bottom: 2em; }
 
 div.invitation-part {
   border-bottom: 1px solid #aaa;
 }
 
-/* http://stackoverflow.com/a/14942294 */
-/* Add some space between checkbox/radio input and label, and ensure label stays inside a box */
-label.checkbox-radio input { float: left; }
-label.checkbox-radio span { display: block; margin-left: 1.5em; font-weight: normal; }
 
-label span, label input { font-weight: normal; }
+label span, label input { font-weight: normal; margin-right: 0.5em; }
+
+label.checkbox-radio { display: block; }
+label.checkbox-radio input { float: left; }
+label.checkbox-radio span { display: block; margin-left: 1.5em; margin-right: 1.5em; font-weight: normal; }
+
+label.textarea span { display: block; }
+label.textarea textarea { font-weight: normal; min-width: 400px; }

@@ -15,7 +15,7 @@ export default React.createClass({
 
   renderRadio(radio, formIndex) {
     return (
-      <div className="response col-sm-4" key={formIndex}>
+      <div className="response" key={formIndex}>
         {radio.options.map((option, i) => {
           return (
             <label key={i} className="checkbox-radio">
@@ -30,7 +30,7 @@ export default React.createClass({
 
   renderCheckbox(checkbox, formIndex) {
     return (
-      <div className="response col-sm-4" key={formIndex}>
+      <div className="response" key={formIndex}>
         <br />
         <label className="checkbox-radio">
           <input type="checkbox" name={checkbox.name} onChange={ this.changeCheckbox.bind(this, checkbox.name) } checked={ this.props.data[checkbox.name] == 'yes' } />
@@ -41,14 +41,11 @@ export default React.createClass({
   },
 
   renderText(textField, formIndex) {
-    // TODO make text field wrap
-    let minWidth = 100; //Math.max((textField.placeholder || '').length*6, 200);
-
     return (
-      <div className="response col-sm-4" key={formIndex}>
-        <label>
+      <div className="response" key={formIndex}>
+        <label className="textarea">
           <span>{textField.label}</span>
-          <input type="text" name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } placeholder={textField.placeholder} style={{minWidth}}/>
+          <textarea name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } placeholder={textField.placeholder} />
         </label>
       </div>
     );
@@ -74,7 +71,7 @@ export default React.createClass({
       <div className="panel-body invitation-part">
         <form>
           <div className="row">
-            <div className="name col-sm-4">
+            <div className="name response">
               <input type="text" name="name" onChange={this.change} value={ this.props.data.name }></input>
               { plusOne }
             </div>

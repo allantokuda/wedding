@@ -9,8 +9,8 @@ export default React.createClass({
         {loc.when && <p>{loc.when}</p>}
         <p>
           {loc.where}
-          {loc.map     && <span> (<a href={loc.map    }>Map</a>)</span>}
-          {loc.website && <span> (<a href={loc.website}>Website</a>)</span>}
+          {loc.map     && <span> (<a target="_blank" href={loc.map    }>Map</a>)</span>}
+          {loc.website && <span> (<a target="_blank" href={loc.website}>Website</a>)</span>}
         </p>
         {loc.how && <p className="details">{loc.how}</p>}
       </div>
