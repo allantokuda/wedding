@@ -19,7 +19,7 @@ export default React.createClass({
         {radio.options.map((option, i) => {
           return (
             <label key={i}>
-              <input type="radio" name={option.name} onChange={ this.change.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} />
+              <input type="radio" name={option.name} onChange={ this.change.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} disabled={this.props.disabled} />
               <span>{option.label}</span>
             </label>
           )
@@ -33,7 +33,7 @@ export default React.createClass({
       <div className="response col-sm-4" key={formIndex}>
         <br />
         <label>
-          <input type="checkbox" name={checkbox.name} onChange={ this.changeCheckbox.bind(this, checkbox.name) } checked={ this.props.data[checkbox.name] == 'yes' } />
+          <input type="checkbox" name={checkbox.name} onChange={ this.changeCheckbox.bind(this, checkbox.name) } checked={ this.props.data[checkbox.name] == 'yes' } disabled={this.props.disabled} />
           <span>{checkbox.label}</span>
         </label><br />
       </div>
@@ -46,7 +46,7 @@ export default React.createClass({
         <br />
         <label>
           <span>{textField.label}</span>
-          <input type="text" name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } />
+          <input type="text" name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } disabled={this.props.disabled}/>
         </label><br />
       </div>
     );
@@ -74,7 +74,7 @@ export default React.createClass({
           <div className="panel-body">
             <div className="row">
               <div className="name col-sm-4">
-                <input type="text" name="name" onChange={this.change} value={ this.props.data.name }></input>
+                <input type="text" name="name" onChange={this.change} value={ this.props.data.name } disabled={this.props.disabled}></input>
                 { plusOne }
               </div>
               {this.renderOptions()}

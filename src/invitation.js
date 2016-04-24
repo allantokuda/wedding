@@ -5,7 +5,7 @@ import Person from './person';
 
 export default React.createClass({
   getInitialState: function() {
-    return { };
+    return { edit: true };
   },
 
   componentWillMount: function() {
@@ -16,6 +16,7 @@ export default React.createClass({
       this.eventRef.on("value", function(eventSnapshot) {
         invitation.event = eventSnapshot.val();
         this.setState(invitation);
+        this.setState({ edit: invitation.event.responseDate !== undefined });
       }.bind(this));
     }.bind(this));
 
@@ -39,6 +40,8 @@ export default React.createClass({
     this.state.responseDate = Firebase.ServerValue.TIMESTAMP;
     this.forceUpdate();
 
+    this.setState({ edit: false });
+
     this.invitationRef.set(this.state);
   },
 
@@ -52,25 +55,18 @@ export default React.createClass({
     this.setState({ comments: e.target.value });
   },
 
+  reEnableForm: function(e) {
+    e.preventDefault();
+    this.setState({ edit: true });
+  },
+
   render: function() {
     if (this.state.people) {
       let peopleSections = this.state.people.map(function(person, i) {
         return (
-          <Person key={i} personNumber={i} data={person} questions={this.state.event.individualQuestions} changeCallback={this.updatePerson} />
+          <Person key={i} personNumber={i} data={person} questions={this.state.event.individualQuestions} changeCallback={this.updatePerson} disabled={!this.state.edit} />
         );
       }, this);
-
-      let reactionTag;
-      if (this.state.responseDate) {
-        reactionTag = <div className="reaction panel">
-          <div className="panel-body">
-            <p>Thank you for responding!</p>
-            <div className="backdrop">
-            <video className="dancing" src="/dancing.webm" autoplay loop controls width="550"></video>
-            </div>
-          </div>
-        </div>;
-      }
 
       let description_lines = this.state.event && this.state.event.description.split("\n");
 
@@ -78,6 +74,9 @@ export default React.createClass({
         backgroundImage: 'url(' + this.state.event.backgroundImage + ')',
         backgroundPosition: this.state.event.backgroundPosition
       };
+      let rsvpLine = this.state.edit ? (
+        <p><b>RSVP by {this.state.event.rsvp_date}</b></p>
+      ) : <p>&nbsp;</p>
 
       return (
         <div className="invitation" style={backgroundStyle}>
@@ -86,19 +85,33 @@ export default React.createClass({
               <h1>You're invited</h1>
               {description_lines.map(line => <p>{line}</p>)}
               {this.state.event.locations.map((location, i) => <Location key={i} location={location}/>)}
+              {rsvpLine}
             </div>
           </div>
           {peopleSections}
           <div className="comments panel">
             <div className="panel-body">
               <label>Comments:</label>
-              <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} />
+              <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} disabled={!this.state.edit} />
             </div>
           </div>
-          <div className="rsvp">
-            <a className="btn btn-lg btn-default" href="#" onClick={this.send}>RSVP by March 31</a>
+          <div className="reaction panel">
+            <div className="panel-body">
+              {this.state.edit ? (
+                <div>
+                  {rsvpLine}
+                  <a className="btn btn-lg btn-default btn-primary" href="#" onClick={this.send}>Send</a>
+                </div>
+              ) : (
+                <div>
+                  <p>Thank you for responding!</p>
+                  {this.state.event.thankYou}
+                  <p>If things change between now and {this.state.event.rsvp_date}, you may <a href="#" onClick={this.reEnableForm}>update your answers</a>.</p>
+                  <br/>
+                </div>
+              )}
+            </div>
           </div>
-          { reactionTag }
         </div>
       );
     } else if (this.state.loadError) {
