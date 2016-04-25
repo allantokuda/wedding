@@ -42,7 +42,7 @@ export default React.createClass({
 
   renderText(textField, formIndex) {
     return (
-      <div className="response" key={formIndex}>
+      <div className="response right" key={formIndex}>
         <label className="textarea">
           <span>{textField.label}</span>
           <textarea name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } placeholder={textField.placeholder} />
