@@ -15,7 +15,8 @@ var renderApp = function(req, res) {
 
 // send all requests to index.html so browserHistory in React Router works
 app.get('/invitation*', function (req, res) { renderApp(req, res); })
-app.get('/event*'     , function (req, res) { renderApp(req, res); })
+app.get('/event/[-_a-z0-9]*', function (req, res) { renderApp(req, res); })
+app.get('/event/[-_a-z0-9]+/[-_a-z0-9]+', function (req, res) { renderApp(req, res); })
 
 var PORT = process.env.PORT || 8080
 app.listen(PORT, function() {
