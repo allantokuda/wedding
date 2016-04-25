@@ -5,12 +5,16 @@ export default React.createClass({
     return { plusOne: this.props.data.name == "" };
   },
 
-  change: function(inputName, inputValue, e) {
+  changeRadio: function(inputName, inputValue, e) {
     this.props.changeCallback(this.props.personNumber, inputName, inputValue );
   },
 
   changeCheckbox: function(inputName, e) {
     this.props.changeCallback(this.props.personNumber, inputName, e.target.checked ? "yes" : "no" );
+  },
+
+  changeText: function(inputName, e) {
+    this.props.changeCallback(this.props.personNumber, inputName, e.target.value );
   },
 
   renderRadio(radio, formIndex) {
@@ -19,7 +23,7 @@ export default React.createClass({
         {radio.options.map((option, i) => {
           return (
             <label key={i} className="checkbox-radio">
-              <input type="radio" name={option.name} onChange={ this.change.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} />
+              <input type="radio" name={option.name} onChange={ this.changeRadio.bind(this, radio.name, option.name) } checked={ this.props.data[radio.name] == option.name } value={option.name} />
               <span>{option.label}</span>
             </label>
           )
@@ -45,7 +49,7 @@ export default React.createClass({
       <div className="response right" key={formIndex}>
         <label className="textarea">
           <span>{textField.label}</span>
-          <textarea name={textField.name} onChange={ this.changeCheckbox.bind(this, textField.name) } placeholder={textField.placeholder} />
+          <textarea name={textField.name} onChange={ this.changeText.bind(this, textField.name) } placeholder={textField.placeholder} />
         </label>
       </div>
     );
@@ -72,7 +76,7 @@ export default React.createClass({
         <form>
           <div className="row">
             <div className="name response">
-              <input type="text" name="name" onChange={this.change} value={ this.props.data.name }></input>
+              <input type="text" name="name" onChange={this.changeText.bind(this, 'name')} value={ this.props.data.name }></input>
               { plusOne }
             </div>
             {this.renderOptions()}
