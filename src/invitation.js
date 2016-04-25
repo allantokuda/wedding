@@ -16,8 +16,10 @@ export default React.createClass({
       this.invitationRef = new Firebase(eventPath + '/invitations/' + this.props.params.invitationId);
       this.invitationRef.on("value", function(invitationSnapshot) {
         let invitation = invitationSnapshot.val();
-        invitation.edit = invitation.responseDates === undefined;
-        this.setState({ card, invitation });
+        let people = invitation.people || [];
+        let comments = invitation.comments || '';
+        let edit = invitation.responseDates === undefined;
+        this.setState({ card, people, comments, edit, invitation });
       }.bind(this));
     }.bind(this));
 
@@ -25,7 +27,7 @@ export default React.createClass({
   },
 
   checkValidInvitation: function() {
-    if (!this.state.invitation) {
+    if (!this.state.people) {
       this.setState({ loadError: 'Sorry, this seems to be the wrong link.' });
     }
   },
@@ -41,24 +43,26 @@ export default React.createClass({
     // add timestamp to state and immediately send it to Firebase (requires direct manipulation and force update)
     this.state.invitation.responseDates = this.state.invitation.responseDates || [];
     this.state.invitation.responseDates.push(Firebase.ServerValue.TIMESTAMP);
-    this.forceUpdate();
+    this.state.invitation.people   = this.state.people   || this.state.invitation.people;
+    this.state.invitation.comments = this.state.comments || this.state.invitation.comments;
 
     this.invitationRef.set(this.state.invitation);
+
+    this.setState({edit: false});
   },
 
   anyYesOnThisInvitation() {
     let result = false;
-    this.state.invitation.people.forEach(person => {
+    this.state.people.forEach(person => {
       result = result || person.accept === 'yes';
     });
     return result;
   },
 
   updatePerson: function(personNumber, attribute, value) {
-    console.log(personNumber, attribute, value);
-    let updatedPeople = this.state.invitation.people.slice();
+    let updatedPeople = this.state.people.slice();
     updatedPeople[personNumber][attribute] = value;
-    this.setState({ invitation: { people: updatedPeople } });
+    this.setState({ people: updatedPeople });
   },
 
   comment: function(e) {
@@ -93,7 +97,7 @@ export default React.createClass({
 
   renderForm: function() {
     if (this.state.edit) {
-      let peopleSections = this.state.invitation.people.map(function(person, i) {
+      let peopleSections = this.state.people.map(function(person, i) {
         return (
           <Person key={i} personNumber={i} data={person} questions={this.state.card.individualQuestions} changeCallback={this.updatePerson} />
         );
@@ -105,7 +109,7 @@ export default React.createClass({
 
           <div className="panel-body">
             <label>Comments:</label>
-            <textarea style={{width: "100%"}} value={this.state.invitation.comments} onChange={this.comment} />
+            <textarea style={{width: "100%"}} value={this.state.comments} onChange={this.comment} />
           </div>
 
           <div className="panel-body">
