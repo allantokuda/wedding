@@ -1,8 +1,19 @@
 {
   "rules": {
-    ".read": "auth != null && auth.uid == root.child('admin').val()",
-    ".write": "auth != null && auth.uid == root.child('admin').val()",
-
+    ".read": "auth != null && auth.uid == 'google:000000000000000000000'",
+    ".write": "auth != null && auth.uid == 'google:000000000000000000000'",
+    "user": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+    "event": {
+      "$event_id": {
+        ".read": true,
+        ".write": "newData.child('uid').val() == auth.uid"
+      }
+    },
     "invitation": {
       ".read": true,
       ".write": true
