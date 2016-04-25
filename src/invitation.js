@@ -43,8 +43,8 @@ export default React.createClass({
     // add timestamp to state and immediately send it to Firebase (requires direct manipulation and force update)
     this.state.invitation.responseDates = this.state.invitation.responseDates || [];
     this.state.invitation.responseDates.push(Firebase.ServerValue.TIMESTAMP);
-    this.state.invitation.people   = this.state.people   || this.state.invitation.people;
-    this.state.invitation.comments = this.state.comments || this.state.invitation.comments;
+    this.state.invitation.people   = this.state.people;
+    this.state.invitation.comments = this.state.comments;
 
     this.invitationRef.set(this.state.invitation);
 
