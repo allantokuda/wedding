@@ -2,3 +2,4 @@ build
 vendor
 bundle.js
 node_modules
+scripts/run.sh

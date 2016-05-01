@@ -12,6 +12,13 @@ npm install
 DATABASE_LOCATION="your-firebase-address.firebaseio.com" npm run start
 ```
 
+or for server development,
+
+```
+npm install -g nodemon  # one-time
+nodemon server.js
+```
+
 # Production config
 
 ```
