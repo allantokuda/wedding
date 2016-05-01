@@ -5,24 +5,30 @@ nvm use 5
 npm install
 ```
 
+# Configure
+
+Create file `.env` based on `.env.example`.
 
 # Development
 
-```
-DATABASE_LOCATION="your-firebase-address.firebaseio.com" npm run start
-```
-
-or for server development,
+Frontend development:
 
 ```
-npm install -g nodemon  # one-time
-nodemon server.js
+npm run start
+```
+
+Server development:
+
+```
+npm run start:serverdev
 ```
 
 # Production config
 
+In addition to deploying the app to Heroku, environment variables need to be defined on Heroku. With `.env` created, run
+
 ```
-heroku config:set DATABASE_LOCATION=your-firebase-address.firebaseio.com
+npm run configure:heroku
 ```
 
 # Google setup

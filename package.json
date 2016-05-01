@@ -32,10 +32,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "webpack",
+    "configure:heroku": "cat .env | xargs heroku config:set",
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:dev": "webpack-dev-server --inline --content-base public --history-api-fallback",
-    "start:serverdev": "webpack && nodemon server.js",
-    "start:prod": "webpack && node server.js"
+    "start:dev":       "ls .env && export $(cat .env | xargs) && webpack-dev-server --inline --content-base public --history-api-fallback",
+    "start:serverdev": "ls .env && export $(cat .env | xargs) && webpack && nodemon server.js",
+    "start:prod":      "ls .env && export $(cat .env | xargs) && webpack && node server.js"
   },
   "repository": {
     "type": "git",
