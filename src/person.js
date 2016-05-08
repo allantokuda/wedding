@@ -70,14 +70,12 @@ export default React.createClass({
   },
 
   render: function() {
-    var plusOne = (this.state.plusOne) ? <label style={{fontWeight: "normal", fontStyle: "italic" }}>+1 guest</label> : null;
     return (
       <div className="panel-body invitation-part">
         <form>
           <div className="row">
             <div className="name response">
-              <input type="text" name="name" onChange={this.changeText.bind(this, 'name')} value={ this.props.data.name }></input>
-              { plusOne }
+              <input type="text" name="name" onChange={this.changeText.bind(this, 'name')} placeholder="Guest name" value={ this.props.data.name }></input>
             </div>
             {this.renderOptions()}
           </div>
