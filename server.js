@@ -42,8 +42,9 @@ router.post('/sendmail', function(req, res) {
   }
 
   var replyToName = req.body.replyToName || "Invitation";
-  var replyToAddress = req.body.replyToAddress || MAIL_DOMAIN_NAME;
-  var fromAddress = replyToName + " <" + replyToAddress + ">"
+  var replyToAddress = req.body.replyToAddress || ('invitation@' + MAIL_DOMAIN_NAME);
+  var replyToLine = replyToName + " <" + replyToAddress + ">";
+  var fromAddress = replyToName + " <invitation@" + MAIL_DOMAIN_NAME + ">"
 
   var toAddresses = req.body.invitations.map(function(invitation) {
     return invitation.toName + " <" + invitation.toAddr + ">";
@@ -71,6 +72,7 @@ router.post('/sendmail', function(req, res) {
     "to": toAddresses,
     "subject": req.body.subject,
     "text": emailTextLines.join("\n\n"),
+    "h:Reply-To": replyToLine,
     "recipient-variables": JSON.stringify(recipientVariables)
   };
 
