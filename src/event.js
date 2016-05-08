@@ -1,6 +1,7 @@
 import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
+import $ from 'jquery';
 
 export default React.createClass({
   getInitialState: function() {
@@ -20,8 +21,9 @@ export default React.createClass({
     this.eventRef.on("value", eventSnapshot => {
       let event = eventSnapshot.val();
       let card = event.card;
+      let email = event.email;
       let invitations = event.invitations;
-      this.setState({ card, invitations });
+      this.setState({ card, email, invitations });
     });
   },
 
@@ -34,6 +36,37 @@ export default React.createClass({
     invitations[invitationId][attributeName] = e.target.value;
     this.setState({invitations});
     this.eventRef.child('invitations/' + invitationId + '/' + attributeName).set(e.target.value);
+  },
+
+  sendAll() {
+    let requestBody = {
+      "eventId": this.props.params.eventId,
+      "message1": this.state.email.message1,
+      "message2": this.state.email.message2,
+      "replyToName": this.state.email.replyToName,
+      "replyToAddress": this.state.email.replyToAddress,
+      "subject": this.state.email.subject,
+      "invitations": _.keys(this.state.invitations).map(invitationId => {
+        let inv = this.state.invitations[invitationId];
+        return {
+          "id": invitationId,
+          "toAddr": inv.email,
+          "toName": inv.people[0].name
+        }
+      })
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/sendmail',
+      processData: false,
+      contentType: 'application/json',
+      data: JSON.stringify(requestBody)
+    }).done(function(success) {
+      console.log(success);
+    }).fail(function(error) {
+      console.error(error.responseText);
+    });
   },
 
   render() {
@@ -88,20 +121,23 @@ export default React.createClass({
     });
 
     return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Invitation</th>
-            <th>Name</th>
-            {headerCells}
-            <th>Comments</th>
-          </tr>
-        </thead>
-        <tbody>
-          { result }
-        </tbody>
-      </table>
+      <div>
+        <button onClick={this.sendAll}>Send all invitations</button>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Invitation</th>
+              <th>Name</th>
+              {headerCells}
+              <th>Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            { result }
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

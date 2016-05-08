@@ -31,37 +31,57 @@ router.post('/sendmail', function(req, res) {
   if (!req.body) {
     res.status(400);
     res.json({ error: "JSON body must be provided" });
+    console.error('Failed to send emails. Missing or malformed JSON body.');
+    return
   }
   if (!util.isArray(req.body.invitations)) {
     res.status(400);
     res.json({ error: "Array of invitations must be provided" });
+    console.error('Failed to send emails. Missing array of invitations.');
+    return
   }
 
+  var replyToName = req.body.replyToName || "Invitation";
+  var replyToAddress = req.body.replyToAddress || MAIL_DOMAIN_NAME;
+  var fromAddress = replyToName + " <" + replyToAddress + ">"
+
   var toAddresses = req.body.invitations.map(function(invitation) {
-    return invitation.to;
+    return invitation.toName + " <" + invitation.toAddr + ">";
   })
 
   var recipientVariables = {};
   req.body.invitations.forEach(function(invitation) {
-    recipientVariables[invitation.to] = { 'invitationId': invitation.id };
+    recipientVariables[invitation.toAddr] = { 'invitationId': invitation.id };
   });
 
-  var emailText = req.body.message1 + "\n\n" +
-    "http://" + DOMAIN_NAME + "/event/" + req.body.eventId + "/%recipient.invitationId%" + "\n\n" +
-    req.body.message2;
+  var emailTextLines = [];
+
+  if (req.body.message1) {
+    emailTextLines.push(req.body.message1);
+  }
+
+  emailTextLines.push("http://" + DOMAIN_NAME + "/event/" + req.body.eventId + "/%recipient.invitationId%");
+
+  if (req.body.message2) {
+    emailTextLines.push(req.body.message2);
+  }
+
+  var formData = {
+    "from": fromAddress,
+    "to": toAddresses,
+    "subject": req.body.subject,
+    "text": emailTextLines.join("\n\n"),
+    "recipient-variables": JSON.stringify(recipientVariables)
+  };
+
+  console.log(formData);
 
   request.post({url: MAIL_SERVICE + "/" + MAIL_DOMAIN_NAME + "/messages",
     auth: {
       user: "api",
       pass: MAIL_API_KEY
     },
-    form: {
-      "from": req.body.from || "Invitation <info@" + MAIL_DOMAIN_NAME + ">",
-      "to": toAddresses,
-      "subject": req.body.subject,
-      "text": emailText,
-      "recipient-variables": JSON.stringify(recipientVariables)
-    }
+    form: formData
   }, function (error, response, body) {
     if (error) {
       console.error(error);

@@ -20,6 +20,7 @@
     "firebase": "~2.4.2",
     "if-env": "~1.0.0",
     "image-webpack-loader": "~1.7.0",
+    "jquery": "^2.2.3",
     "lodash": "~4.11.1",
     "react": "~15.0.1",
     "react-dom": "~15.0.1",
@@ -35,6 +36,7 @@
     "configure:heroku": "cat .env | xargs heroku config:set",
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:dev":       "ls .env && export $(cat .env | xargs) && webpack-dev-server --inline --content-base public --history-api-fallback",
+    "watch:dev":       "ls .env && export $(cat .env | xargs) && webpack --watch",
     "start:serverdev": "ls .env && export $(cat .env | xargs) && webpack && nodemon server.js",
     "start:prod":      "ls .env && export $(cat .env | xargs) && webpack && node server.js"
   },
