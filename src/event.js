@@ -2,6 +2,7 @@ import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
 import $ from 'jquery';
+import crypto from 'crypto';
 
 export default React.createClass({
   getInitialState: function() {
@@ -36,6 +37,25 @@ export default React.createClass({
     invitations[invitationId][attributeName] = e.target.value;
     this.setState({invitations});
     this.eventRef.child('invitations/' + invitationId + '/' + attributeName).set(e.target.value);
+  },
+
+  randomKey() {
+    return crypto.randomBytes(12).toString('base64').replace('/','0').replace('+','0');
+  },
+
+  addInvitation() {
+    this.eventRef.child('invitations/' + this.randomKey()).set({
+      people: [
+        { name: "" },
+        { name: "" }
+      ]
+    });
+  },
+
+  deleteInvitation(invitationId) {
+    if (confirm('Are you sure you want to delete this invitation?')) {
+      this.eventRef.child('invitations/' + invitationId).remove();
+    }
   },
 
   sendAll() {
@@ -93,6 +113,12 @@ export default React.createClass({
         <td rowSpan={numPeople}>{item.comments}</td>
       );
 
+      let actionsCell = (
+        <td rowSpan={numPeople}>
+          <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete</button>
+        </td>
+      );
+
       var people = _.map(item.people, (person, i) => {
         let questionCells = this.state.card.individualQuestions.map((question, i) => {
           return (
@@ -107,6 +133,7 @@ export default React.createClass({
             <td>{ person.name || '-' }</td>
             {questionCells}
             {i == 0 && commentsCell}
+            {i == 0 && actionsCell}
           </tr>
         );
       });
@@ -137,6 +164,7 @@ export default React.createClass({
             { result }
           </tbody>
         </table>
+        <button onClick={this.addInvitation}>Add</button>
       </div>
     );
   }
