@@ -95,16 +95,16 @@ export default React.createClass({
 
       var people = _.map(item.people, (person, i) => {
         let questionCells = this.state.card.individualQuestions.map((question, i) => {
-          <td key={i}>{ person[question.name] || '-' }</td>
+          return (
+            <td key={i}>{ person[question.name] || '-' }</td>
+          );
         });
 
         return (
           <tr>
             {i == 0 && emailCell}
             {i == 0 && invitationLinkCell}
-            <td>{ person.name || '+1' }</td>
-            <td>{ person.accept || '-' }</td>
-            <td>{ person.drinks || '-' }</td>
+            <td>{ person.name || '-' }</td>
             {questionCells}
             {i == 0 && commentsCell}
           </tr>
