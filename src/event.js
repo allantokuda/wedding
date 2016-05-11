@@ -76,6 +76,22 @@ export default React.createClass({
     }
   },
 
+  resetInvitation(invitationId) {
+    if (confirm('Are you sure you want to reset this invitation? This will delete the guest\'s responses.')) {
+      let invitationRef = this.eventRef.child('invitations/' + invitationId);
+      invitationRef.once("value", function(snapshot) {
+        let existingInvitation = snapshot.val();
+        let newInvitation = {
+          email: existingInvitation.email,
+          people: _.mapValues(existingInvitation.people, person => {
+            return { name: person.name };
+          })
+        };
+        invitationRef.set(newInvitation);
+      });
+    }
+  },
+
   sendAll() {
     let requestBody = {
       "eventId": this.props.params.eventId,
@@ -134,6 +150,7 @@ export default React.createClass({
       let actionsCell = (
         <td rowSpan={numPeople}>
           <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete Invitation</button>
+          <button onClick={this.resetInvitation.bind(this, inviteId)}>Reset Invitation</button>
           <button onClick={this.addPerson.bind(this, inviteId)}>Add Person</button>
         </td>
       );
