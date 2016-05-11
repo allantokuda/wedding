@@ -6,15 +6,15 @@ export default React.createClass({
   },
 
   changeRadio: function(inputName, inputValue, e) {
-    this.props.changeCallback(this.props.personNumber, inputName, inputValue );
+    this.props.changeCallback(this.props.personId, inputName, inputValue );
   },
 
   changeCheckbox: function(inputName, e) {
-    this.props.changeCallback(this.props.personNumber, inputName, e.target.checked ? "yes" : "no" );
+    this.props.changeCallback(this.props.personId, inputName, e.target.checked ? "yes" : "no" );
   },
 
   changeText: function(inputName, e) {
-    this.props.changeCallback(this.props.personNumber, inputName, e.target.value );
+    this.props.changeCallback(this.props.personId, inputName, e.target.value );
   },
 
   renderRadio(radio, formIndex) {

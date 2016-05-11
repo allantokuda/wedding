@@ -53,15 +53,15 @@ export default React.createClass({
 
   anyYesOnThisInvitation() {
     let result = false;
-    this.state.people.forEach(person => {
+    _.each(this.state.people, person => {
       result = result || person.accept === 'yes';
     });
     return result;
   },
 
-  updatePerson: function(personNumber, attribute, value) {
-    let updatedPeople = this.state.people.slice();
-    updatedPeople[personNumber][attribute] = value;
+  updatePerson: function(personId, attribute, value) {
+    let updatedPeople = this.state.people;
+    updatedPeople[personId][attribute] = value;
     this.setState({ people: updatedPeople });
   },
 
@@ -97,9 +97,9 @@ export default React.createClass({
 
   renderForm: function() {
     if (this.state.edit) {
-      let peopleSections = this.state.people.map(function(person, i) {
+      let peopleSections = _.map(this.state.people, (person, personId) => {
         return (
-          <Person key={i} personNumber={i} data={person} questions={this.state.card.individualQuestions} changeCallback={this.updatePerson} />
+          <Person key={personId} personId={personId} data={person} questions={this.state.card.individualQuestions} changeCallback={this.updatePerson} />
         );
       }, this);
 
