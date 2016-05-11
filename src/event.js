@@ -39,6 +39,10 @@ export default React.createClass({
     this.eventRef.child('invitations/' + invitationId + '/' + attributeName).set(e.target.value);
   },
 
+  changePerson(invitationId, personId, attributeName, e) {
+    this.eventRef.child('invitations/' + invitationId + '/people/' + personId + '/' + attributeName).set(e.target.value);
+  },
+
   randomKey() {
     return crypto.randomBytes(12).toString('base64').replace('/','0').replace('+','0');
   },
@@ -148,7 +152,7 @@ export default React.createClass({
           <tr>
             {i == 1 && emailCell}
             {i == 1 && invitationLinkCell}
-            <td>{ person.name || '-' }</td>
+            <td><input value={person.name} onChange={this.changePerson.bind(this, inviteId, personId, 'name')}/></td>
             {questionCells}
             <td><button onClick={this.deletePerson.bind(this, inviteId, personId)}>Delete Person</button></td>
             {i == 1 && commentsCell}
