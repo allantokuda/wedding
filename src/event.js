@@ -189,6 +189,7 @@ export default React.createClass({
               <th>Invitation</th>
               <th>Name</th>
               {headerCells}
+              <th></th>
               <th>Comments</th>
             </tr>
           </thead>
