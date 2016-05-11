@@ -59,6 +59,13 @@ export default React.createClass({
     });
   },
 
+  deletePerson(invitationId, personId) {
+    let personRef = this.eventRef.child('invitations/' + invitationId + '/people/' + personId);
+    if (confirm('Are you sure you want to delete this person from their invitation?')) {
+      personRef.remove();
+    }
+  },
+
   deleteInvitation(invitationId) {
     if (confirm('Are you sure you want to delete this invitation?')) {
       this.eventRef.child('invitations/' + invitationId).remove();
@@ -122,13 +129,13 @@ export default React.createClass({
 
       let actionsCell = (
         <td rowSpan={numPeople}>
-          <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete</button>
+          <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete Invitation</button>
           <button onClick={this.addPerson.bind(this, inviteId)}>Add Person</button>
         </td>
       );
 
       let i = 0;
-      var people = _.map(item.people, person => {
+      var people = _.map(item.people, (person, personId) => {
         i++;
 
         let questionCells = this.state.card.individualQuestions.map((question, j) => {
@@ -143,6 +150,7 @@ export default React.createClass({
             {i == 1 && invitationLinkCell}
             <td>{ person.name || '-' }</td>
             {questionCells}
+            <td><button onClick={this.deletePerson.bind(this, inviteId, personId)}>Delete Person</button></td>
             {i == 1 && commentsCell}
             {i == 1 && actionsCell}
           </tr>
