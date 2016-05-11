@@ -132,19 +132,11 @@ export default React.createClass({
       let numPeople = _.keys(item.people).length;
 
       let emailCell = (
-        <td rowSpan={numPeople}>
-          <input name="email" type="text" value={item.email} onChange={this.changeInvitation.bind(this, inviteId, 'email')}/>
-        </td>
+        <input name="email" type="text" value={item.email} onChange={this.changeInvitation.bind(this, inviteId, 'email')} disabled={item.responseDates}/>
       );
 
       let invitationLinkCell = (
-        <td rowSpan={numPeople}>
-          <a target="_blank" href={inviteLink}>Invitation</a>
-        </td>
-      );
-
-      let commentsCell = (
-        <td rowSpan={numPeople}>{item.comments}</td>
+        <a target="_blank" href={inviteLink}>Invitation</a>
       );
 
       let actionsCell = (
@@ -167,13 +159,13 @@ export default React.createClass({
 
         return (
           <tr>
-            {i == 1 && emailCell}
-            {i == 1 && invitationLinkCell}
-            <td><input value={person.name} onChange={this.changePerson.bind(this, inviteId, personId, 'name')}/></td>
+            {i == 1 && <td rowSpan={numPeople}>{emailCell}</td>}
+            {i == 1 && <td rowSpan={numPeople}>{invitationLinkCell}</td>}
+            <td><input value={person.name} onChange={this.changePerson.bind(this, inviteId, personId, 'name')} disabled={person.accept}/></td>
             {questionCells}
-            <td><button onClick={this.deletePerson.bind(this, inviteId, personId)}>Delete Person</button></td>
-            {i == 1 && commentsCell}
-            {i == 1 && actionsCell}
+            <td>{ !person.accept && <button onClick={this.deletePerson.bind(this, inviteId, personId)}>Delete Person</button>}</td>
+            {i == 1 && <td rowSpan={numPeople}>{item.comments}</td>}
+            {i == 1 && <td rowSpan={numPeople}>{actionsCell}</td>}
           </tr>
         );
       });
