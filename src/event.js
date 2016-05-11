@@ -52,6 +52,13 @@ export default React.createClass({
     });
   },
 
+  addPerson(invitationId) {
+    let peopleRef = this.eventRef.child('invitations/' + invitationId + '/people/');
+    peopleRef.once("value", function(snapshot) {
+      peopleRef.push({ name: '' });
+    });
+  },
+
   deleteInvitation(invitationId) {
     if (confirm('Are you sure you want to delete this invitation?')) {
       this.eventRef.child('invitations/' + invitationId).remove();
@@ -95,7 +102,7 @@ export default React.createClass({
 
       //var emailLink = "mailto:" + item.email + "?subject=" + this.state.card.emailSubject + "&body=" + this.state.card.emailBody + "%0A%0A" + inviteLink
 
-      let numPeople = item.people.length;
+      let numPeople = _.keys(item.people).length;
 
       let emailCell = (
         <td rowSpan={numPeople}>
@@ -116,24 +123,28 @@ export default React.createClass({
       let actionsCell = (
         <td rowSpan={numPeople}>
           <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete</button>
+          <button onClick={this.addPerson.bind(this, inviteId)}>Add Person</button>
         </td>
       );
 
-      var people = _.map(item.people, (person, i) => {
-        let questionCells = this.state.card.individualQuestions.map((question, i) => {
+      let i = 0;
+      var people = _.map(item.people, person => {
+        i++;
+
+        let questionCells = this.state.card.individualQuestions.map((question, j) => {
           return (
-            <td key={i}>{ person[question.name] || '-' }</td>
+            <td key={j}>{ person[question.name] || '-' }</td>
           );
         });
 
         return (
           <tr>
-            {i == 0 && emailCell}
-            {i == 0 && invitationLinkCell}
+            {i == 1 && emailCell}
+            {i == 1 && invitationLinkCell}
             <td>{ person.name || '-' }</td>
             {questionCells}
-            {i == 0 && commentsCell}
-            {i == 0 && actionsCell}
+            {i == 1 && commentsCell}
+            {i == 1 && actionsCell}
           </tr>
         );
       });
@@ -164,7 +175,7 @@ export default React.createClass({
             { result }
           </tbody>
         </table>
-        <button onClick={this.addInvitation}>Add</button>
+        <button onClick={this.addInvitation}>Add Invitation</button>
       </div>
     );
   }
