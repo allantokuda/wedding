@@ -56,3 +56,7 @@ label.textarea textarea { font-weight: normal; width: 340px; }
 input[disabled] {
   background-color: #ccc;
 }
+
+tr.initial {
+  border-top: 30px solid #bbb;
+}

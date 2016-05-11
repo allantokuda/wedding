@@ -143,7 +143,6 @@ export default React.createClass({
         <td rowSpan={numPeople}>
           <button onClick={this.deleteInvitation.bind(this, inviteId)}>Delete Invitation</button>
           <button onClick={this.resetInvitation.bind(this, inviteId)}>Reset Invitation</button>
-          <button onClick={this.addPerson.bind(this, inviteId)}>Add Person</button>
         </td>
       );
 
@@ -158,19 +157,25 @@ export default React.createClass({
         });
 
         return (
-          <tr>
-            {i == 1 && <td rowSpan={numPeople}>{emailCell}</td>}
-            {i == 1 && <td rowSpan={numPeople}>{invitationLinkCell}</td>}
+          <tr className={ i == 1 ? 'initial' : null}>
+            {i == 1 && <td rowSpan={numPeople+1}>{emailCell}</td>}
+            {i == 1 && <td rowSpan={numPeople+1}>{invitationLinkCell}</td>}
+            <td>{ !person.accept && <button onClick={this.deletePerson.bind(this, inviteId, personId)}>Remove</button>}</td>
             <td><input value={person.name} onChange={this.changePerson.bind(this, inviteId, personId, 'name')} disabled={person.accept}/></td>
             {questionCells}
-            <td>{ !person.accept && <button onClick={this.deletePerson.bind(this, inviteId, personId)}>Delete Person</button>}</td>
-            {i == 1 && <td rowSpan={numPeople}>{item.comments}</td>}
-            {i == 1 && <td rowSpan={numPeople}>{actionsCell}</td>}
+            {i == 1 && <td rowSpan={numPeople+1}>{item.comments}</td>}
+            {i == 1 && <td rowSpan={numPeople+1}>{actionsCell}</td>}
           </tr>
         );
       });
 
-      return people;
+      return people.concat(
+        <tr>
+          <td colSpan={this.state.card.individualQuestions.length+2}>
+            <button onClick={this.addPerson.bind(this, inviteId)}>Add Person</button>
+          </td>
+        </tr>
+      );
     });
 
     let headerCells = this.state.card && this.state.card.individualQuestions.map((question, i) => {
@@ -187,9 +192,9 @@ export default React.createClass({
             <tr>
               <th>Email</th>
               <th>Invitation</th>
+              <th></th>
               <th>Name</th>
               {headerCells}
-              <th></th>
               <th>Comments</th>
             </tr>
           </thead>
