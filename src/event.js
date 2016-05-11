@@ -123,8 +123,16 @@ export default React.createClass({
     });
   },
 
-  render() {
-    let result = _.map(this.state.invitations, (item, inviteId) => {
+  renderInvitationHeader() {
+    return this.state.card && this.state.card.individualQuestions.map((question, i) => {
+      return (
+        <th key={i}>{ question.label || question.name }</th>
+      );
+    });
+  },
+
+  renderInvitations() {
+    return _.map(this.state.invitations, (item, inviteId) => {
       var inviteLink = "/event/" + this.props.params.eventId + '/' + inviteId
 
       //var emailLink = "mailto:" + item.email + "?subject=" + this.state.card.emailSubject + "&body=" + this.state.card.emailBody + "%0A%0A" + inviteLink
@@ -177,29 +185,18 @@ export default React.createClass({
         </tr>
       );
     });
+  },
 
-    let headerCells = this.state.card && this.state.card.individualQuestions.map((question, i) => {
-      return (
-        <th key={i}>{ question.label || question.name }</th>
-      );
-    });
-
+  render() {
     return (
       <div>
         <button onClick={this.sendAll}>Send all invitations</button>
         <table className="table">
           <thead>
-            <tr>
-              <th>Email</th>
-              <th>Invitation</th>
-              <th></th>
-              <th>Name</th>
-              {headerCells}
-              <th>Comments</th>
-            </tr>
+            { this.renderInvitationHeader() }
           </thead>
           <tbody>
-            { result }
+            { this.renderInvitations() }
           </tbody>
         </table>
         <button onClick={this.addInvitation}>Add Invitation</button>
