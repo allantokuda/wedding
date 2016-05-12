@@ -53,10 +53,30 @@ label.checkbox-radio span { display: block; margin-left: 1.5em; margin-right: 1.
 label.textarea span { display: block; }
 label.textarea textarea { font-weight: normal; width: 340px; }
 
-input[disabled] {
+input[disabled], textarea[disabled] {
   background-color: #ccc;
 }
 
 tr.initial {
   border-top: 30px solid #bbb;
+}
+
+td.question-response {
+  padding: 0px 10px;
+}
+
+td.comments-review {
+  padding: 10px;
+}
+
+table.guestbook > tbody > tr > td {
+  padding: 20px 0px;
+  border-top: 1px solid #fff;
+  vertical-align: top;
+}
+
+table.guestbook a {
+  display: inline-block;
+  padding: 0px 10px;
+  height: 32px;
 }

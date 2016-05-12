@@ -81,7 +81,7 @@ export default React.createClass({
     return (
       <div>
         <button onClick={this.sendAll}>Send all invitations</button>
-        <table className="table">
+        <table className="guestbook">
           <tbody>
             {_.map(this.state.invitations, (item, inviteId) => (
               <InvitationSummary card={this.state.card} data={item} inviteRef={this.eventRef.child('invitations/' + inviteId)} eventId={this.props.params.eventId} inviteId={inviteId}/>

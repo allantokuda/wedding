@@ -38,23 +38,26 @@ export default React.createClass({
   },
 
   renderPeople() {
-    return _.map(this.props.data.people, (person, personId) => {
+    let responded = this.props.data.responseDates !== undefined;
+    let people = _.map(this.props.data.people, (person, personId) => {
       let questionCells = this.props.card.individualQuestions.map((question, j) => {
         return (
-          <td key={j}>{ person[question.name] || '-' }</td>
+          <td className="question-response" key={j}>{ person[question.name] }</td>
         );
       });
 
       return (
         <tr key={personId}>
           <td>
-            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept}/>
+            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept} width="200"/>
             { !person.accept && <button onClick={this.deletePerson.bind(this, personId)}>{"\u274c"}</button>}
           </td>
-          {this.props.data.responseDates && questionCells}
+          {responded && questionCells}
         </tr>
       );
-    }).concat(
+    });
+
+    return responded ? people : people.concat(
       <tr key="add-button">
         <td colSpan="2">
           <button onClick={this.addPerson}>Add Person</button>
@@ -64,11 +67,12 @@ export default React.createClass({
   },
 
   render() {
+    let responded = this.props.data.responseDates !== undefined;
     return (
-      <tr class="invitation" key={this.props.inviteId}>
+      <tr className="invitation-summary" key={this.props.inviteId}>
         <td>
-          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={this.props.data.responseDates}/>
-          {!this.props.data.responseDates && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
+          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded}/>
+          {!responded && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
         </td>
         <td>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
@@ -80,8 +84,8 @@ export default React.createClass({
             </tbody>
           </table>
         </td>
-        <td>{this.props.data.comments}</td>
-        <td>{this.props.data.responseDates && <button onClick={this.resetInvitation}>Clear</button>}</td>
+        <td>{responded && <textarea disabled>{this.props.data.comments}</textarea>}</td>
+        <td>{responded && <button onClick={this.resetInvitation}>Clear</button>}</td>
       </tr>
     );
   }
