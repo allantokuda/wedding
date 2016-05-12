@@ -13,7 +13,7 @@ export default React.createClass({
   },
 
   resetInvitation() {
-    if (confirm('Are you sure you want to reset this invitation? This will delete the guest\'s responses.')) {
+    if (confirm('Are you sure you want to clear the guest\'s responses from this invitation?')) {
       this.props.inviteRef.set({
         email: this.props.data.email,
         people: _.mapValues(this.props.data.people, person => {
@@ -47,9 +47,11 @@ export default React.createClass({
 
       return (
         <tr key={personId}>
-          <td>{ !person.accept && <button onClick={this.deletePerson.bind(this, personId)}>Remove</button>}</td>
-          <td><input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept}/></td>
-          {questionCells}
+          <td>
+            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept}/>
+            { !person.accept && <button onClick={this.deletePerson.bind(this, personId)}>{"\u274c"}</button>}
+          </td>
+          {this.props.data.responseDates && questionCells}
         </tr>
       );
     }).concat(
@@ -65,11 +67,8 @@ export default React.createClass({
     return (
       <tr class="invitation" key={this.props.inviteId}>
         <td>
-          {!this.props.data.responseDates && <button onClick={this.deleteInvitation}>Delete</button>}
-          {this.props.data.responseDates && <button onClick={this.resetInvitation}>Reset</button>}
-        </td>
-        <td>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={this.props.data.responseDates}/>
+          {!this.props.data.responseDates && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
         </td>
         <td>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
@@ -82,6 +81,7 @@ export default React.createClass({
           </table>
         </td>
         <td>{this.props.data.comments}</td>
+        <td>{this.props.data.responseDates && <button onClick={this.resetInvitation}>Clear</button>}</td>
       </tr>
     );
   }
