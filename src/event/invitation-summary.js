@@ -72,6 +72,8 @@ export default React.createClass({
       <tr className="invitation-summary" key={this.props.inviteId}>
         <td>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded}/>
+        </td>
+        <td>
           {!responded && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
         </td>
         <td>
