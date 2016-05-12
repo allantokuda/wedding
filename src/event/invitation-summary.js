@@ -63,7 +63,7 @@ export default React.createClass({
 
   render() {
     return (
-      <tr class="invitation">
+      <tr class="invitation" key={this.props.inviteId}>
         <td>
           {!this.props.data.responseDates && <button onClick={this.deleteInvitation}>Delete</button>}
           {this.props.data.responseDates && <button onClick={this.resetInvitation}>Reset</button>}
@@ -71,11 +71,9 @@ export default React.createClass({
         <td>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={this.props.data.responseDates}/>
         </td>
-        {/* TODO: re-gather these IDs based on DB ref toString()
         <td>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
         </td>
-        */}
         <td>
           <table class="people">
             <tbody>
