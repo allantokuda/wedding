@@ -54,7 +54,7 @@ export default React.createClass({
       );
     }).concat(
       <tr key="add-button">
-        <td colSpan={this.props.card.individualQuestions.length+2}>
+        <td colSpan="2">
           <button onClick={this.addPerson}>Add Person</button>
         </td>
       </tr>
@@ -64,6 +64,10 @@ export default React.createClass({
   render() {
     return (
       <tr class="invitation">
+        <td>
+          {!this.props.data.responseDates && <button onClick={this.deleteInvitation}>Delete</button>}
+          {this.props.data.responseDates && <button onClick={this.resetInvitation}>Reset</button>}
+        </td>
         <td>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={this.props.data.responseDates}/>
         </td>
@@ -80,10 +84,6 @@ export default React.createClass({
           </table>
         </td>
         <td>{this.props.data.comments}</td>
-        <td>
-          <button onClick={this.deleteInvitation}>Delete Invitation</button>
-          <button onClick={this.resetInvitation}>Reset Invitation</button>
-        </td>
       </tr>
     );
   }
