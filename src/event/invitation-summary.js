@@ -39,7 +39,15 @@ export default React.createClass({
 
   renderPeople() {
     let responded = this.props.data.responseDates !== undefined;
-    let people = _.map(this.props.data.people, (person, personId) => {
+    let peopleArray = _.keys(this.props.data.people).map(personId => {
+      let person = this.props.data.people[personId];
+      person.personId = personId;
+      return person;
+    });
+
+    peopleArray = _.sortBy(peopleArray, person => person.index);
+
+    let people = _.map(peopleArray, person => {
       let questionCells = this.props.card.individualQuestions.map((question, j) => {
         return (
           <td className="question-response" key={j}>{ person[question.name] }</td>
@@ -47,10 +55,10 @@ export default React.createClass({
       });
 
       return (
-        <tr key={personId}>
+        <tr key={person.personId}>
           <td>
-            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept} width="200" placeholder="Full name"/>
-            { !person.accept && <button onClick={this.deletePerson.bind(this, personId)}>{"\u274c"}</button>}
+            <input value={person.name} onChange={this.changePerson.bind(this, person.personId, 'name')} disabled={person.accept} width="200" placeholder="Full name"/>
+            { !person.accept && <button onClick={this.deletePerson.bind(this, person.personId)}>{"\u274c"}</button>}
           </td>
           {responded && questionCells}
         </tr>

@@ -24,10 +24,10 @@ export default React.createClass({
     this.rows().forEach(rowText => {
       let people = rowText.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
       let peopleHash = {};
-      people.forEach(person => {
+      people.forEach((person, i) => {
         let personName = person.trim();
         if (personName.length > 0) {
-          peopleHash[randomKey()] = { name: personName };
+          peopleHash[randomKey()] = { name: personName, index: i };
         }
       });
       console.log(peopleHash);
