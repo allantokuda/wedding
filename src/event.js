@@ -90,7 +90,7 @@ export default React.createClass({
   render() {
     return (
       <div>
-        <button onClick={this.sendAll}>Send all invitations</button>
+        {this.state.invitations && this.state.invitations.length > 0 && <button onClick={this.sendAll}>Send all invitations</button>}
         <table className="guestbook">
           <tbody>
             {_.map(this.state.invitations, invitation => (
