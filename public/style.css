@@ -85,3 +85,11 @@ table.guestbook a {
   display: flex;
   padding: 20px;
 }
+
+.bulk-add-form {
+  background: #eee;
+  border: 1px solid #999;
+  padding: 20px;
+  float: right;
+  margin-bottom: 30px;
+}

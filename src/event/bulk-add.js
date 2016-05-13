@@ -61,14 +61,12 @@ export default React.createClass({
   render() {
     return (
       <div className="bulk-add-form">
-        <textarea onChange={this.onChange} placeholder="Paste here to bulk-add invitations" value={this.state.text}/>
-        {this.state.text && (
-          <div>
-            <p>Detected {this.rows().length} invitations.</p>
-            <button onClick={this.import}>Import All</button>
-            <button onClick={this.clear}>Clear</button>
-          </div>
-        )}
+        <textarea onChange={this.onChange} placeholder="Paste here to bulk-add invitations." value={this.state.text}/>
+        <div>
+          <p>{this.state.text && "Detected " + this.rows().length + " invitations."}&nbsp;</p>
+          <button onClick={this.import} disabled={!this.state.text}>Import All</button>
+          <button onClick={this.clear} disabled={!this.state.text}>Clear</button>
+        </div>
       </div>
     );
   },
