@@ -1,5 +1,6 @@
 import React from 'react';
 import randomKey from '../util/random-key';
+import Firebase from 'firebase';
 
 export default React.createClass({
   getInitialState() {
@@ -23,13 +24,24 @@ export default React.createClass({
     let newKeys = {};
 
     this.rows().forEach(rowText => {
+      let regex = /^\d+\s+|\s+\d+$/g
+      let matches = rowText.match(regex);
+      let count;
+      if (matches && matches.length == 1) {
+        rowText = rowText.replace(regex, '');
+        count = parseInt(matches[0].trim(), 10);
+      }
       let people = rowText.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
       let peopleHash = {};
-      people.forEach((person, i) => {
+      let i = 0;
+      people.forEach((person) => {
         let personName = person.trim();
-        peopleHash[randomKey()] = { name: personName, index: i };
+        peopleHash[randomKey()] = { name: personName, index: ++i };
       });
-      newKeys[randomKey()] = { people: peopleHash };
+      while (i < count) {
+        peopleHash[randomKey()] = { name: '', index: ++i }
+      }
+      newKeys[randomKey()] = { people: peopleHash, creationDate: Firebase.ServerValue.TIMESTAMP };
     });
 
     this.props.eventRef.child('invitations').update(newKeys).then(() => {

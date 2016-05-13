@@ -45,7 +45,6 @@ export default React.createClass({
     this.eventRef.child('invitations/' + randomKey()).set({
       creationDate: Firebase.ServerValue.TIMESTAMP,
       people: [
-        { name: "" },
         { name: "" }
       ]
     });
