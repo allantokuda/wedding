@@ -11,7 +11,7 @@ export default React.createClass({
   },
 
   rows() {
-    return this.state.text.split("\n");
+    return this.state.text.trim().split(/\n+/);
   },
 
   clear() {
