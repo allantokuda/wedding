@@ -49,7 +49,7 @@ export default React.createClass({
       return (
         <tr key={personId}>
           <td>
-            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept} width="200"/>
+            <input value={person.name} onChange={this.changePerson.bind(this, personId, 'name')} disabled={person.accept} width="200" placeholder="Full name"/>
             { !person.accept && <button onClick={this.deletePerson.bind(this, personId)}>{"\u274c"}</button>}
           </td>
           {responded && questionCells}
@@ -71,7 +71,7 @@ export default React.createClass({
     return (
       <div className="invitation-summary" key={this.props.inviteId}>
         <div style={{minWidth: 250}}>
-          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded}/>
+          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
           {!responded && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
         </div>
         <div>
