@@ -90,7 +90,9 @@ export default React.createClass({
   render() {
     return (
       <div>
-        {this.state.invitations && this.state.invitations.length > 0 && <button onClick={this.sendAll}>Send all invitations</button>}
+        <div className="event-manager-controls">
+          {this.state.invitations && this.state.invitations.length > 0 && <button onClick={this.sendAll}>Send all invitations</button>}
+        </div>
         <table className="guestbook">
           <tbody>
             {_.map(this.state.invitations, invitation => (
@@ -98,11 +100,13 @@ export default React.createClass({
             ))}
           </tbody>
         </table>
-        <button onClick={this.addInvitation}>Add Invitation</button>
+        <div className="event-manager-controls">
+          <button onClick={this.addInvitation}>Add Invitation</button>
 
-        <br/><br/>
+          <br/><br/>
 
-        <BulkAdd eventRef={this.eventRef} />
+          <BulkAdd eventRef={this.eventRef} />
+        </div>
       </div>
     );
   }
