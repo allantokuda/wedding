@@ -26,14 +26,16 @@ export default React.createClass({
       let card = event.card;
       let email = event.email;
       let invitations = [];
+      let maxIndex = 0;
       _.keys(event.invitations).forEach(inviteId => {
         let invitation = event.invitations[inviteId];
         invitation.inviteId = inviteId;
+        maxIndex = Math.max(invitation.index, maxIndex);
         invitations.push(invitation);
       });
-      invitations = _.sortBy(invitations, i => i.creationDate);
+      invitations = _.sortBy(invitations, i => i.index);
 
-      this.setState({ card, email, invitations });
+      this.setState({ card, email, invitations, maxIndex });
     });
   },
 
@@ -42,8 +44,10 @@ export default React.createClass({
   },
 
   addInvitation() {
+    let maxIndex = this.state.maxIndex + 1;
+    this.setState({ maxIndex });
     this.eventRef.child('invitations/' + randomKey()).set({
-      creationDate: Firebase.ServerValue.TIMESTAMP,
+      index: maxIndex,
       people: [
         { name: "" }
       ]

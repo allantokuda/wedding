@@ -20,7 +20,7 @@ export default React.createClass({
     this.setState({ text: '' });
   },
 
-  import() {
+  structuredData(inviteIndex) {
     let newKeys = {};
 
     this.rows().forEach(rowText => {
@@ -41,11 +41,20 @@ export default React.createClass({
       while (i < count) {
         peopleHash[randomKey()] = { name: '', index: ++i }
       }
-      newKeys[randomKey()] = { people: peopleHash, creationDate: Firebase.ServerValue.TIMESTAMP };
+      newKeys[randomKey()] = { people: peopleHash, index: ++inviteIndex };
     });
 
-    this.props.eventRef.child('invitations').update(newKeys).then(() => {
-      this.setState({ text: '' });
+    return newKeys;
+  },
+
+  import() {
+    let invitationsRef = this.props.eventRef.child('invitations');
+    invitationsRef.once('value', snapshot => {
+      let maxIndex =_.chain(snapshot.val()).values().map(invitation => invitation.index).max().value() || 1;
+      let newKeys = this.structuredData(maxIndex);
+      invitationsRef.update(newKeys).then(() => {
+        this.setState({ text: '' });
+      });
     });
   },
 
