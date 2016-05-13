@@ -15,7 +15,8 @@ export default React.createClass({
   resetInvitation() {
     if (confirm('Are you sure you want to clear the guest\'s responses from this invitation?')) {
       this.props.inviteRef.set({
-        email: this.props.data.email,
+        index: this.props.data.index,
+        email: this.props.data.email || '',
         people: _.mapValues(this.props.data.people, person => {
           return { name: person.name };
         })
