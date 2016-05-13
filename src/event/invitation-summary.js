@@ -69,26 +69,24 @@ export default React.createClass({
   render() {
     let responded = this.props.data.responseDates !== undefined;
     return (
-      <tr className="invitation-summary" key={this.props.inviteId}>
-        <td>
+      <div className="invitation-summary" key={this.props.inviteId}>
+        <div style={{minWidth: 250}}>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded}/>
-        </td>
-        <td>
           {!responded && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
-        </td>
-        <td>
+        </div>
+        <div>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
-        </td>
-        <td>
+        </div>
+        <div>
           <table class="people">
             <tbody>
               { this.renderPeople() }
             </tbody>
           </table>
-        </td>
-        <td>{responded && <textarea disabled value={this.props.data.comments}/>}</td>
-        <td>{responded && <button onClick={this.resetInvitation}>Clear</button>}</td>
-      </tr>
+        </div>
+        <div>{responded && <textarea disabled value={this.props.data.comments}/>}</div>
+        <div>{responded && <button onClick={this.resetInvitation}>Clear</button>}</div>
+      </div>
     );
   }
 });

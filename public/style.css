@@ -80,3 +80,8 @@ table.guestbook a {
   padding: 0px 10px;
   height: 32px;
 }
+
+.invitation-summary {
+  display: flex;
+  padding: 20px;
+}
