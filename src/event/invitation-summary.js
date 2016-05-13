@@ -86,7 +86,7 @@ export default React.createClass({
             </tbody>
           </table>
         </td>
-        <td>{responded && <textarea disabled>{this.props.data.comments}</textarea>}</td>
+        <td>{responded && <textarea disabled value={this.props.data.comments}/>}</td>
         <td>{responded && <button onClick={this.resetInvitation}>Clear</button>}</td>
       </tr>
     );
