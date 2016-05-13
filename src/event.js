@@ -2,8 +2,9 @@ import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
 import $ from 'jquery';
-import crypto from 'crypto';
 import InvitationSummary from './event/invitation-summary';
+import BulkAdd from './event/bulk-add';
+import randomKey from './util/random-key';
 
 export default React.createClass({
   getInitialState: function() {
@@ -40,12 +41,8 @@ export default React.createClass({
     this.eventRef.off();
   },
 
-  randomKey() {
-    return crypto.randomBytes(12).toString('base64').replace('/','0').replace('+','0');
-  },
-
   addInvitation() {
-    this.eventRef.child('invitations/' + this.randomKey()).set({
+    this.eventRef.child('invitations/' + randomKey()).set({
       creationDate: Firebase.ServerValue.TIMESTAMP,
       people: [
         { name: "" },
@@ -97,6 +94,10 @@ export default React.createClass({
           </tbody>
         </table>
         <button onClick={this.addInvitation}>Add Invitation</button>
+
+        <br/><br/>
+
+        <BulkAdd eventRef={this.eventRef} />
       </div>
     );
   }
