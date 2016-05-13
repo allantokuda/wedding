@@ -11,7 +11,8 @@ export default React.createClass({
   },
 
   rows() {
-    return this.state.text.trim().split(/\n+/);
+    let lines = this.state.text.trim().split(/\n+/);
+    return _.filter(lines, line => line.length > 0);
   },
 
   clear() {
@@ -26,11 +27,8 @@ export default React.createClass({
       let peopleHash = {};
       people.forEach((person, i) => {
         let personName = person.trim();
-        if (personName.length > 0) {
-          peopleHash[randomKey()] = { name: personName, index: i };
-        }
+        peopleHash[randomKey()] = { name: personName, index: i };
       });
-      console.log(peopleHash);
       newKeys[randomKey()] = { people: peopleHash };
     });
 
