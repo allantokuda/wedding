@@ -72,17 +72,19 @@ export default React.createClass({
       })
     };
 
-    $.ajax({
-      type: 'POST',
-      url: '/sendmail',
-      processData: false,
-      contentType: 'application/json',
-      data: JSON.stringify(requestBody)
-    }).done(function(success) {
-      console.log(success);
-    }).fail(function(error) {
-      console.error(error.responseText);
-    });
+    if (confirm('Are you sure you want to email invitations to all guests?')) {
+      $.ajax({
+        type: 'POST',
+        url: '/sendmail',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(requestBody)
+      }).done(function(success) {
+        console.log(success);
+      }).fail(function(error) {
+        console.error(error.responseText);
+      });
+    }
   },
 
   render() {
