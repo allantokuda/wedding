@@ -16,7 +16,7 @@ export default React.createClass({
       this.invitationRef = new Firebase(eventPath + '/invitations/' + this.props.params.invitationId);
       this.invitationRef.on("value", function(invitationSnapshot) {
         let invitation = invitationSnapshot.val();
-        let people = invitation.people || [];
+        let people = _.sortBy(invitation.people || [], invite => invite.index);
         let comments = invitation.comments || '';
         let edit = invitation.responseDates === undefined;
         this.setState({ card, people, comments, edit, invitation });
