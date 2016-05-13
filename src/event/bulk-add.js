@@ -22,10 +22,16 @@ export default React.createClass({
     let newKeys = {};
 
     this.rows().forEach(rowText => {
-      let person = { name: rowText };
-      let people = {};
-      people[randomKey()] = person;
-      newKeys[randomKey()] = { people };
+      let people = rowText.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
+      let peopleHash = {};
+      people.forEach(person => {
+        let personName = person.trim();
+        if (personName.length > 0) {
+          peopleHash[randomKey()] = { name: personName };
+        }
+      });
+      console.log(peopleHash);
+      newKeys[randomKey()] = { people: peopleHash };
     });
 
     this.props.eventRef.child('invitations').update(newKeys).then(() => {
