@@ -24,7 +24,14 @@ export default React.createClass({
       let event = eventSnapshot.val();
       let card = event.card;
       let email = event.email;
-      let invitations = event.invitations;
+      let invitations = [];
+      _.keys(event.invitations).forEach(inviteId => {
+        let invitation = event.invitations[inviteId];
+        invitation.inviteId = inviteId;
+        invitations.push(invitation);
+      });
+      invitations = _.sortBy(invitations, i => i.creationDate);
+
       this.setState({ card, email, invitations });
     });
   },
@@ -39,6 +46,7 @@ export default React.createClass({
 
   addInvitation() {
     this.eventRef.child('invitations/' + this.randomKey()).set({
+      creationDate: Firebase.ServerValue.TIMESTAMP,
       people: [
         { name: "" },
         { name: "" }
@@ -83,8 +91,8 @@ export default React.createClass({
         <button onClick={this.sendAll}>Send all invitations</button>
         <table className="guestbook">
           <tbody>
-            {_.map(this.state.invitations, (item, inviteId) => (
-              <InvitationSummary card={this.state.card} data={item} inviteRef={this.eventRef.child('invitations/' + inviteId)} eventId={this.props.params.eventId} inviteId={inviteId}/>
+            {_.map(this.state.invitations, invitation => (
+              <InvitationSummary card={this.state.card} data={invitation} inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)} eventId={this.props.params.eventId} inviteId={invitation.inviteId}/>
             ))}
           </tbody>
         </table>
