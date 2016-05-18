@@ -76,7 +76,7 @@ table.guestbook > tbody > tr > td {
 
 table.guestbook a {
   display: inline-block;
-  padding: 4px 20px;
+  margin: 4px 20px;
   height: 32px;
 }
 
@@ -93,6 +93,7 @@ table.guestbook a {
 .invitation-summary {
   display: flex;
   margin: 20px;
+  margin-bottom: 0px; /* no margin to insert invitation button */
 }
 
 .invitation-summary div {
@@ -116,15 +117,27 @@ table.guestbook a {
   margin-bottom: 30px;
 }
 
+.invitation-right-border {
+  position: relative;
+}
+
 .delete-invitation-button {
-  margin-right: 30px;
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
 
 .insert-invitation-button {
-  margin-left: 20px;
+  color: #555;
+  margin-left: 8px;
+  background: none;
+  border: none;
 }
 
-.insert-invitation-link:hover {
-  color: black;
-  background: #9d9;
+td.person-name {
+  min-width: 190px;
+}
+
+td.person-name input {
+  width: 150px;
 }

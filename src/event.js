@@ -101,7 +101,7 @@ export default React.createClass({
     return _.map(this.state.invitations, invitation => {
       let result = (
         <div>
-          <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>Add invitation</button>
+          <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
           <InvitationSummary
             card={this.state.card}
             data={invitation}
@@ -125,7 +125,7 @@ export default React.createClass({
           </tbody>
         </table>
         <div className="event-manager-controls">
-          <button onClick={this.addInvitation}>Add Invitation</button>
+          <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
           <div>
             <a href="#bulkadd" onClick={this.showBulkAdd}>Bulk add invitations</a>
           </div>

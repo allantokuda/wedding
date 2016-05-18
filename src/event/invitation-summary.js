@@ -65,8 +65,8 @@ export default React.createClass({
 
       return (
         <tr key={person.personId}>
-          <td>
-            <input value={person.name} onChange={this.changePerson.bind(this, person.personId, 'name')} disabled={person.accept} width="200" placeholder="Full name"/>
+          <td className="person-name">
+            <input value={person.name} onChange={this.changePerson.bind(this, person.personId, 'name')} disabled={person.accept} placeholder="Full name"/>
             { !person.accept && <button onClick={this.deletePerson.bind(this, person.personId)}>{"\u274c"}</button>}
           </td>
           {responded && questionCells}
@@ -93,11 +93,9 @@ export default React.createClass({
 
     return (
       <div className={classes.join(' ')} key={this.props.inviteId}>
-        <div style={{minWidth: 250}}>
-          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
-          <button className="send-invitation-button" onClick={this.sendInvitation.bind(this, this.props.inviteId)}>Send</button>
-        </div>
         <div>
+          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/><br/>
+          <button className="send-invitation-button" onClick={this.sendInvitation.bind(this, this.props.inviteId)}>Send</button>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
         </div>
         <div>
@@ -109,7 +107,7 @@ export default React.createClass({
         </div>
         <div>{responded && <textarea disabled value={this.props.data.comments}/>}</div>
         <div>{responded && <button onClick={this.resetInvitation}>Clear</button>}</div>
-        <div className="outside">
+        <div className="invitation-right-border">
           {!responded && <button className="delete-invitation-button" onClick={this.deleteInvitation}>{"\u274c"}</button>}
         </div>
       </div>
