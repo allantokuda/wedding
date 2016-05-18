@@ -42,7 +42,8 @@ export default React.createClass({
   },
 
   isBlank() {
-    return _.every(this.props.data.people, person => person.name == '');
+    return (this.props.data.email == null || this.props.data.email == '') &&
+      _.every(this.props.data.people, person => person.name == '');
   },
 
   renderPeople() {
