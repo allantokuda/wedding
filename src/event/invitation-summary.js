@@ -33,7 +33,7 @@ export default React.createClass({
   },
 
   deletePerson(personId) {
-    if (confirm('Are you sure you want to delete this person from their invitation?')) {
+    if (this.props.data.people[personId].name == '' || confirm('Are you sure you want to delete this person from their invitation?')) {
       this.props.inviteRef.child('people/' + personId).remove();
     }
   },
