@@ -7,7 +7,7 @@ export default React.createClass({
   },
 
   deleteInvitation() {
-    if (confirm('Are you sure you want to delete this invitation?')) {
+    if (this.isBlank() || confirm('Are you sure you want to delete this invitation?')) {
       this.props.inviteRef.remove();
     }
   },
@@ -36,6 +36,13 @@ export default React.createClass({
     if (confirm('Are you sure you want to delete this person from their invitation?')) {
       this.props.inviteRef.child('people/' + personId).remove();
     }
+  },
+
+  sendInvitation(inviteId) {
+  },
+
+  isBlank() {
+    return _.every(this.props.data.people, person => person.name == '');
   },
 
   renderPeople() {
@@ -77,11 +84,17 @@ export default React.createClass({
 
   render() {
     let responded = this.props.data.responseDates !== undefined;
+
+    let classes = ['invitation-summary'];
+    if (this.isBlank()) {
+      classes.push('blank')
+    }
+
     return (
-      <div className="invitation-summary" key={this.props.inviteId}>
+      <div className={classes.join(' ')} key={this.props.inviteId}>
         <div style={{minWidth: 250}}>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
-          {!responded && <button onClick={this.deleteInvitation}>{"\u274c"}</button>}
+          <button className="send-invitation-button" onClick={this.sendInvitation.bind(this, this.props.inviteId)}>Send</button>
         </div>
         <div>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
@@ -95,6 +108,9 @@ export default React.createClass({
         </div>
         <div>{responded && <textarea disabled value={this.props.data.comments}/>}</div>
         <div>{responded && <button onClick={this.resetInvitation}>Clear</button>}</div>
+        <div className="outside">
+          {!responded && <button className="delete-invitation-button" onClick={this.deleteInvitation}>{"\u274c"}</button>}
+        </div>
       </div>
     );
   }

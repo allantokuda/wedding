@@ -46,12 +46,21 @@ export default React.createClass({
   addInvitation() {
     let maxIndex = this.state.maxIndex + 1;
     this.setState({ maxIndex });
-    this.eventRef.child('invitations/' + randomKey()).set({
-      index: maxIndex,
-      people: [
-        { name: "" }
-      ]
-    });
+    this.addInvitationWithIndex(maxIndex);
+  },
+
+  addInvitationWithIndex(index) {
+    let people = [{ name: "" }];
+    this.eventRef.child('invitations/' + randomKey()).set({ index, people });
+  },
+
+  insertInvitation(after, before, e) {
+    e.preventDefault();
+    this.addInvitationWithIndex((after + before)/2);
+  },
+
+  showBulkAdd() {
+    this.setState({ showingBulkAdd: true });
   },
 
   sendAll() {
@@ -87,26 +96,42 @@ export default React.createClass({
     }
   },
 
+  renderInvitations() {
+    let prevIndex = -1;
+    return _.map(this.state.invitations, invitation => {
+      let result = (
+        <div>
+          <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>Add invitation</button>
+          <InvitationSummary
+            card={this.state.card}
+            data={invitation}
+            inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
+            eventId={this.props.params.eventId}
+            inviteId={invitation.inviteId}
+          />
+        </div>
+      );
+      prevIndex = invitation.index;
+      return result;
+    });
+  },
+
   render() {
     return (
       <div>
-        <div className="event-manager-controls">
-          {this.state.invitations && this.state.invitations.length > 0 && <button onClick={this.sendAll}>Send all invitations</button>}
-        </div>
         <table className="guestbook">
           <tbody>
-            {_.map(this.state.invitations, invitation => (
-              <InvitationSummary card={this.state.card} data={invitation} inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)} eventId={this.props.params.eventId} inviteId={invitation.inviteId}/>
-            ))}
+            {this.renderInvitations()}
           </tbody>
         </table>
         <div className="event-manager-controls">
           <button onClick={this.addInvitation}>Add Invitation</button>
-
-          <br/><br/>
-
-          <BulkAdd eventRef={this.eventRef} />
+          <div>
+            <a href="#bulkadd" onClick={this.showBulkAdd}>Bulk add invitations</a>
+          </div>
         </div>
+        <a name="bulkadd"></a>
+        {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef}/>}
       </div>
     );
   }

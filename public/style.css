@@ -76,23 +76,55 @@ table.guestbook > tbody > tr > td {
 
 table.guestbook a {
   display: inline-block;
-  padding: 0px 10px;
+  padding: 4px 20px;
   height: 32px;
 }
 
 .event-manager-controls {
   padding: 20px;
+  display: flex;
+}
+
+.event-manager-controls > div {
+  width: 200px;
+  padding: 10px 30px;
 }
 
 .invitation-summary {
   display: flex;
+  margin: 20px;
+}
+
+.invitation-summary div {
   padding: 20px;
+  background: #ddd;
+}
+
+.invitation-summary.blank div {
+  background: #ccc;
+}
+
+.invitation-summary div.outside {
+  background: none;
+  padding: 0;
 }
 
 .bulk-add-form {
   background: #eee;
   border: 1px solid #999;
   padding: 20px;
-  float: right;
   margin-bottom: 30px;
+}
+
+.delete-invitation-button {
+  margin-right: 30px;
+}
+
+.insert-invitation-button {
+  margin-left: 20px;
+}
+
+.insert-invitation-link:hover {
+  color: black;
+  background: #9d9;
 }
