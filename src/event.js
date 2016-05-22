@@ -18,24 +18,24 @@ export default React.createClass({
         console.error("Authentication failed!", error);
       } else {
         console.log("Authentication success!", authData);
+
+        this.eventRef.on("value", eventSnapshot => {
+          let event = eventSnapshot.val();
+          let card = event.card;
+          let email = event.email;
+          let invitations = [];
+          let maxIndex = 0;
+          _.keys(event.invitations).forEach(inviteId => {
+            let invitation = event.invitations[inviteId];
+            invitation.inviteId = inviteId;
+            maxIndex = Math.max(invitation.index, maxIndex);
+            invitations.push(invitation);
+          });
+          invitations = _.sortBy(invitations, i => i.index);
+
+          this.setState({ card, email, invitations, maxIndex });
+        });
       }
-    });
-
-    this.eventRef.on("value", eventSnapshot => {
-      let event = eventSnapshot.val();
-      let card = event.card;
-      let email = event.email;
-      let invitations = [];
-      let maxIndex = 0;
-      _.keys(event.invitations).forEach(inviteId => {
-        let invitation = event.invitations[inviteId];
-        invitation.inviteId = inviteId;
-        maxIndex = Math.max(invitation.index, maxIndex);
-        invitations.push(invitation);
-      });
-      invitations = _.sortBy(invitations, i => i.index);
-
-      this.setState({ card, email, invitations, maxIndex });
     });
   },
 
