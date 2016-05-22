@@ -82,6 +82,10 @@ export default React.createClass({
     this.setState({ showingBulkAdd: true });
   },
 
+  // TBD how to design this user interface.
+  // Need a way to send only to people who have not been sent yet.
+  // Also need a way to know which emails have bounced.
+  // Leaving out for now.
   sendAll() {
     let requestBody = {
       "eventId": this.props.params.eventId,
