@@ -123,7 +123,7 @@ export default React.createClass({
     let prevIndex = -1;
     return _.map(this.state.invitations, invitation => {
       let result = (
-        <div>
+        <div key={invitation.index}>
           <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
           <InvitationSummary
             card={this.state.card}
