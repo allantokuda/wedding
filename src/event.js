@@ -13,29 +13,48 @@ export default React.createClass({
 
   componentWillMount: function() {
     this.eventRef = new Firebase(__DATABASE_LOCATION__ + '/event/' + this.props.params.eventId);
-    this.eventRef.authWithOAuthPopup("google", (error, authData) => {
-      if (error) {
-        console.error("Authentication failed!", error);
-      } else {
-        console.log("Authentication success!", authData);
-
-        this.eventRef.on("value", eventSnapshot => {
-          let event = eventSnapshot.val();
-          let card = event.card;
-          let email = event.email;
-          let invitations = [];
-          let maxIndex = 0;
-          _.keys(event.invitations).forEach(inviteId => {
-            let invitation = event.invitations[inviteId];
-            invitation.inviteId = inviteId;
-            maxIndex = Math.max(invitation.index, maxIndex);
-            invitations.push(invitation);
-          });
-          invitations = _.sortBy(invitations, i => i.index);
-
-          this.setState({ card, email, invitations, maxIndex });
-        });
+    this.eventRef.onAuth(authData => {
+      if (authData) {
+        this.loadData();
       }
+    });
+  },
+
+  login(e) {
+    e.preventDefault();
+    if (!this.eventRef.getAuth()) {
+      this.eventRef.authWithOAuthPopup("google", (error, authData) => {
+        if (error) {
+          console.error("Authentication failed!", error);
+        }
+      });
+    }
+  },
+
+  logout(e) {
+    e.preventDefault();
+    this.eventRef.unauth();
+    this.setState({ invitations: [], auth: null });
+  },
+
+  loadData() {
+    this.eventRef.on("value", eventSnapshot => {
+      let event = eventSnapshot.val();
+      let card = event.card;
+      let email = event.email;
+      let invitations = [];
+      let maxIndex = 0;
+      _.keys(event.invitations).forEach(inviteId => {
+        let invitation = event.invitations[inviteId];
+        invitation.inviteId = inviteId;
+        maxIndex = Math.max(invitation.index, maxIndex);
+        invitations.push(invitation);
+      });
+      invitations = _.sortBy(invitations, i => i.index);
+
+      let auth = this.eventRef.getAuth();
+
+      this.setState({ card, email, invitations, maxIndex, auth });
     });
   },
 
@@ -117,22 +136,38 @@ export default React.createClass({
   },
 
   render() {
-    return (
-      <div>
-        <table className="guestbook">
-          <tbody>
-            {this.renderInvitations()}
-          </tbody>
-        </table>
-        <div className="event-manager-controls">
-          <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
-          <div>
-            <a href="#bulkadd" onClick={this.showBulkAdd}>Bulk add invitations</a>
+    if (this.state.auth) {
+      let displayName = this.state.auth[this.state.auth.provider].displayName;
+      return (
+        <div>
+          <div className="user-header">
+            <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a>
+            </span>
           </div>
+          <table className="guestbook">
+            <tbody>
+              {this.renderInvitations()}
+            </tbody>
+          </table>
+          <div className="event-manager-controls">
+            <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
+            <div>
+              <a href="#bulkadd" onClick={this.showBulkAdd}>Bulk add invitations</a>
+            </div>
+          </div>
+          <a name="bulkadd"></a>
+          {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef}/>}
         </div>
-        <a name="bulkadd"></a>
-        {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef}/>}
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="full-page-login">
+          <center>
+            <p>You must be logged in as an owner of this invitation to view it.</p>
+            <a href="#" onClick={this.login}>Log in with Google</a>
+          </center>
+        </div>
+      );
+    }
   }
 });
