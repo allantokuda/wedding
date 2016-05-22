@@ -148,11 +148,9 @@ export default React.createClass({
             <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a>
             </span>
           </div>
-          <table className="guestbook">
-            <tbody>
+          <div className="guestbook">
               {this.renderInvitations()}
-            </tbody>
-          </table>
+          </div>
           <div className="event-manager-controls">
             <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
             <div>
