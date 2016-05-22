@@ -8,7 +8,7 @@ import randomKey from './util/random-key';
 
 export default React.createClass({
   getInitialState: function() {
-    return { items: {} };
+    return { items: {}, loaded: false };
   },
 
   componentWillMount: function() {
@@ -53,8 +53,9 @@ export default React.createClass({
       invitations = _.sortBy(invitations, i => i.index);
 
       let auth = this.eventRef.getAuth();
+      let loaded = true;
 
-      this.setState({ card, email, invitations, maxIndex, auth });
+      this.setState({ card, email, invitations, maxIndex, auth, loaded });
     });
   },
 
@@ -161,7 +162,7 @@ export default React.createClass({
           {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef}/>}
         </div>
       );
-    } else {
+    } else if (this.state.loaded) {
       return (
         <div className="full-page-login">
           <center>
@@ -170,6 +171,8 @@ export default React.createClass({
           </center>
         </div>
       );
+    } else {
+      return null;
     }
   }
 });
