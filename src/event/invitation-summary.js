@@ -94,7 +94,7 @@ export default React.createClass({
     return (
       <div className={classes.join(' ')} key={this.props.inviteId}>
         <div>
-          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/><br/>
+          <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/><br/><br/>
           <button className="send-invitation-button" onClick={this.sendInvitation.bind(this, this.props.inviteId)}>Send</button>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
         </div>
