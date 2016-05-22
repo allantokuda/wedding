@@ -37,18 +37,28 @@ export default React.createClass({
     this.invitationRef.off();
   },
 
+  validForSend() {
+    return _.every(this.state.people, person => {
+      return person.name == '' || person.name == null || person.accept != null;
+    });
+  },
+
   send(e) {
     e.preventDefault();
 
-    // add timestamp to state and immediately send it to Firebase (requires direct manipulation and force update)
-    this.state.invitation.responseDates = this.state.invitation.responseDates || [];
-    this.state.invitation.responseDates.push(Firebase.ServerValue.TIMESTAMP);
-    this.state.invitation.people   = this.state.people;
-    this.state.invitation.comments = this.state.comments;
+    if (!this.validForSend()) {
+      alert('You must accept or decline for each named guest.');
+    } else {
+      // add timestamp to state and immediately send it to Firebase (requires direct manipulation and force update)
+      this.state.invitation.responseDates = this.state.invitation.responseDates || [];
+      this.state.invitation.responseDates.push(Firebase.ServerValue.TIMESTAMP);
+      this.state.invitation.people   = this.state.people;
+      this.state.invitation.comments = this.state.comments;
 
-    this.invitationRef.set(this.state.invitation);
+      this.invitationRef.set(this.state.invitation);
 
-    this.setState({edit: false});
+      this.setState({edit: false});
+    }
   },
 
   anyYesOnThisInvitation() {
