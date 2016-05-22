@@ -138,6 +138,11 @@ td.comments-review {
   border: none;
 }
 
+button[disabled] {
+  color: #bbb;
+  border: 1px solid #bbb;
+}
+
 td.person-name {
   min-width: 190px;
 }
