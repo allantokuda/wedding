@@ -126,8 +126,21 @@ export default React.createClass({
       data: JSON.stringify(requestBody)
     }).done(success => {
       this.exponentialBackoffCheckForBounces();
+      this.rememberSentEmailAddresses(invitations);
     }).fail(error => {
       console.error(error.responseText);
+    });
+  },
+
+  rememberSentEmailAddresses(invitations) {
+    this.eventRef.on("value", eventSnapshot => {
+      let event = eventSnapshot.val();
+      
+      invitations.forEach(invitation => {
+        event.invitations[invitation.inviteId].sentEmail = invitation.email;
+      });
+
+      this.eventRef.set(event);
     });
   },
 
@@ -153,6 +166,13 @@ export default React.createClass({
   renderInvitations() {
     let prevIndex = -1;
     return _.map(this.state.invitations, invitation => {
+      let emailState;
+      if (_.includes(this.state.bouncedEmails, invitation.email)) {
+        emailState = 'bounced';
+      } else if (invitation.email && (invitation.email === invitation.sentEmail)) {
+        emailState = 'sent';
+      }
+
       let result = (
         <div key={invitation.index}>
           <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
@@ -162,7 +182,7 @@ export default React.createClass({
             inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
             eventId={this.props.params.eventId}
             inviteId={invitation.inviteId}
-            bouncedEmail={_.includes(this.state.bouncedEmails, invitation.email)}
+            emailState={emailState}
             onSend={this.sendOneEmail}
           />
         </div>

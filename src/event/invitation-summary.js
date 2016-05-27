@@ -92,10 +92,24 @@ export default React.createClass({
       classes.push('blank')
     }
 
+    let emailMessage;
+    let emailMessageClass;
+    let emailInputClass;
+    if (this.props.emailState === 'bounced') {
+      emailMessage = 'Email bounced!';
+      emailMessageClass = 'error-message';
+      emailInputClass = 'error';
+    } else if (this.props.emailState === 'sent') {
+      emailMessage = 'Email sent.';
+    }
+
     return (
       <div className={classes.join(' ')} key={this.props.inviteId}>
         <div>
-          <input className={this.props.bouncedEmail && 'error'} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/><br/><span className="error-message">{this.props.bouncedEmail && 'Email bounced!'}</span><br/>
+          <input className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
+          <br/>
+          <span className={emailMessageClass}>{emailMessage}</span>
+          <br/>
           <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email}>Send</button>
           <a target="_blank" href={"/event/" + this.props.eventId + '/invitation/' + this.props.inviteId}>Preview</a>
         </div>
