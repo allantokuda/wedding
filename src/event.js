@@ -20,6 +20,8 @@ export default React.createClass({
         this.setState({ loaded: true });
       }
     });
+
+    this.checkForBounces();
   },
 
   login(e) {
@@ -112,7 +114,7 @@ export default React.createClass({
           "id": invitation.inviteId,
           "toAddr": invitation.email,
           "toName": invitation.people[0].name
-        }
+        };
       })
     };
 
@@ -122,9 +124,28 @@ export default React.createClass({
       processData: false,
       contentType: 'application/json',
       data: JSON.stringify(requestBody)
-    }).done(function(success) {
-      console.log(success);
-    }).fail(function(error) {
+    }).done(success => {
+      this.exponentialBackoffCheckForBounces();
+    }).fail(error => {
+      console.error(error.responseText);
+    });
+  },
+
+  exponentialBackoffCheckForBounces() {
+    for (let i=0; i<10; i++) {
+      setTimeout(this.checkForBounces, Math.pow(2, i)*1000);
+    }
+  },
+
+  checkForBounces() {
+    $.ajax({
+      type: 'GET',
+      url: '/bounces',
+      processData: false,
+      contentType: 'application/json'
+    }).done(response => {
+      this.setState({ bouncedEmails: response.items });
+    }).fail(error => {
       console.error(error.responseText);
     });
   },
@@ -141,6 +162,7 @@ export default React.createClass({
             inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
             eventId={this.props.params.eventId}
             inviteId={invitation.inviteId}
+            bouncedEmail={_.includes(this.state.bouncedEmails, invitation.email)}
             onSend={this.sendOneEmail}
           />
         </div>

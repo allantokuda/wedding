@@ -151,6 +151,14 @@ td.person-name input {
   width: 150px;
 }
 
+input.error {
+  background: #fcc;
+}
+
+span.error-message {
+  color: #822;
+}
+
 .user-header {
   position: fixed;
   top: 0;

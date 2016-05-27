@@ -14,6 +14,10 @@ var MAIL_API_KEY      = process.env.MAIL_API_KEY || 'YOUR_MAILGUN_API_KEY';
 
 var MAIL_SERVICE = "https://api.mailgun.net/v3";
 
+var MAIL_URL_BASE = MAIL_SERVICE + '/' + MAIL_DOMAIN_NAME;
+
+var MAIL_API_AUTH = { user: "api", pass: MAIL_API_KEY };
+
 app.use(compression());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -78,17 +82,29 @@ router.post('/sendmail', function(req, res) {
 
   console.log(formData);
 
-  request.post({url: MAIL_SERVICE + "/" + MAIL_DOMAIN_NAME + "/messages",
-    auth: {
-      user: "api",
-      pass: MAIL_API_KEY
-    },
+  request.post({url: MAIL_URL_BASE + "/messages",
+    auth: MAIL_API_AUTH,
     form: formData
   }, function (error, response, body) {
     if (error) {
       console.error(error);
     }
-    res.send(body);
+    res.send(null);
+  });
+});
+
+router.get('/bounces', function(req, res) {
+  request.get({url: MAIL_URL_BASE + "/bounces",
+    auth: MAIL_API_AUTH
+  }, function (error, response, body) {
+    if (error) {
+      console.error(error);
+    }
+    res.send({
+      items: JSON.parse(body)['items'].map(function(item) {
+        return item.address;
+      })
+    });
   });
 });
 
