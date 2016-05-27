@@ -38,12 +38,13 @@ export default React.createClass({
     }
   },
 
-  sendInvitation(inviteId) {
-  },
-
   isBlank() {
     return (this.props.data.email == null || this.props.data.email == '') &&
       _.every(this.props.data.people, person => person.name == '');
+  },
+
+  onSend() {
+    this.props.onSend(this.props.data);
   },
 
   renderPeople() {
@@ -95,7 +96,7 @@ export default React.createClass({
       <div className={classes.join(' ')} key={this.props.inviteId}>
         <div>
           <input name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/><br/><br/>
-          <button className="send-invitation-button" onClick={this.sendInvitation.bind(this, this.props.inviteId)} disabled={!this.props.data.email}>Send</button>
+          <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email}>Send</button>
           <a target="_blank" href={"/event/" + this.props.eventId + '/' + this.props.inviteId}>Preview</a>
         </div>
         <div>

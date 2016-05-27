@@ -52,7 +52,7 @@ router.post('/sendmail', function(req, res) {
 
   var recipientVariables = {};
   req.body.invitations.forEach(function(invitation) {
-    recipientVariables[invitation.toAddr] = { 'invitationId': invitation.id };
+    recipientVariables[invitation.toAddr] = { 'inviteId': invitation.id };
   });
 
   var emailTextLines = [];
@@ -61,7 +61,7 @@ router.post('/sendmail', function(req, res) {
     emailTextLines.push(req.body.message1);
   }
 
-  emailTextLines.push("http://" + DOMAIN_NAME + "/event/" + req.body.eventId + "/%recipient.invitationId%");
+  emailTextLines.push("http://" + DOMAIN_NAME + "/event/" + req.body.eventId + "/%recipient.inviteId%");
 
   if (req.body.message2) {
     emailTextLines.push(req.body.message2);

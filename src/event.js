@@ -89,7 +89,17 @@ export default React.createClass({
   // Need a way to send only to people who have not been sent yet.
   // Also need a way to know which emails have bounced.
   // Leaving out for now.
-  sendAll() {
+  sendAllEmails() {
+    if (confirm('Are you sure you want to email invitations to all guests?')) {
+      sendEmails(this.state.invitations);
+    }
+  },
+
+  sendOneEmail(invitation) {
+    this.sendEmails([invitation]);
+  },
+
+  sendEmails(invitations) {
     let requestBody = {
       "eventId": this.props.params.eventId,
       "message1": this.state.email.message1,
@@ -97,29 +107,26 @@ export default React.createClass({
       "replyToName": this.state.email.replyToName,
       "replyToAddress": this.state.email.replyToAddress,
       "subject": this.state.email.subject,
-      "invitations": _.keys(this.state.invitations).map(invitationId => {
-        let inv = this.state.invitations[invitationId];
+      "invitations": invitations.map(invitation => {
         return {
-          "id": invitationId,
-          "toAddr": inv.email,
-          "toName": inv.people[0].name
+          "id": invitation.inviteId,
+          "toAddr": invitation.email,
+          "toName": invitation.people[0].name
         }
       })
     };
 
-    if (confirm('Are you sure you want to email invitations to all guests?')) {
-      $.ajax({
-        type: 'POST',
-        url: '/sendmail',
-        processData: false,
-        contentType: 'application/json',
-        data: JSON.stringify(requestBody)
-      }).done(function(success) {
-        console.log(success);
-      }).fail(function(error) {
-        console.error(error.responseText);
-      });
-    }
+    $.ajax({
+      type: 'POST',
+      url: '/sendmail',
+      processData: false,
+      contentType: 'application/json',
+      data: JSON.stringify(requestBody)
+    }).done(function(success) {
+      console.log(success);
+    }).fail(function(error) {
+      console.error(error.responseText);
+    });
   },
 
   renderInvitations() {
@@ -134,6 +141,7 @@ export default React.createClass({
             inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
             eventId={this.props.params.eventId}
             inviteId={invitation.inviteId}
+            onSend={this.sendOneEmail}
           />
         </div>
       );
