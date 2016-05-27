@@ -8,7 +8,7 @@ require("./node_modules/bootstrap/dist/css/bootstrap.min.css");
 
 render((
   <Router history={browserHistory}>
-    <Route path="/event/:eventId/:invitationId" component={Invitation}/>
+    <Route path="/event/:eventId/invitation/:invitationId" component={Invitation}/>
     <Route path="/event/:eventId" component={Event}/>
     <Route path="/invitation/:invitationId" component={Invitation}/>
   </Router>
