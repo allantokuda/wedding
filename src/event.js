@@ -16,6 +16,8 @@ export default React.createClass({
     this.eventRef.onAuth(authData => {
       if (authData) {
         this.loadData();
+      } else {
+        this.setState({ loaded: true });
       }
     });
   },
