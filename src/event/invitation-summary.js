@@ -44,7 +44,7 @@ export default React.createClass({
   },
 
   onSend() {
-    this.props.onSend(this.props.data);
+    this.props.onSend(this.props.inviteId);
   },
 
   renderPeople() {

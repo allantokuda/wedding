@@ -38,27 +38,23 @@ export default React.createClass({
   logout(e) {
     e.preventDefault();
     this.eventRef.unauth();
-    this.setState({ invitations: [], auth: null });
+    this.setState({ event: null, auth: null });
   },
 
   loadData() {
     this.eventRef.on("value", eventSnapshot => {
 
       let event = eventSnapshot.val();
-      let invitations = [];
       let maxIndex = 0;
       _.keys(event.invitations).forEach(inviteId => {
         let invitation = event.invitations[inviteId];
-        invitation.inviteId = inviteId;
         maxIndex = Math.max(invitation.index, maxIndex);
-        invitations.push(invitation);
       });
-      invitations = _.sortBy(invitations, i => i.index);
 
       let auth = this.eventRef.getAuth();
       let loaded = true;
 
-      this.setState({ event, invitations, maxIndex, auth, loaded });
+      this.setState({ event, maxIndex, auth, loaded });
     });
   },
 
@@ -92,12 +88,14 @@ export default React.createClass({
   // Leaving out for now.
   sendAllEmails() {
     if (confirm('Are you sure you want to email invitations to all guests?')) {
-      sendEmails(this.state.invitations);
+      sendEmails(this.state.event.invitations);
     }
   },
 
-  sendOneEmail(invitation) {
-    this.sendEmails([invitation]);
+  sendOneEmail(inviteId) {
+    let invitations = {};
+    invitations[inviteId] = this.state.event.invitations[inviteId];
+    this.sendEmails(invitations);
   },
 
   sendEmails(invitations) {
@@ -109,11 +107,11 @@ export default React.createClass({
       "replyToName": eventEmail.replyToName,
       "replyToAddress": eventEmail.replyToAddress,
       "subject": eventEmail.subject,
-      "invitations": invitations.map(invitation => {
+      "invitations": _.keys(invitations).map(inviteId => {
         return {
-          "id": invitation.inviteId,
-          "toAddr": invitation.email,
-          "toName": invitation.people[0].name
+          "id": inviteId,
+          "toAddr": invitations[inviteId].email,
+          "toName": invitations[inviteId].people[0].name
         };
       })
     };
@@ -132,16 +130,14 @@ export default React.createClass({
     });
   },
 
-  rememberSentEmailAddresses(invitations) {
-    this.eventRef.on("value", eventSnapshot => {
-      let event = eventSnapshot.val();
-      
-      invitations.forEach(invitation => {
-        event.invitations[invitation.inviteId].sentEmail = invitation.email;
-      });
+  rememberSentEmailAddresses(sentInvitations) {
+    let event = this.state.event;
 
-      this.eventRef.set(event);
+    _.keys(sentInvitations).forEach(inviteId => {
+      event.invitations[inviteId].sentEmail = sentInvitations[inviteId].email;
     });
+
+    this.eventRef.set(event);
   },
 
   exponentialBackoffCheckForBounces() {
@@ -164,8 +160,15 @@ export default React.createClass({
   },
 
   renderInvitations() {
+    let invitationsArray = _.chain(this.state.event.invitations)
+      .mapValues((invitation, inviteId) => _.extend(invitation, { inviteId }))
+      .toArray()
+      .sortBy(invitation => invitation.index)
+      .value();
+
     let prevIndex = -1;
-    return _.map(this.state.invitations, invitation => {
+
+    return invitationsArray.map(invitation => {
       let emailState;
       if (_.includes(this.state.bouncedEmails, invitation.email)) {
         emailState = 'bounced';
