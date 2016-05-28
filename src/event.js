@@ -43,9 +43,8 @@ export default React.createClass({
 
   loadData() {
     this.eventRef.on("value", eventSnapshot => {
+
       let event = eventSnapshot.val();
-      let card = event.card;
-      let email = event.email;
       let invitations = [];
       let maxIndex = 0;
       _.keys(event.invitations).forEach(inviteId => {
@@ -59,7 +58,7 @@ export default React.createClass({
       let auth = this.eventRef.getAuth();
       let loaded = true;
 
-      this.setState({ card, email, invitations, maxIndex, auth, loaded });
+      this.setState({ event, invitations, maxIndex, auth, loaded });
     });
   },
 
@@ -102,13 +101,14 @@ export default React.createClass({
   },
 
   sendEmails(invitations) {
+    let eventEmail = this.state.event.email;
     let requestBody = {
       "eventId": this.props.params.eventId,
-      "message1": this.state.email.message1,
-      "message2": this.state.email.message2,
-      "replyToName": this.state.email.replyToName,
-      "replyToAddress": this.state.email.replyToAddress,
-      "subject": this.state.email.subject,
+      "message1": eventEmail.message1,
+      "message2": eventEmail.message2,
+      "replyToName": eventEmail.replyToName,
+      "replyToAddress": eventEmail.replyToAddress,
+      "subject": eventEmail.subject,
       "invitations": invitations.map(invitation => {
         return {
           "id": invitation.inviteId,
@@ -177,7 +177,7 @@ export default React.createClass({
         <div key={invitation.index}>
           <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
           <InvitationSummary
-            card={this.state.card}
+            card={this.state.event.card}
             data={invitation}
             inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
             eventId={this.props.params.eventId}
