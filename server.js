@@ -89,6 +89,7 @@ router.post('/sendmail', function(req, res) {
     if (error) {
       console.error(error);
     }
+    res.status(201);
     res.send(null);
   });
 });
