@@ -35,10 +35,10 @@
     "postinstall": "webpack",
     "configure:heroku": "cat .env | xargs heroku config:set",
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:dev":       "ls .env && export $(cat .env | xargs) && webpack-dev-server --inline --content-base public --history-api-fallback",
-    "watch:dev":       "ls .env && export $(cat .env | xargs) && webpack --watch",
+    "start:dev": "ls .env && export $(cat .env | xargs) && webpack-dev-server --inline --content-base public --history-api-fallback",
+    "watch:dev": "ls .env && export $(cat .env | xargs) && webpack --watch",
     "start:serverdev": "ls .env && export $(cat .env | xargs) && webpack && nodemon server.js",
-    "start:prod":      "ls .env && export $(cat .env | xargs) && webpack && node server.js"
+    "start:prod": "ls .env && export $(cat .env | xargs) && webpack && node server.js"
   },
   "repository": {
     "type": "git",
