@@ -81,8 +81,8 @@ describe('textToData', () => {
     expect(people[1].name).toBe('');
   });
 
-  it('detects email addresses', () => {
-    let data = textToData("Jack Johnson and Jill Jameson jj@example.com\nZach zach@foo.com");
+  it('detects email addresses, even with misspelled domains', () => {
+    let data = textToData("Jack Johnson and Jill Jameson jj@example.com\nZach zach@gmail");
     let invitations = expect_keys(data, 2, 'invitations');
 
     let people = expect_keys(invitations[0].people, 2, 'people');
@@ -92,6 +92,6 @@ describe('textToData', () => {
 
     people = expect_keys(invitations[1].people, 1, 'person');
     expect(people[0].name).toBe('Zach');
-    expect(invitations[1].email).toBe('zach@foo.com');
+    expect(invitations[1].email).toBe('zach@gmail');
   });
 });

@@ -1,7 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
+import { emailRegex } from '../util/email-regex';
 
 export default React.createClass({
+  getInitialState() {
+    return { validEmail: true };
+  },
+
   changeInvitation(attributeName, e) {
     this.props.inviteRef.child(attributeName).set(e.target.value);
   },
@@ -95,7 +100,11 @@ export default React.createClass({
     let emailMessage;
     let emailMessageClass;
     let emailInputClass;
-    if (this.props.emailState === 'bounced') {
+    if (this.props.data.email && this.props.data.email.match(emailRegex) === null) {
+      emailMessage = 'Invalid email.';
+      emailMessageClass = 'error-message';
+      emailInputClass = 'error';
+    } else if (this.props.emailState === 'bounced') {
       emailMessage = 'Email bounced!';
       emailMessageClass = 'error-message';
       emailInputClass = 'error';

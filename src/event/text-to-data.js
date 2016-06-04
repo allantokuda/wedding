@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import randomKey from '../util/random-key';
-import emailRegex from '../util/email-regex';
+import { looseEmailRegex } from '../util/email-regex';
 
 export function textToLines(text) {
   let lines = text.trim().split(/\n+/);
@@ -21,11 +21,11 @@ export function textToData(text, maxIndex=0) {
     }
 
     // Look for an email address
-    let emailMatches = line.match(emailRegex);
+    let emailMatches = line.match(looseEmailRegex);
     let email;
 
     if (emailMatches && emailMatches.length === 1) {
-      line = line.replace(emailRegex, '');
+      line = line.replace(looseEmailRegex, '');
       email = emailMatches[0].trim();
     }
 
