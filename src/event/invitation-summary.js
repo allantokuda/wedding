@@ -117,7 +117,7 @@ export default React.createClass({
     return (
       <div className={classes.join(' ')} key={this.props.inviteId}>
         <div>
-          <input className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
+          <PatientInput className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
           <br/>
           <span className={emailMessageClass}>{emailMessage}</span>
           <br/>
