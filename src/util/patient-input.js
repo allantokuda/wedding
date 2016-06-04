@@ -14,16 +14,21 @@ export default React.createClass({
   },
 
   changeValue(e) {
-    this.setState({ value: e.target.value });
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+    }
+    e.persist();
+    let timeoutId = setTimeout(this.callbackChange.bind(this, e), 1000);
+    this.setState({ value: e.target.value, timeoutId });
   },
 
-  blur(e) {
-    this.props.onBlur(e);
+  callbackChange(e) {
+    this.props.onChange(e);
   },
 
   render() {
     return (
-      <input {...this.state} onChange={this.changeValue} onBlur={this.blur}/>
+      <input {...this.state} onChange={this.changeValue} onBlur={this.callbackChange}/>
     );
   }
 });

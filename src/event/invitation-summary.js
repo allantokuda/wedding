@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { emailRegex } from '../util/email-regex';
-import OnBlurInput from '../util/on-blur-input';
+import PatientInput from '../util/patient-input';
 
 export default React.createClass({
   getInitialState() {
@@ -74,7 +74,7 @@ export default React.createClass({
       return (
         <tr key={person.personId}>
           <td className="person-name">
-            <OnBlurInput value={person.name} onBlur={this.changePerson.bind(this, person.personId, 'name')} disabled={person.accept} placeholder="Full name"/>
+            <PatientInput value={person.name} onChange={this.changePerson.bind(this, person.personId, 'name')} disabled={person.accept} placeholder="Full name"/>
             { !person.accept && <button onClick={this.deletePerson.bind(this, person.personId)}>{"\u274c"}</button>}
           </td>
           {responded && questionCells}
