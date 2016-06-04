@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import randomKey from '../util/random-key';
+import emailRegex from '../util/email-regex';
 
 export function textToLines(text) {
   let lines = text.trim().split(/\n+/);
@@ -10,24 +11,42 @@ export function textToData(text, maxIndex=0) {
   let data = {};
 
   textToLines(text).forEach(line => {
-    let regex = /^\d+\s+|\s+\d+$/g
-    let matches = line.match(regex);
+    // Look for a count of people who should be each the invitation, including fill-ins (blank names)
+    let countRegex = /\b\d+\b/
+    let countMatches = line.match(countRegex);
     let count;
-    if (matches && matches.length == 1) {
-      line = line.replace(regex, '');
-      count = parseInt(matches[0].trim(), 10);
+    if (countMatches && countMatches.length === 1) {
+      line = line.replace(countRegex, '');
+      count = parseInt(countMatches[0].trim(), 10);
     }
-    let people = line.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
-    let peopleHash = {};
+
+    // Look for an email address
+    let emailMatches = line.match(emailRegex);
+    let email;
+
+    if (emailMatches && emailMatches.length === 1) {
+      line = line.replace(emailRegex, '');
+      email = emailMatches[0].trim();
+    }
+
+    // Divide up remainder as list of people, delimited by "," or "and"
+    let peopleArray = line.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
+    let people = {};
     let i = 0;
-    people.forEach((person) => {
+    peopleArray.forEach((person) => {
       let personName = person.trim();
-      peopleHash[randomKey()] = { name: personName, index: ++i };
+      people[randomKey()] = { name: personName, index: ++i };
     });
     while (i < count) {
-      peopleHash[randomKey()] = { name: '', index: ++i }
+      people[randomKey()] = { name: '', index: ++i }
     }
-    data[randomKey()] = { people: peopleHash, index: ++maxIndex };
+    let invitation = { people, index: ++maxIndex };
+
+    if (email) {
+      invitation.email = email;
+    }
+
+    data[randomKey()] = invitation;
   });
 
   return data;
