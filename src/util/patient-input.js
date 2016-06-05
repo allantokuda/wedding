@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 export default React.createClass({
   getInitialState() {
@@ -14,12 +15,21 @@ export default React.createClass({
   },
 
   changeValue(e) {
-    if (this.state.timeoutId) {
-      clearTimeout(this.state.timeoutId);
-    }
+    this.clearTimeoutIfPresent();
     e.persist();
     let timeoutId = setTimeout(this.callbackChange.bind(this, e), 1000);
     this.setState({ value: e.target.value, timeoutId });
+  },
+
+  blurField(e) {
+    this.clearTimeoutIfPresent();
+    this.callbackChange(e);
+  },
+
+  clearTimeoutIfPresent() {
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+    }
   },
 
   callbackChange(e) {
@@ -28,7 +38,7 @@ export default React.createClass({
 
   render() {
     return (
-      <input {...this.state} onChange={this.changeValue} onBlur={this.callbackChange}/>
+      <input {...this.state} onChange={this.changeValue} onBlur={this.blurField}/>
     );
   }
 });
