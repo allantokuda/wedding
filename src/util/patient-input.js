@@ -17,7 +17,7 @@ export default React.createClass({
   changeValue(e) {
     this.clearTimeoutIfPresent();
     e.persist();
-    let timeoutId = setTimeout(this.callbackChange.bind(this, e), 1000);
+    let timeoutId = setTimeout(this.callbackChange.bind(this, e), this.props.delay || 500);
     this.setState({ value: e.target.value, timeoutId });
   },
 
