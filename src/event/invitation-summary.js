@@ -99,10 +99,12 @@ export default React.createClass({
       classes.push('blank')
     }
 
+    let invalidEmail = this.props.data.email && this.props.data.email.match(emailRegex) === null;
+
     let emailMessage;
     let emailMessageClass;
     let emailInputClass;
-    if (this.props.data.email && this.props.data.email.match(emailRegex) === null) {
+    if (invalidEmail) {
       emailMessage = 'Invalid email.';
       emailMessageClass = 'error-message';
       emailInputClass = 'error';
@@ -121,7 +123,7 @@ export default React.createClass({
           <br/>
           <span className={emailMessageClass}>{emailMessage}</span>
           <br/>
-          <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email}>Send</button>
+          <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email || invalidEmail}>Send</button>
           <a target="_blank" href={"/event/" + this.props.eventId + '/invitation/' + this.props.inviteId}>Preview</a>
         </div>
         <div>
