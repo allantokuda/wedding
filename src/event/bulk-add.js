@@ -7,7 +7,7 @@ export default React.createClass({
     return { text: '' };
   },
 
-  cancel() {
+  close() {
     this.setState({ text: '' });
     this.props.onClose();
   },
@@ -42,7 +42,7 @@ export default React.createClass({
           <p>{this.state.text && "Detected " + textToLines(this.state.text).length + " invitations."}&nbsp;</p>
           <button onClick={this.import} disabled={!this.state.text}>Import All</button>
           &nbsp;
-          <button onClick={this.cancel}>Cancel</button>
+          <button onClick={this.close}>Done</button>
           <br/><br/>
           <button onClick={this.deleteAll}>Delete all invitations</button>
         </div>

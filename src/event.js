@@ -5,6 +5,7 @@ import $ from 'jquery';
 import InvitationSummary from './event/invitation-summary';
 import BulkAdd from './event/bulk-add';
 import randomKey from './util/random-key';
+import { browserHistory } from 'react-router'
 
 export default React.createClass({
   getInitialState: function() {
@@ -184,6 +185,44 @@ export default React.createClass({
     });
   },
 
+  editMode() {
+    return this.props.params.mode === 'edit';
+  },
+
+  toggleEdit(e) {
+    e.preventDefault();
+    let path = '/event/' + this.props.params.eventId + (this.editMode() ? '' : '/edit');
+    browserHistory.push(path);
+  },
+
+  singleLineInvitation(invitation) {
+    let people = [];
+    let extras = 0;
+
+    _.values(invitation.people).forEach(person => {
+      if (person.name) {
+	people.push(person.name)
+      } else {
+	extras++;
+      }
+    });
+
+    let parts = [
+      people.join(', ') + ((extras > 0) ? (' +' + extras) : ''),
+      invitation.email
+    ].map((part, i) => {
+      return (
+	<div key={i}>{part}</div>
+      );
+    });
+
+    return (
+      <div key={invitation.index} className="single-line-invitation">
+	{parts}
+      </div>
+    );
+  },
+
   renderInvitations() {
     let invitationsArray = _.chain(this.state.event.invitations)
       .mapValues((invitation, inviteId) => _.extend(invitation, { inviteId }))
@@ -201,7 +240,7 @@ export default React.createClass({
         emailState = 'sent';
       }
 
-      let result = (
+      let result = this.editMode() ? (
         <div key={invitation.index}>
           <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
           <InvitationSummary
@@ -214,13 +253,18 @@ export default React.createClass({
             onSend={this.sendOneEmail}
           />
         </div>
-      );
+      ) : this.singleLineInvitation(invitation);
       prevIndex = invitation.index;
       return result;
     });
   },
 
   render() {
+    let bodyClasses = ['scrolling-body'];
+    if (this.editMode()) {
+      bodyClasses.push('edit-mode');
+    }
+
     if (this.state.auth) {
       let displayName = this.state.auth[this.state.auth.provider].displayName;
       return (
@@ -229,17 +273,24 @@ export default React.createClass({
             <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a>
             </span>
           </div>
-          <div className="guestbook">
-              {this.renderInvitations()}
-          </div>
-          <div className="event-manager-controls">
-            <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
-            <div>
-              {!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
-            </div>
-          </div>
-          <a name="bulkadd"></a>
-          {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef} onClose={this.toggleBulkAdd}/>}
+	  <div className={bodyClasses.join(' ')}>
+	    <div className="header-section">
+	      <div>
+		<a href="#" onClick={this.toggleEdit}>{this.editMode() ? 'Return to summary' : 'Edit invitations'}</a>
+	      </div>
+	    </div>
+	    <div className="guestbook">
+		{this.renderInvitations()}
+	    </div>
+	    <div className="event-manager-controls">
+	      <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
+	      <div>
+		{!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+	      </div>
+	    </div>
+	    <a name="bulkadd"></a>
+	    {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef} onClose={this.toggleBulkAdd}/>}
+	  </div>
         </div>
       );
     } else if (this.state.loaded) {

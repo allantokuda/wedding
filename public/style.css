@@ -94,6 +94,10 @@ td.comments-review {
   padding: 10px 30px;
 }
 
+.header-section div {
+  padding: 20px;
+}
+
 .invitation-summary {
   display: flex;
   margin: 20px;
@@ -112,6 +116,15 @@ td.comments-review {
 .invitation-summary div.outside {
   background: none;
   padding: 0;
+}
+
+.single-line-invitation {
+  display: table-row;
+}
+
+.single-line-invitation div {
+  display: table-cell;
+  padding: 0px 20px;
 }
 
 .bulk-add-form {
@@ -160,7 +173,7 @@ span.error-message {
 }
 
 .user-header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -173,6 +186,15 @@ span.error-message {
 .user-header span {
   display: inline-block;
   padding: 5px 20px;
+}
+
+.scrolling-body {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: scroll;
 }
 
 .full-page-login {
