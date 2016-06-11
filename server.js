@@ -80,8 +80,6 @@ router.post('/sendmail', function(req, res) {
     "recipient-variables": JSON.stringify(recipientVariables)
   };
 
-  console.log(formData);
-
   request.post({url: MAIL_URL_BASE + "/messages",
     auth: MAIL_API_AUTH,
     form: formData
@@ -106,6 +104,18 @@ router.get('/bounces', function(req, res) {
         return item.address;
       })
     });
+  });
+});
+
+router.delete('/bounces/:email', function(req, res) {
+  request.delete({url: MAIL_URL_BASE + "/bounces/" + req.params.email,
+    auth: MAIL_API_AUTH
+  }, function (error, response, body) {
+    if (error) {
+      console.error(error);
+    }
+    res.status(204);
+    res.send(null);
   });
 });
 

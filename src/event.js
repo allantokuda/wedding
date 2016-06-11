@@ -153,9 +153,33 @@ export default React.createClass({
       processData: false,
       contentType: 'application/json'
     }).done(response => {
-      this.setState({ bouncedEmails: response.items });
+      if (response.items && response.items.length > 0) {
+        this.saveBounceRecordsAndDeleteOriginals(response.items);
+      }
     }).fail(error => {
       console.error(error.responseText);
+    });
+  },
+
+  // App is responsible for deleting the remote records once it has acquired a
+  // copy, to prevent the number of bounces from expanding indefinitely.
+  saveBounceRecordsAndDeleteOriginals(bouncedEmails) {
+    let successfulDeletes = [];
+    let numRemainingDeletes = bouncedEmails.length;
+
+    bouncedEmails.forEach(email => {
+      $.ajax({
+        type: 'DELETE',
+        url: '/bounces/' + email
+      }).done(response => {
+        successfulDeletes.push(email);
+      }).fail(error => {
+        console.error(error.responseText);
+      }).always(() => {
+        if (--numRemainingDeletes === 0) {
+          this.setState({ bouncedEmails: (this.state.bouncedEmails || []).concat(successfulDeletes) });
+        }
+      });
     });
   },
 
