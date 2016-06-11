@@ -193,6 +193,7 @@ export default React.createClass({
     e.preventDefault();
     let path = '/event/' + this.props.params.eventId + (this.editMode() ? '' : '/edit');
     browserHistory.push(path);
+    this.setState({ showingBulkAdd: false });
   },
 
   singleLineInvitation(invitation) {
