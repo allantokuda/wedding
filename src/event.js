@@ -78,8 +78,8 @@ export default React.createClass({
     this.addInvitationWithIndex((after + before)/2);
   },
 
-  showBulkAdd() {
-    this.setState({ showingBulkAdd: true });
+  toggleBulkAdd() {
+    this.setState({ showingBulkAdd: !this.state.showingBulkAdd });
   },
 
   // TBD how to design this user interface.
@@ -235,11 +235,11 @@ export default React.createClass({
           <div className="event-manager-controls">
             <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
             <div>
-              <a href="#bulkadd" onClick={this.showBulkAdd}>Bulk add invitations</a>
+              {!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
             </div>
           </div>
           <a name="bulkadd"></a>
-          {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef}/>}
+          {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef} onClose={this.toggleBulkAdd}/>}
         </div>
       );
     } else if (this.state.loaded) {

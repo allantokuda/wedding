@@ -7,8 +7,9 @@ export default React.createClass({
     return { text: '' };
   },
 
-  clear() {
+  cancel() {
     this.setState({ text: '' });
+    this.props.onClose();
   },
 
   onChange(e) {
@@ -26,6 +27,13 @@ export default React.createClass({
     });
   },
 
+  deleteAll() {
+    var verify = prompt("Really delete ALL invitations? Type 'yes' to continue");
+    if (verify.toLowerCase() === 'yes') {
+      this.props.eventRef.child('invitations').remove();
+    }
+  },
+
   render() {
     return (
       <div className="bulk-add-form">
@@ -33,7 +41,10 @@ export default React.createClass({
         <div>
           <p>{this.state.text && "Detected " + textToLines(this.state.text).length + " invitations."}&nbsp;</p>
           <button onClick={this.import} disabled={!this.state.text}>Import All</button>
-          <button onClick={this.clear} disabled={!this.state.text}>Clear</button>
+          &nbsp;
+          <button onClick={this.cancel}>Cancel</button>
+          <br/><br/>
+          <button onClick={this.deleteAll}>Delete all invitations</button>
         </div>
       </div>
     );
