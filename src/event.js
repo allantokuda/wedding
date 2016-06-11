@@ -199,7 +199,8 @@ export default React.createClass({
     //this.setState({ showingBulkAdd: false });
   },
 
-  deleteInvitation(inviteId) {
+  deleteInvitation(inviteId, e) {
+    e.preventDefault();
     let invitation = this.state.event.invitations[inviteId];
     console.log(inviteId, invitation);
     let isBlank = (invitation.email == null || invitation.email == '') &&
@@ -234,7 +235,7 @@ export default React.createClass({
 	<div className="invitation-actions">
 	  <div className="horizontal-actions">
 	    <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
-	    <button onClick={this.deleteInvitation.bind(this, invitation.inviteId)}>Delete</button>
+	    <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
 	  </div>
 	</div>
       </div>

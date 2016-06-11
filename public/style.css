@@ -176,6 +176,13 @@ td.comments-review {
   align-items: center;
 }
 
+.warning-link {
+  color: #511;
+}
+.warning-link:hover {
+  color: #911;
+}
+
 .bulk-add-form {
   background: #eee;
   border: 1px solid #999;
