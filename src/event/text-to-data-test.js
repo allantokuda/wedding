@@ -44,6 +44,14 @@ describe('textToData', () => {
     expect(people[1].name).toBe('prescott');
   });
 
+  it('when string is two names separated by "&": returns one invitation containing two people', () => {
+    let data = textToData('Tom & Jerry');
+    let invitations = expect_keys(data, 1, 'invitation');
+    let people = expect_keys(invitations[0].people, 2, 'people');
+    expect(people[0].name).toBe('Tom');
+    expect(people[1].name).toBe('Jerry');
+  });
+
   it('when string is three names: returns one invitation containing two people', () => {
     let data = textToData('bart,lisa,maggie');
     let invitations = expect_keys(data, 1, 'invitation');

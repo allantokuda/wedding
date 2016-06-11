@@ -30,7 +30,7 @@ export function textToData(text, maxIndex=0) {
     }
 
     // Divide up remainder as list of people, delimited by "," or "and"
-    let peopleArray = line.split(/\s*,\s*and\s+|\s+and\s+|\s*,\s*/)
+    let peopleArray = line.split(/\s*,\s*(?:and|&)\s+|\s+(?:and|&)\s+|\s*,\s*/)
     let people = {};
     let i = 0;
     peopleArray.forEach((person) => {
