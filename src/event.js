@@ -69,9 +69,16 @@ export default React.createClass({
     this.addInvitationWithIndex(maxIndex);
   },
 
+  editSpecificInvitation(inviteId) {
+    let path = '/event/' + this.props.params.eventId + '/edit/' + inviteId;
+    browserHistory.push(path);
+  },
+
   addInvitationWithIndex(index) {
     let people = [{ name: "" }];
-    this.eventRef.child('invitations/' + randomKey()).set({ index, people });
+    let key = randomKey();
+    this.eventRef.child('invitations/' + key).set({ index, people });
+    this.editSpecificInvitation(key);
   },
 
   insertInvitation(after, before, e) {
@@ -185,15 +192,11 @@ export default React.createClass({
     });
   },
 
-  editMode() {
-    return this.props.params.mode === 'edit';
-  },
-
-  toggleEdit(e) {
+  editInvitation(inviteId, e) {
     e.preventDefault();
-    let path = '/event/' + this.props.params.eventId + (this.editMode() ? '' : '/edit');
+    let path = '/event/' + this.props.params.eventId + '/edit/' + inviteId;
     browserHistory.push(path);
-    this.setState({ showingBulkAdd: false });
+    //this.setState({ showingBulkAdd: false });
   },
 
   singleLineInvitation(invitation) {
@@ -220,12 +223,17 @@ export default React.createClass({
 
     return (
       <div key={invitation.index} className="single-line-invitation">
+	<div key="actions">
+	  <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+	</div>
 	{parts}
       </div>
     );
   },
 
   renderInvitations() {
+    let editInviteId = this.props.params.inviteId;
+
     let invitationsArray = _.chain(this.state.event.invitations)
       .mapValues((invitation, inviteId) => _.extend(invitation, { inviteId }))
       .toArray()
@@ -242,9 +250,8 @@ export default React.createClass({
         emailState = 'sent';
       }
 
-      let result = this.editMode() ? (
+      let result = (invitation.inviteId === editInviteId) ? (
         <div key={invitation.index}>
-          <button className="insert-invitation-button" onClick={this.insertInvitation.bind(this, prevIndex, invitation.index)}>&#8627; Add invitation</button>
           <InvitationSummary
             card={this.state.event.card}
             data={invitation}
@@ -263,9 +270,6 @@ export default React.createClass({
 
   render() {
     let bodyClasses = ['scrolling-body'];
-    if (this.editMode()) {
-      bodyClasses.push('edit-mode');
-    }
 
     if (this.state.auth) {
       let displayName = this.state.auth[this.state.auth.provider].displayName;
@@ -277,9 +281,6 @@ export default React.createClass({
           </div>
 	  <div className={bodyClasses.join(' ')}>
 	    <div className="header-section">
-	      <div>
-		<a href="#" onClick={this.toggleEdit}>{this.editMode() ? 'Return to summary' : 'Edit invitations'}</a>
-	      </div>
 	    </div>
 	    <div className="guestbook">
 		{this.renderInvitations()}

@@ -78,7 +78,11 @@ td.comments-review {
   vertical-align: top;
 }
 
-.guestbook a {
+.guestbook .actions {
+  padding: 0px 20px;
+}
+
+.invitation-summary a {
   display: inline-block;
   margin: 4px 20px;
   height: 32px;
@@ -100,8 +104,7 @@ td.comments-review {
 
 .invitation-summary {
   display: flex;
-  margin: 20px;
-  margin-bottom: 0px; /* no margin to insert invitation button */
+  margin: 0px 20px;
 }
 
 .invitation-summary div {
