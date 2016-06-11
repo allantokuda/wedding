@@ -42,7 +42,6 @@ div.invitation-part {
   border-bottom: 1px solid #aaa;
 }
 
-
 label span, label input { font-weight: normal; margin-right: 0.5em; }
 
 label.checkbox-radio { display: block; }
@@ -69,6 +68,9 @@ td.comments-review {
 }
 
 .guestbook {
+  display: table;
+  margin: auto;
+  border-collapse: collapse;
   margin-top: 50px;
 }
 
@@ -82,38 +84,57 @@ td.comments-review {
   padding: 0px 20px;
 }
 
-.invitation-summary a {
+.guestbook a, .invitation-summary a {
   display: inline-block;
   margin: 4px 20px;
-  height: 32px;
 }
 
 .event-manager-controls {
-  padding: 20px;
   display: flex;
 }
 
 .event-manager-controls > div {
-  width: 200px;
   padding: 10px 30px;
 }
 
-.header-section div {
+.guestbook-header div {
   padding: 20px;
+}
+
+.edit-container {
+  position: absolute;
+  top: 30px; /* user-header height */
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.4)
 }
 
 .invitation-summary {
-  display: flex;
-  margin: 0px 20px;
-}
-
-.invitation-summary div {
-  padding: 20px;
   background: #ddd;
+  width: 500px;
 }
 
-.invitation-summary.blank div {
-  background: #ccc;
+.invitation-summary .dialog-body {
+  display: flex;
+}
+
+.invitation-summary .dialog-footer {
+  display: flex;
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.invitation-summary .dialog-footer button {
+  display: flex;
+  margin-right: 20px;
+}
+
+.invitation-summary .dialog-body div {
+  padding: 20px;
 }
 
 .invitation-summary div.outside {
@@ -121,13 +142,38 @@ td.comments-review {
   padding: 0;
 }
 
-.single-line-invitation {
-  display: table-row;
+.close-dialog-button {
+  color: black;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
-.single-line-invitation div {
+.close-dialog-button:hover {
+  color: black;
+  background: #eee;
+  text-decoration: none;
+  cursor: default;
+}
+
+.single-line-invitation {
+  display: table-row;
+  border-collapse: collapse;
+  border-bottom: 1px solid #888;
+  border-top:    1px solid #888;
+}
+
+.single-line-invitation > div {
   display: table-cell;
-  padding: 0px 20px;
+  padding: 3px 20px;
+}
+
+.horizontal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .bulk-add-form {
@@ -139,12 +185,8 @@ td.comments-review {
 
 .invitation-right-border {
   position: relative;
-}
-
-.delete-invitation-button {
-  position: absolute;
-  top: 2px;
-  right: 2px;
+  width: 100%;
+  text-align: right;
 }
 
 .insert-invitation-button {

@@ -199,6 +199,17 @@ export default React.createClass({
     //this.setState({ showingBulkAdd: false });
   },
 
+  deleteInvitation(inviteId) {
+    let invitation = this.state.event.invitations[inviteId];
+    console.log(inviteId, invitation);
+    let isBlank = (invitation.email == null || invitation.email == '') &&
+      _.every(invitation.people, person => person.name == '');
+
+    if (isBlank || confirm('Are you sure you want to delete this invitation?')) {
+      this.eventRef.child('invitations').child(inviteId).remove();
+    }
+  },
+
   singleLineInvitation(invitation) {
     let namedPeople = [];
     let extras = 0;
@@ -212,88 +223,80 @@ export default React.createClass({
       }
     });
 
-    let parts = [
-      namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : ''),
-      invitation.email
-    ].map((part, i) => {
-      return (
-	<div key={i}>{part}</div>
-      );
-    });
-
     return (
       <div key={invitation.index} className="single-line-invitation">
-	<div key="actions">
-	  <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+	<div className="invitation-names">
+	  {namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : '')}
 	</div>
-	{parts}
+	<div className="invitation-email">
+	  {invitation.email}
+	</div>
+	<div className="invitation-actions">
+	  <div className="horizontal-actions">
+	    <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+	    <button onClick={this.deleteInvitation.bind(this, invitation.inviteId)}>Delete</button>
+	  </div>
+	</div>
       </div>
     );
   },
 
-  renderInvitations() {
-    let editInviteId = this.props.params.inviteId;
-
-    let invitationsArray = _.chain(this.state.event.invitations)
+  invitationsArray() {
+    return _.chain(this.state.event.invitations)
       .mapValues((invitation, inviteId) => _.extend(invitation, { inviteId }))
       .toArray()
       .sortBy(invitation => invitation.index)
       .value();
-
-    let prevIndex = -1;
-
-    return invitationsArray.map(invitation => {
-      let emailState;
-      if (_.includes(this.state.event.bouncedEmails, invitation.email)) {
-        emailState = 'bounced';
-      } else if (invitation.email && (invitation.email === invitation.sentEmail)) {
-        emailState = 'sent';
-      }
-
-      let result = (invitation.inviteId === editInviteId) ? (
-        <div key={invitation.index}>
-          <InvitationSummary
-            card={this.state.event.card}
-            data={invitation}
-            inviteRef={this.eventRef.child('invitations/' + invitation.inviteId)}
-            eventId={this.props.params.eventId}
-            inviteId={invitation.inviteId}
-            emailState={emailState}
-            onSend={this.sendOneEmail}
-          />
-        </div>
-      ) : this.singleLineInvitation(invitation);
-      prevIndex = invitation.index;
-      return result;
-    });
   },
 
   render() {
-    let bodyClasses = ['scrolling-body'];
+    let editInviteId = this.props.params.inviteId;
+    let editInvitation, emailState;
+
+    if (this.state.event && editInviteId) {
+      editInvitation = this.state.event.invitations[editInviteId];
+      console.log(this.state.event.invitations);
+
+      if (_.includes(this.state.event.bouncedEmails, editInvitation.email)) {
+	emailState = 'bounced';
+      } else if (editInvitation.email && (editInvitation.email === editInvitation.sentEmail)) {
+	emailState = 'sent';
+      }
+    }
 
     if (this.state.auth) {
       let displayName = this.state.auth[this.state.auth.provider].displayName;
       return (
         <div>
           <div className="user-header">
-            <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a>
-            </span>
+            <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a></span>
           </div>
-	  <div className={bodyClasses.join(' ')}>
-	    <div className="header-section">
+	  <div className="scrolling-body">
+	    <div className="guestbook-header">
 	    </div>
 	    <div className="guestbook">
-		{this.renderInvitations()}
-	    </div>
-	    <div className="event-manager-controls">
-	      <button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
-	      <div>
-		{!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+	      {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
+	      <div className="event-manager-controls">
+		<button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
+		<div>
+		  {!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+		</div>
 	      </div>
 	    </div>
 	    <a name="bulkadd"></a>
 	    {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef} onClose={this.toggleBulkAdd}/>}
 	  </div>
+	  {editInvitation && <div className="edit-container">
+	    <InvitationSummary
+	      card={this.state.event.card}
+	      data={editInvitation}
+	      inviteRef={this.eventRef.child('invitations/' + editInviteId)}
+	      eventId={this.props.params.eventId}
+	      inviteId={editInviteId}
+	      emailState={emailState}
+	      onSend={this.sendOneEmail}
+	    />
+	  </div>}
         </div>
       );
     } else if (this.state.loaded) {

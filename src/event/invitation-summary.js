@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { emailRegex } from '../util/email-regex';
 import PatientInput from '../util/patient-input';
+import { browserHistory } from 'react-router'
 
 export default React.createClass({
   getInitialState() {
@@ -19,6 +20,7 @@ export default React.createClass({
     }
   },
 
+  // TODO move to main view
   resetInvitation() {
     if (confirm('Are you sure you want to clear the guest\'s responses from this invitation?')) {
       this.props.inviteRef.set({
@@ -52,6 +54,10 @@ export default React.createClass({
 
   onSend() {
     this.props.onSend(this.props.inviteId);
+  },
+
+  unEdit() {
+    browserHistory.push('/event/' + this.props.eventId);
   },
 
   renderPeople() {
@@ -118,25 +124,25 @@ export default React.createClass({
 
     return (
       <div className={classes.join(' ')} key={this.props.inviteId}>
-        <div>
-          <PatientInput className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
-          <br/>
-          <span className={emailMessageClass}>{emailMessage}</span>
-          <br/>
-          <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email || invalidEmail}>Send</button>
-          <a target="_blank" href={"/event/" + this.props.eventId + '/invitation/' + this.props.inviteId}>Preview</a>
-        </div>
-        <div>
-          <table class="people">
-            <tbody>
-              { this.renderPeople() }
-            </tbody>
-          </table>
-        </div>
-        <div>{responded && <textarea disabled value={this.props.data.comments}/>}</div>
-        <div>{responded && <button onClick={this.resetInvitation}>Clear</button>}</div>
-        <div className="invitation-right-border">
-          {!responded && <button className="delete-invitation-button" onClick={this.deleteInvitation}>{"\u274c"}</button>}
+        <div className="dialog-body">
+          <div>
+            <PatientInput className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
+            <br/>
+            <span className={emailMessageClass}>{emailMessage}</span>
+            <br/>
+            <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email || invalidEmail}>Send</button>
+            <a target="_blank" href={"/event/" + this.props.eventId + '/invitation/' + this.props.inviteId}>Preview</a>
+          </div>
+          <div>
+            <table class="people">
+              <tbody>
+                { this.renderPeople() }
+              </tbody>
+            </table>
+          </div>
+          <div className="invitation-right-border">
+            <button className="close-dialog-button" onClick={this.unEdit}>{"\u274c"}</button>
+          </div>
         </div>
       </div>
     );
