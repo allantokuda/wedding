@@ -20,8 +20,6 @@ export default React.createClass({
         this.setState({ loaded: true });
       }
     });
-
-    this.checkForBounces();
   },
 
   login(e) {
@@ -55,6 +53,8 @@ export default React.createClass({
       let loaded = true;
 
       this.setState({ event, maxIndex, auth, loaded });
+
+      this.checkForBounces();
     });
   },
 
@@ -154,18 +154,23 @@ export default React.createClass({
       contentType: 'application/json'
     }).done(response => {
       if (response.items && response.items.length > 0) {
-        this.saveBounceRecordsAndDeleteOriginals(response.items);
+        this.saveBounceRecords(response.items);
       }
     }).fail(error => {
       console.error(error.responseText);
     });
   },
 
+  saveBounceRecords(newBouncedEmails) {
+    let bouncedEmails = (this.state.event && this.state.event.bouncedEmails || []).concat(newBouncedEmails);
+    this.eventRef.child('bouncedEmails').set(bouncedEmails);
+    this.deleteOriginalBounceRecords(newBouncedEmails);
+  },
+
   // App is responsible for deleting the remote records once it has acquired a
   // copy, to prevent the number of bounces from expanding indefinitely.
-  saveBounceRecordsAndDeleteOriginals(bouncedEmails) {
+  deleteOriginalBounceRecords(bouncedEmails) {
     let successfulDeletes = [];
-    let numRemainingDeletes = bouncedEmails.length;
 
     bouncedEmails.forEach(email => {
       $.ajax({
@@ -175,10 +180,6 @@ export default React.createClass({
         successfulDeletes.push(email);
       }).fail(error => {
         console.error(error.responseText);
-      }).always(() => {
-        if (--numRemainingDeletes === 0) {
-          this.setState({ bouncedEmails: (this.state.bouncedEmails || []).concat(successfulDeletes) });
-        }
       });
     });
   },
@@ -194,7 +195,7 @@ export default React.createClass({
 
     return invitationsArray.map(invitation => {
       let emailState;
-      if (_.includes(this.state.bouncedEmails, invitation.email)) {
+      if (_.includes(this.state.event.bouncedEmails, invitation.email)) {
         emailState = 'bounced';
       } else if (invitation.email && (invitation.email === invitation.sentEmail)) {
         emailState = 'sent';

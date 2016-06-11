@@ -111,11 +111,15 @@ router.delete('/bounces/:email', function(req, res) {
   request.delete({url: MAIL_URL_BASE + "/bounces/" + req.params.email,
     auth: MAIL_API_AUTH
   }, function (error, response, body) {
-    if (error) {
+    // Allow 404 responses (already deleted)
+    if (response.statusCode == 204 || response.statusCode == 404) {
+      res.status(204);
+      res.send(null);
+    } else {
       console.error(error);
+      res.status(response.statusCode);
+      res.send(null);
     }
-    res.status(204);
-    res.send(null);
   });
 });
 
