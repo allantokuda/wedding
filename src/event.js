@@ -196,19 +196,20 @@ export default React.createClass({
   },
 
   singleLineInvitation(invitation) {
-    let people = [];
+    let namedPeople = [];
     let extras = 0;
 
-    _.values(invitation.people).forEach(person => {
+    let people = _.chain(invitation.people).values().sortBy(person => person.index).value();
+    people.forEach(person => {
       if (person.name) {
-	people.push(person.name)
+	namedPeople.push(person.name)
       } else {
 	extras++;
       }
     });
 
     let parts = [
-      people.join(', ') + ((extras > 0) ? (' +' + extras) : ''),
+      namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : ''),
       invitation.email
     ].map((part, i) => {
       return (
