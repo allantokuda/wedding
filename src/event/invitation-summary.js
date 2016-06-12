@@ -52,10 +52,6 @@ export default React.createClass({
       _.every(this.props.data.people, person => person.name == '');
   },
 
-  onSend() {
-    this.props.onSend(this.props.inviteId);
-  },
-
   unEdit() {
     browserHistory.push('/event/' + this.props.eventId);
   },
@@ -108,18 +104,10 @@ export default React.createClass({
     let invalidEmail = this.props.data.email && this.props.data.email.match(emailRegex) === null;
 
     let emailMessage;
-    let emailMessageClass;
     let emailInputClass;
     if (invalidEmail) {
       emailMessage = 'Invalid email.';
-      emailMessageClass = 'error-message';
       emailInputClass = 'error';
-    } else if (this.props.emailState === 'bounced') {
-      emailMessage = 'Email bounced!';
-      emailMessageClass = 'error-message';
-      emailInputClass = 'error';
-    } else if (this.props.emailState === 'sent') {
-      emailMessage = 'Email sent.';
     }
 
     return (
@@ -128,9 +116,8 @@ export default React.createClass({
           <div>
             <PatientInput className={emailInputClass} name="email" type="text" value={this.props.data.email} onChange={this.changeInvitation.bind(this, 'email')} disabled={responded} placeholder="Email address"/>
             <br/>
-            <span className={emailMessageClass}>{emailMessage}</span>
+            <span className="error-message">{emailMessage}</span>
             <br/>
-            <button className="send-invitation-button" onClick={this.onSend} disabled={!this.props.data.email || invalidEmail}>Send</button>
             <a target="_blank" href={"/event/" + this.props.eventId + '/invitation/' + this.props.inviteId}>Preview</a>
           </div>
           <div>

@@ -192,6 +192,15 @@ td.comments-review {
   color: #911;
 }
 
+.major-link {
+  color: #222;
+  font-weight: bold;
+}
+
+.major-link:hover {
+  color: black;
+}
+
 .bulk-add-form {
   padding-top: 20px;
   margin-bottom: 30px;

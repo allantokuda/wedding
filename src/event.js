@@ -236,9 +236,13 @@ export default React.createClass({
 
     let bounced = this.state.event.bouncedEmails
 
-    let emailClasses = ['invitation-email'];
+    let emailClass, emailNote;
     if (this.didBounce(invitation.email)) {
-      emailClasses.push('bounced-email')
+      emailClass = 'bounced-email';
+      emailNote = '(Bounced!)';
+    } else if (invitation.email && invitation.email === invitation.sentEmail) {
+      emailClass = 'sent-email';
+      emailNote = '(Sent)';
     }
 
     return (
@@ -246,13 +250,14 @@ export default React.createClass({
 	<div className="invitation-names">
 	  {namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : '')}
 	</div>
-	<div className={emailClasses.join(' ')}>
-	  {invitation.email}
+	<div className="invitation-email">
+	  <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
 	</div>
 	<div className="invitation-actions">
 	  <div className="horizontal-actions">
 	    <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
 	    <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
+	    <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
 	  </div>
 	</div>
       </div>
@@ -269,16 +274,10 @@ export default React.createClass({
 
   render() {
     let editInviteId = this.props.params.inviteId;
-    let editInvitation, emailState;
+    let editInvitation;
 
     if (this.state.event && editInviteId) {
       editInvitation = this.state.event.invitations[editInviteId];
-
-      if (this.didBounce(editInvitation.email)) {
-	emailState = 'bounced';
-      } else if (editInvitation.email && (editInvitation.email === editInvitation.sentEmail)) {
-	emailState = 'sent';
-      }
     }
 
     if (this.state.auth) {
@@ -308,8 +307,6 @@ export default React.createClass({
 	      inviteRef={this.eventRef.child('invitations/' + editInviteId)}
 	      eventId={this.props.params.eventId}
 	      inviteId={editInviteId}
-	      emailState={emailState}
-	      onSend={this.sendOneEmail}
 	    />
 	  </ModalContainer>
 	  <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
