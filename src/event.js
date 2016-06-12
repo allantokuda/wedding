@@ -289,7 +289,9 @@ export default React.createClass({
 	  <div className="horizontal-actions">
 	    <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
 	    <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
-	    <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
+	    {invitation.email ? (
+	      <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
+	    ) : (<span className="disabled-link">Send</span>)}
 	  </div>
 	</div>
       </div>

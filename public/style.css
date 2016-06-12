@@ -192,7 +192,7 @@ td.comments-review {
   padding-right: 5px;
 }
 
-.single-line-invitation > .invitation-actions a {
+.single-line-invitation > .invitation-actions .horizontal-actions > * {
   /* reduce margin between these one-word links */
   margin-left: 15px;
   margin-right: 15px;
@@ -246,11 +246,15 @@ td.comments-review {
 
 .major-link {
   color: #222;
-  font-weight: bold;
 }
 
 .major-link:hover {
   color: black;
+}
+
+.disabled-link {
+  color: #ccc;
+  cursor: default;
 }
 
 .bulk-add-form {
