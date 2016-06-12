@@ -200,6 +200,10 @@ export default React.createClass({
     });
   },
 
+  didBounce(email) {
+    return _.includes(this.state.event.bouncedEmails, email);
+  },
+
   editInvitation(inviteId, e) {
     e.preventDefault();
     let path = '/event/' + this.props.params.eventId + '/edit/' + inviteId;
@@ -230,12 +234,19 @@ export default React.createClass({
       }
     });
 
+    let bounced = this.state.event.bouncedEmails
+
+    let emailClasses = ['invitation-email'];
+    if (this.didBounce(invitation.email)) {
+      emailClasses.push('bounced-email')
+    }
+
     return (
       <div key={invitation.index} className="single-line-invitation">
 	<div className="invitation-names">
 	  {namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : '')}
 	</div>
-	<div className="invitation-email">
+	<div className={emailClasses.join(' ')}>
 	  {invitation.email}
 	</div>
 	<div className="invitation-actions">
@@ -263,7 +274,7 @@ export default React.createClass({
     if (this.state.event && editInviteId) {
       editInvitation = this.state.event.invitations[editInviteId];
 
-      if (_.includes(this.state.event.bouncedEmails, editInvitation.email)) {
+      if (this.didBounce(editInvitation.email)) {
 	emailState = 'bounced';
       } else if (editInvitation.email && (editInvitation.email === editInvitation.sentEmail)) {
 	emailState = 'sent';

@@ -146,6 +146,11 @@ td.comments-review {
   padding: 0;
 }
 
+.bounced-email {
+  color: #511;
+  text-decoration: line-through;
+}
+
 .close-dialog-button {
   color: black;
   background: none;
