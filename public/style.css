@@ -84,7 +84,7 @@ td.comments-review {
   padding: 0px 20px;
 }
 
-.guestbook a, .invitation-summary a {
+.guestbook a, .invite-edit a {
   display: inline-block;
   margin: 4px 20px;
 }
@@ -119,30 +119,30 @@ td.comments-review {
   background: #ddd;
 }
 
-.invitation-summary {
+.invite-edit {
   width: 500px;
 }
 
-.invitation-summary .dialog-body {
+.invite-edit .dialog-body {
   display: flex;
 }
 
-.invitation-summary .dialog-footer {
+.invite-edit .dialog-footer {
   display: flex;
   padding: 20px;
   border-top: 1px solid #eee;
 }
 
-.invitation-summary .dialog-footer button {
+.invite-edit .dialog-footer button {
   display: flex;
   margin-right: 20px;
 }
 
-.invitation-summary .dialog-body div {
+.invite-edit .dialog-body div {
   padding: 20px;
 }
 
-.invitation-summary div.outside {
+.invite-edit div.outside {
   background: none;
   padding: 0;
 }

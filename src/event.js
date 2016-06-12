@@ -2,7 +2,8 @@ import React from 'react';
 import Firebase from 'firebase';
 import _ from 'lodash';
 import $ from 'jquery';
-import InvitationSummary from './event/invitation-summary';
+import InviteEdit from './event/invite-edit';
+import ResponseReview from './event/response-review';
 import BulkAdd from './event/bulk-add';
 import randomKey from './util/random-key';
 import { browserHistory } from 'react-router'
@@ -222,7 +223,13 @@ export default React.createClass({
 
   editInvitation(inviteId, e) {
     e.preventDefault();
-    let path = '/event/' + this.props.params.eventId + '/edit/' + inviteId;
+    let path = '/event/' + this.props.params.eventId + '/invite/' + inviteId + '/edit';
+    browserHistory.push(path);
+  },
+
+  viewResponse(inviteId, e) {
+    e.preventDefault();
+    let path = '/event/' + this.props.params.eventId + '/invite/' + inviteId;
     browserHistory.push(path);
   },
 
@@ -294,13 +301,19 @@ export default React.createClass({
           <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
         </div>
         <div className="invitation-actions">
-          <div className="horizontal-actions">
-            <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
-            <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
-            {invitation.email ? (
-              <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
-            ) : (<span className="disabled-link">Send</span>)}
-          </div>
+          {invitation.responseDates ? (
+            <div className="horizontal-actions">
+              <a href="#" onClick={this.viewResponse.bind(this, invitation.inviteId)}>View response</a>
+            </div>
+          ) : (
+            <div className="horizontal-actions">
+              <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+              <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
+              {invitation.email ? (
+                <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
+              ) : (<span className="disabled-link">Send</span>)}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -315,15 +328,18 @@ export default React.createClass({
   },
 
   render() {
-    let editInviteId = this.props.params.inviteId;
-    let editInvitation;
-
-    if (this.state.event && editInviteId) {
-      editInvitation = this.state.event.invitations[editInviteId];
-    }
-
-    if (this.state.auth) {
+    if (this.state.auth && this.state.event) {
       let displayName = this.state.auth[this.state.auth.provider].displayName;
+
+      let inviteId = this.props.params.inviteId;
+      let invitation = this.state.event.invitations && this.state.event.invitations[inviteId];
+      let modalMode;
+      if (this.props.params.action === 'edit') {
+        modalMode = 'edit';
+      } else if (invitation) {
+        modalMode = 'view';
+      }
+
       return (
         <div>
           <div className="user-header">
@@ -341,13 +357,19 @@ export default React.createClass({
               <a className="warning-link" href="#" onClick={this.deleteAll}>Delete all invitations</a>
             </div>
           </div>
-          <ModalContainer condition={editInvitation} onClose={this.showList}>
-            <InvitationSummary
+          <ModalContainer condition={modalMode === 'view'} onClose={this.showList}>
+            <ResponseReview
               card={this.state.event.card}
-              data={editInvitation}
-              inviteRef={this.eventRef.child('invitations/' + editInviteId)}
+              data={invitation}
+              inviteRef={this.eventRef.child('invitations/' + inviteId)}
+            />
+          </ModalContainer>
+          <ModalContainer condition={modalMode === 'edit'} onClose={this.showList}>
+            <InviteEdit
+              data={invitation}
+              inviteRef={this.eventRef.child('invitations/' + inviteId)}
               eventId={this.props.params.eventId}
-              inviteId={editInviteId}
+              inviteId={inviteId}
             />
           </ModalContainer>
           <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
