@@ -2,4 +2,9 @@ build
 vendor
 bundle.js
 node_modules
+public/*.woff2
+public/*.svg
+public/*.ttf
+public/*.eot
+public/*.woff
 .env
