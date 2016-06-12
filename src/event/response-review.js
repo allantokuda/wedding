@@ -2,7 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import { emailRegex } from '../util/email-regex';
 import PatientInput from '../util/patient-input';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
+import Lozenge from '../lozenge';
 
 export default React.createClass({
   // TODO restore this functionality
@@ -27,16 +28,22 @@ export default React.createClass({
 
     peopleArray = _.sortBy(peopleArray, person => person.index);
 
-    return _.map(peopleArray, person => (
-      <tr key={person.personId}>
-        <td className="person-name">
-          {person.name}
-        </td>
-        {this.props.card.individualQuestions.map((question, j) => (
-          <td className="question-response" key={j}>{ person[question.name] }</td>
-        ))}
-      </tr>
-    ));
+    return _.map(peopleArray, person => {
+      let responses = _.chain(this.props.card.individualQuestions)
+      .filter(question => question.name !== 'accept')
+      .map((question, j) => (
+        <td className="question-response" key={j}>{ person[question.name] }</td>
+      )).value();
+
+      return (
+        <tr key={person.personId}>
+          <td className="person-name">
+            <Lozenge label={person.name} type={person.accept} />
+          </td>
+          {responses}
+        </tr>
+      )
+    });
   },
 
   render() {

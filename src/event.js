@@ -8,6 +8,7 @@ import BulkAdd from './event/bulk-add';
 import randomKey from './util/random-key';
 import { browserHistory } from 'react-router'
 import ModalContainer from './util/modal-container';
+import Lozenge from './lozenge';
 
 export default React.createClass({
   getInitialState: function() {
@@ -257,25 +258,12 @@ export default React.createClass({
       }
     });
 
-    let renderedNames = namedPeople.map((person, i) => {
-      let lozengeClasses = ['lozenge'];
-      if (person.accept) {
-        lozengeClasses.push('response-' + person.accept);
-      }
-      return (
-        <span key={i}>
-          {i > 0 ? (<span>, </span>) : null}
-          <span className={lozengeClasses.join(' ')}>
-            <span className="text">
-              {person.name || '(blank name)'}
-            </span>
-            {person.accept && (
-              <span className="icon">&nbsp;</span>
-            )}
-          </span>
-        </span>
-      );
-    });
+    let renderedNames = namedPeople.map((person, i) => (
+      <span key={i}>
+        {i > 0 ? (<span>, </span>) : null}
+        <Lozenge label={person.name} type={person.accept} />
+      </span>
+    ));
 
     if (extras > 0) {
       renderedNames.push(<span key="extras"> +{extras}</span>)

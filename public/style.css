@@ -116,7 +116,7 @@ td.comments-review {
 
 .modal-body {
   position: relative;
-  background: #ddd;
+  background: white;
 }
 
 .invite-edit {
@@ -198,7 +198,7 @@ td.comments-review {
   margin-right: 15px;
 }
 
-.single-line-invitation .lozenge {
+.lozenge {
   display: inline-block;
   padding: 2px 4px;
   margin: 2px 0px;
@@ -206,23 +206,23 @@ td.comments-review {
   background: #eee;
 }
 
-.single-line-invitation .lozenge.response-yes {
+.lozenge.response-yes {
   background: #bfb;
 }
 
-.single-line-invitation .lozenge.response-no {
+.lozenge.response-no {
   background: #fbb;
 }
 
-.single-line-invitation .lozenge.response-no text {
+.lozenge.response-no text {
   text-decoration: line-through;
 }
 
-.single-line-invitation .lozenge.response-yes .icon:after {
+.lozenge.response-yes .icon:after {
   content: "\2714"; /* check mark */
 }
 
-.single-line-invitation .lozenge.response-no .icon:after {
+.lozenge.response-no .icon:after {
   content: "\274c"; /* X */
 }
 
