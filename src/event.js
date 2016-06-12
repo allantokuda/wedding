@@ -138,8 +138,8 @@ export default React.createClass({
       "replyToAddress": eventEmail.replyToAddress,
       "subject": eventEmail.subject,
       "invitations": _.keys(invitations).map(inviteId => {
-	let invitation = invitations[inviteId];
-	let primaryPerson = _.chain(invitation.people).values().min(person => person.index).value();;
+        let invitation = invitations[inviteId];
+        let primaryPerson = _.chain(invitation.people).values().min(person => person.index).value();;
         return {
           "id": inviteId,
           "toAddr": invitation.email,
@@ -244,29 +244,29 @@ export default React.createClass({
     let people = _.chain(invitation.people).values().sortBy(person => person.index).value();
     people.forEach(person => {
       if (person.name || person.accept) {
-	namedPeople.push(person)
+        namedPeople.push(person)
       } else {
-	extras++;
+        extras++;
       }
     });
 
     let renderedNames = namedPeople.map((person, i) => {
       let lozengeClasses = ['lozenge'];
       if (person.accept) {
-	lozengeClasses.push('response-' + person.accept);
+        lozengeClasses.push('response-' + person.accept);
       }
       return (
-	<span key={i}>
-	  {i > 0 ? (<span>, </span>) : null}
-	  <span className={lozengeClasses.join(' ')}>
-	    <span className="text">
-	      {person.name || '(blank name)'}
-	    </span>
-	    {person.accept && (
-	      <span className="icon">&nbsp;</span>
-	    )}
-	  </span>
-	</span>
+        <span key={i}>
+          {i > 0 ? (<span>, </span>) : null}
+          <span className={lozengeClasses.join(' ')}>
+            <span className="text">
+              {person.name || '(blank name)'}
+            </span>
+            {person.accept && (
+              <span className="icon">&nbsp;</span>
+            )}
+          </span>
+        </span>
       );
     });
 
@@ -287,21 +287,21 @@ export default React.createClass({
 
     return (
       <div key={invitation.index} className="single-line-invitation">
-	<div className="invitation-names">
-	  {renderedNames}
-	</div>
-	<div className="invitation-email">
-	  <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
-	</div>
-	<div className="invitation-actions">
-	  <div className="horizontal-actions">
-	    <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
-	    <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
-	    {invitation.email ? (
-	      <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
-	    ) : (<span className="disabled-link">Send</span>)}
-	  </div>
-	</div>
+        <div className="invitation-names">
+          {renderedNames}
+        </div>
+        <div className="invitation-email">
+          <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
+        </div>
+        <div className="invitation-actions">
+          <div className="horizontal-actions">
+            <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+            <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
+            {invitation.email ? (
+              <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
+            ) : (<span className="disabled-link">Send</span>)}
+          </div>
+        </div>
       </div>
     );
   },
@@ -329,30 +329,30 @@ export default React.createClass({
           <div className="user-header">
             <span>Logged in as {displayName} - <a href="#" onClick={this.logout}>Logout</a></span>
           </div>
-	  <div className="scrolling-body">
-	    <div className="guestbook-header">
-	    </div>
-	    <div className="guestbook">
-	      {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
-	    </div>
-	    <div className="event-manager-controls">
-	      <a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
-	      {!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
-	      <a className="warning-link" href="#" onClick={this.deleteAll}>Delete all invitations</a>
-	    </div>
-	  </div>
-	  <ModalContainer condition={editInvitation} onClose={this.showList}>
-	    <InvitationSummary
-	      card={this.state.event.card}
-	      data={editInvitation}
-	      inviteRef={this.eventRef.child('invitations/' + editInviteId)}
-	      eventId={this.props.params.eventId}
-	      inviteId={editInviteId}
-	    />
-	  </ModalContainer>
-	  <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
-	    <BulkAdd eventRef={this.eventRef} onImport={this.toggleBulkAdd}/>
-	  </ModalContainer>
+          <div className="scrolling-body">
+            <div className="guestbook-header">
+            </div>
+            <div className="guestbook">
+              {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
+            </div>
+            <div className="event-manager-controls">
+              <a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
+              {!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+              <a className="warning-link" href="#" onClick={this.deleteAll}>Delete all invitations</a>
+            </div>
+          </div>
+          <ModalContainer condition={editInvitation} onClose={this.showList}>
+            <InvitationSummary
+              card={this.state.event.card}
+              data={editInvitation}
+              inviteRef={this.eventRef.child('invitations/' + editInviteId)}
+              eventId={this.props.params.eventId}
+              inviteId={editInviteId}
+            />
+          </ModalContainer>
+          <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
+            <BulkAdd eventRef={this.eventRef} onImport={this.toggleBulkAdd}/>
+          </ModalContainer>
         </div>
       );
     } else if (this.state.loaded) {
