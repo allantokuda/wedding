@@ -198,12 +198,37 @@ td.comments-review {
   margin-right: 15px;
 }
 
-.single-line-invitation span.lozenge {
+.single-line-invitation .lozenge {
   display: inline-block;
   padding: 2px 4px;
   margin: 2px 0px;
   border-radius: 3px;
-  background: rgba(0,0,0,0.1);
+  background: #eee;
+}
+
+.single-line-invitation .lozenge.response-yes {
+  background: #bfb;
+}
+
+.single-line-invitation .lozenge.response-no {
+  background: #fbb;
+}
+
+.single-line-invitation .lozenge.response-no text {
+  text-decoration: line-through;
+}
+
+.single-line-invitation .lozenge.response-yes .icon:after {
+  content: "\2714"; /* check mark */
+}
+
+.single-line-invitation .lozenge.response-no .icon:after {
+  content: "\274c"; /* X */
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
 }
 
 .horizontal-actions {

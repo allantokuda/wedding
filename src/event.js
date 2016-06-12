@@ -235,16 +235,30 @@ export default React.createClass({
 
     let people = _.chain(invitation.people).values().sortBy(person => person.index).value();
     people.forEach(person => {
-      if (person.name) {
-	namedPeople.push(person.name)
+      if (person.name || person.accept) {
+	namedPeople.push(person)
       } else {
 	extras++;
       }
     });
 
-    let renderedNames = namedPeople.map((personName, i) => {
+    let renderedNames = namedPeople.map((person, i) => {
+      let lozengeClasses = ['lozenge'];
+      if (person.accept) {
+	lozengeClasses.push('response-' + person.accept);
+      }
       return (
-	<span key={i}>{i > 0 ? (<span>, </span>) : null} <span className="lozenge">{personName}</span></span>
+	<span key={i}>
+	  {i > 0 ? (<span>, </span>) : null}
+	  <span className={lozengeClasses.join(' ')}>
+	    <span className="text">
+	      {person.name || '(blank name)'}
+	    </span>
+	    {person.accept && (
+	      <span className="icon">&nbsp;</span>
+	    )}
+	  </span>
+	</span>
       );
     });
 
