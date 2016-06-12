@@ -189,6 +189,14 @@ td.comments-review {
   margin-right: 15px;
 }
 
+.single-line-invitation span.lozenge {
+  display: inline-block;
+  padding: 2px 4px;
+  margin: 2px 0px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.1);
+}
+
 .horizontal-actions {
   display: flex;
   justify-content: flex-end;
@@ -249,7 +257,7 @@ span.error-message {
   left: 0;
   right: 0;
   height: 30px;
-  background-color: rgba(0,0,0,0.3);
+  background-color: #ddd;
   z-index: 1;
   text-align: right;
 }
@@ -260,6 +268,7 @@ span.error-message {
 }
 
 .scrolling-body {
+  background: white;
   position: absolute;
   top: 30px;
   left: 0;

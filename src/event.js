@@ -235,6 +235,16 @@ export default React.createClass({
       }
     });
 
+    let renderedNames = namedPeople.map((personName, i) => {
+      return (
+	<span key={i}>{i > 0 ? (<span>, </span>) : null} <span className="lozenge">{personName}</span></span>
+      );
+    });
+
+    if (extras > 0) {
+      renderedNames.push(<span key="extras"> +{extras}</span>)
+    }
+
     let bounced = this.state.event.bouncedEmails
 
     let emailClass, emailNote;
@@ -249,7 +259,7 @@ export default React.createClass({
     return (
       <div key={invitation.index} className="single-line-invitation">
 	<div className="invitation-names">
-	  {namedPeople.join(', ') + ((extras > 0) ? (' +' + extras) : '')}
+	  {renderedNames}
 	</div>
 	<div className="invitation-email">
 	  <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
