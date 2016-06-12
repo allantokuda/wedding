@@ -64,7 +64,8 @@ export default React.createClass({
     this.eventRef.off();
   },
 
-  addInvitation() {
+  addInvitation(e) {
+    e.preventDefault();
     let maxIndex = this.state.maxIndex + 1;
     this.setState({ maxIndex });
     this.addInvitationWithIndex(maxIndex);
@@ -292,11 +293,10 @@ export default React.createClass({
 	    </div>
 	    <div className="guestbook">
 	      {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
+	      <br/>
 	      <div className="event-manager-controls">
-		<button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
-		<div>
-		  {!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
-		</div>
+		<a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
+		{!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
 	      </div>
 	    </div>
 	  </div>

@@ -179,6 +179,16 @@ td.comments-review {
   padding: 3px 20px;
 }
 
+.single-line-invitation > .invitation-actions {
+  padding-right: 5px;
+}
+
+.single-line-invitation > .invitation-actions a {
+  /* reduce margin between these one-word links */
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
 .horizontal-actions {
   display: flex;
   justify-content: flex-end;
@@ -210,13 +220,6 @@ td.comments-review {
   position: relative;
   width: 100%;
   text-align: right;
-}
-
-.insert-invitation-button {
-  color: #555;
-  margin-left: 8px;
-  background: none;
-  border: none;
 }
 
 button[disabled] {
