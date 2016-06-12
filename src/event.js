@@ -116,8 +116,16 @@ export default React.createClass({
 
   sendOneEmail(inviteId) {
     let invitations = {};
-    invitations[inviteId] = this.state.event.invitations[inviteId];
-    this.sendEmails(invitations);
+    let invitation = this.state.event.invitations[inviteId];
+    invitations[inviteId] = invitation;
+
+    if (!invitation.email) {
+      return;
+    }
+
+    if (confirm('Please confirm that you wish to send the invitation to ' + invitation.email)) {
+      this.sendEmails(invitations);
+    }
   },
 
   sendEmails(invitations) {
