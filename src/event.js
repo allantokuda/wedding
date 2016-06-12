@@ -93,6 +93,13 @@ export default React.createClass({
     this.addInvitationWithIndex((after + before)/2);
   },
 
+  deleteAll() {
+    var verify = prompt("Really delete ALL invitations? Type 'yes' to continue");
+    if (verify.toLowerCase() === 'yes') {
+      this.eventRef.child('invitations').remove();
+    }
+  },
+
   toggleBulkAdd() {
     this.setState({ showingBulkAdd: !this.state.showingBulkAdd });
   },
@@ -303,11 +310,11 @@ export default React.createClass({
 	    </div>
 	    <div className="guestbook">
 	      {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
-	      <br/>
-	      <div className="event-manager-controls">
-		<a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
-		{!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
-	      </div>
+	    </div>
+	    <div className="event-manager-controls">
+	      <a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
+	      {!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+	      <a className="warning-link" href="#" onClick={this.deleteAll}>Delete all invitations</a>
 	    </div>
 	  </div>
 	  <ModalContainer condition={editInvitation} onClose={this.showList}>
@@ -320,7 +327,7 @@ export default React.createClass({
 	    />
 	  </ModalContainer>
 	  <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
-	    <BulkAdd eventRef={this.eventRef}/>
+	    <BulkAdd eventRef={this.eventRef} onImport={this.toggleBulkAdd}/>
 	  </ModalContainer>
         </div>
       );

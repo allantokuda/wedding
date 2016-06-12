@@ -91,10 +91,11 @@ td.comments-review {
 
 .event-manager-controls {
   display: flex;
+  justify-content: center;
 }
 
-.event-manager-controls > div {
-  padding: 10px 30px;
+.event-manager-controls > a {
+  margin: 30px 30px;
 }
 
 .guestbook-header div {
@@ -179,6 +180,14 @@ td.comments-review {
   padding: 3px 20px;
 }
 
+.single-line-invitation > .invitation-names {
+  min-width: 250px;
+}
+
+.single-line-invitation > .invitation-email {
+  min-width: 150px;
+}
+
 .single-line-invitation > .invitation-actions {
   padding-right: 5px;
 }
@@ -223,6 +232,12 @@ td.comments-review {
   padding-top: 20px;
   margin-bottom: 30px;
 }
+
+.bulk-add-form textarea {
+  width: 500px;
+  height: 300px;
+}
+
 
 .invitation-right-border {
   position: relative;
