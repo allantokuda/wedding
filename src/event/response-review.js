@@ -55,6 +55,10 @@ export default React.createClass({
               { this.renderPeople() }
             </tbody>
           </table>
+          <br/>
+          { this.props.data.comments && (
+            <p><b>Comments:</b> {this.props.data.comments}</p>
+          )}
         </div>
       </div>
     );
