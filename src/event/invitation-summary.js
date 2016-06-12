@@ -140,9 +140,6 @@ export default React.createClass({
               </tbody>
             </table>
           </div>
-          <div className="invitation-right-border">
-            <button className="close-dialog-button" onClick={this.unEdit}>{"\u274c"}</button>
-          </div>
         </div>
       </div>
     );

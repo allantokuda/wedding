@@ -6,6 +6,7 @@ import InvitationSummary from './event/invitation-summary';
 import BulkAdd from './event/bulk-add';
 import randomKey from './util/random-key';
 import { browserHistory } from 'react-router'
+import ModalContainer from './util/modal-container';
 
 export default React.createClass({
   getInitialState: function() {
@@ -74,6 +75,11 @@ export default React.createClass({
     browserHistory.push(path);
   },
 
+  showList() {
+    let path = '/event/' + this.props.params.eventId
+    browserHistory.push(path);
+  },
+
   addInvitationWithIndex(index) {
     let people = [{ name: "" }];
     let key = randomKey();
@@ -116,10 +122,12 @@ export default React.createClass({
       "replyToAddress": eventEmail.replyToAddress,
       "subject": eventEmail.subject,
       "invitations": _.keys(invitations).map(inviteId => {
+	let invitation = invitations[inviteId];
+	let primaryPerson = _.chain(invitation.people).values().min(person => person.index).value();;
         return {
           "id": inviteId,
-          "toAddr": invitations[inviteId].email,
-          "toName": invitations[inviteId].people[0].name
+          "toAddr": invitation.email,
+          "toName": primaryPerson.name
         };
       })
     };
@@ -196,13 +204,11 @@ export default React.createClass({
     e.preventDefault();
     let path = '/event/' + this.props.params.eventId + '/edit/' + inviteId;
     browserHistory.push(path);
-    //this.setState({ showingBulkAdd: false });
   },
 
   deleteInvitation(inviteId, e) {
     e.preventDefault();
     let invitation = this.state.event.invitations[inviteId];
-    console.log(inviteId, invitation);
     let isBlank = (invitation.email == null || invitation.email == '') &&
       _.every(invitation.people, person => person.name == '');
 
@@ -256,7 +262,6 @@ export default React.createClass({
 
     if (this.state.event && editInviteId) {
       editInvitation = this.state.event.invitations[editInviteId];
-      console.log(this.state.event.invitations);
 
       if (_.includes(this.state.event.bouncedEmails, editInvitation.email)) {
 	emailState = 'bounced';
@@ -280,14 +285,12 @@ export default React.createClass({
 	      <div className="event-manager-controls">
 		<button className="insert-invitation-button" onClick={this.addInvitation}>&#8627; Add Invitation</button>
 		<div>
-		  {!this.state.showingBulkAdd && <a href="#bulkadd" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
+		  {!this.state.showingBulkAdd && <a href="#" onClick={this.toggleBulkAdd}>Bulk add invitations</a>}
 		</div>
 	      </div>
 	    </div>
-	    <a name="bulkadd"></a>
-	    {this.state.showingBulkAdd && <BulkAdd eventRef={this.eventRef} onClose={this.toggleBulkAdd}/>}
 	  </div>
-	  {editInvitation && <div className="edit-container">
+	  <ModalContainer condition={editInvitation} onClose={this.showList}>
 	    <InvitationSummary
 	      card={this.state.event.card}
 	      data={editInvitation}
@@ -297,7 +300,10 @@ export default React.createClass({
 	      emailState={emailState}
 	      onSend={this.sendOneEmail}
 	    />
-	  </div>}
+	  </ModalContainer>
+	  <ModalContainer condition={this.state.showingBulkAdd} onClose={this.toggleBulkAdd}>
+	    <BulkAdd eventRef={this.eventRef}/>
+	  </ModalContainer>
         </div>
       );
     } else if (this.state.loaded) {

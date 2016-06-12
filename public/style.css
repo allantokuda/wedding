@@ -101,7 +101,7 @@ td.comments-review {
   padding: 20px;
 }
 
-.edit-container {
+.modal-container {
   position: absolute;
   top: 30px; /* user-header height */
   right: 0;
@@ -113,8 +113,12 @@ td.comments-review {
   background: rgba(0,0,0,0.4)
 }
 
-.invitation-summary {
+.modal-body {
+  position: relative;
   background: #ddd;
+}
+
+.invitation-summary {
   width: 500px;
 }
 
@@ -184,9 +188,7 @@ td.comments-review {
 }
 
 .bulk-add-form {
-  background: #eee;
-  border: 1px solid #999;
-  padding: 20px;
+  padding-top: 20px;
   margin-bottom: 30px;
 }
 

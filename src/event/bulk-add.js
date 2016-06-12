@@ -7,11 +7,6 @@ export default React.createClass({
     return { text: '' };
   },
 
-  close() {
-    this.setState({ text: '' });
-    this.props.onClose();
-  },
-
   onChange(e) {
     this.setState({ text: e.target.value });
   },
@@ -24,6 +19,7 @@ export default React.createClass({
       invitationsRef.update(newKeys).then(() => {
         this.setState({ text: '' });
       });
+      this.props.onImport();
     });
   },
 
@@ -41,8 +37,6 @@ export default React.createClass({
         <div>
           <p>{this.state.text && "Detected " + textToLines(this.state.text).length + " invitations."}&nbsp;</p>
           <button onClick={this.import} disabled={!this.state.text}>Import All</button>
-          &nbsp;
-          <button onClick={this.close}>Done</button>
           <br/><br/>
           <button onClick={this.deleteAll}>Delete all invitations</button>
         </div>
