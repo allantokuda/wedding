@@ -29,12 +29,14 @@ div.panel {
   background: rgba(255,255,255, 0.8);
 }
 
-.invitation h1 { font-size: 18pt !important; margin: 50px; }
+.invitation h1 { font-size: 18pt !important; margin: 40px; }
 h2 { font-size: 14pt !important; margin-top: 2em !important; }
 h3 { margin-top: 0px; }
 
 div.response { display: inline-block; text-align: left; margin: 15px; margin-top: 0; float: left; }
-div.response.right { float: right; }
+div.response.textarea-flex { display: flex; float: none; clear: both; }
+div.response.textarea-flex .fill-space { flex: 1 }
+div.response.textarea-flex .textarea { flex: 10; width: 100%; max-width: 340px; width: 100%; }
 
 div.rsvp { text-align: center; margin-bottom: 2em; }
 
@@ -49,7 +51,7 @@ label.checkbox-radio input { float: left; }
 label.checkbox-radio span { display: block; margin-left: 1.5em; margin-right: 1.5em; font-weight: normal; }
 
 label.textarea span { display: block; }
-label.textarea textarea { font-weight: normal; width: 340px; }
+label.textarea textarea { font-weight: normal; width: 100%; }
 
 input[disabled], textarea[disabled] {
   background-color: #ccc;

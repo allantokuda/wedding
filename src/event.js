@@ -281,7 +281,7 @@ export default React.createClass({
     }
 
     return (
-      <div key={invitation.index} className="single-line-invitation">
+      <div key={invitation.index} className="single-line-invitation" data-invite-id={invitation.inviteId}>
         <div className="invitation-names">
           {renderedNames}
         </div>

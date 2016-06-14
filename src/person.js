@@ -46,7 +46,8 @@ export default React.createClass({
 
   renderText(textField, formIndex) {
     return (
-      <div className="response right" key={formIndex}>
+      <div className="response textarea-flex" key={formIndex}>
+        <span className="fill-space"/>
         <label className="textarea">
           <span>{textField.label}</span>
           <textarea name={textField.name} onChange={ this.changeText.bind(this, textField.name) } placeholder={textField.placeholder} value={ this.props.data[textField.name] } />
