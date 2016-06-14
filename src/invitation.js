@@ -85,15 +85,6 @@ export default React.createClass({
     this.setState({ edit: true });
   },
 
-  renderRsvpLine() {
-    return this.state.edit ? (
-      <p><b>RSVP by {this.state.card.rsvp_date}</b></p>
-    ) : (
-      /* occupy the same space so the page doesn't jump when completed */
-      <p>&nbsp;</p>
-    );
-  },
-
   renderFlier: function() {
     return (
       <div className="description panel" key={1}>
@@ -102,7 +93,6 @@ export default React.createClass({
           <p>{this.state.card.date}</p>
           {this.state.card.locations.map((location, i) => <Location key={i} location={location}/>)}
           <LinkList data={this.state.card.registries} singularLabel="Registry" pluralLabel="Registries"/>
-          {this.renderRsvpLine()}
         </div>
       </div>
     );
@@ -126,9 +116,10 @@ export default React.createClass({
           </div>
 
           <div className="panel-body">
-            <div>
-              {this.renderRsvpLine()}
+            <div className="rsvp">
+              <p><b>RSVP by {this.state.card.rsvp_date}</b></p>
               <a className="btn btn-lg btn-default btn-primary" href="#" onClick={this.send}>Send</a>
+              <br/>
             </div>
           </div>
         </div>
