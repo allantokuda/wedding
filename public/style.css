@@ -331,3 +331,8 @@ span.error-message {
   align-items: center;
   justify-content: center;
 }
+
+/* a little extra margin */
+p.link-list {
+  margin: 20px 0px;
+}

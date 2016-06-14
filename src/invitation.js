@@ -2,6 +2,7 @@ import React from 'react';
 import Firebase from 'firebase';
 import Location from './location';
 import Person from './person';
+import LinkList from './link-list';
 
 export default React.createClass({
   getInitialState: function() {
@@ -88,6 +89,7 @@ export default React.createClass({
     return this.state.edit ? (
       <p><b>RSVP by {this.state.card.rsvp_date}</b></p>
     ) : (
+      /* occupy the same space so the page doesn't jump when completed */
       <p>&nbsp;</p>
     );
   },
@@ -99,6 +101,7 @@ export default React.createClass({
           <h1>{this.state.card.title}</h1>
           <p>{this.state.card.date}</p>
           {this.state.card.locations.map((location, i) => <Location key={i} location={location}/>)}
+          <LinkList data={this.state.card.registries} singularLabel="Registry" pluralLabel="Registries"/>
           {this.renderRsvpLine()}
         </div>
       </div>
