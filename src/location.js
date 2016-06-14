@@ -12,6 +12,7 @@ export default React.createClass({
           {loc.map     && <span> (<a target="_blank" href={loc.map    }>Map</a>)</span>}
           {loc.website && <span> (<a target="_blank" href={loc.website}>Website</a>)</span>}
         </p>
+        {loc.notes && <p>{loc.notes}</p>}
         {loc.how && <p className="details">{loc.how}</p>}
       </div>
     );
