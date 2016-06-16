@@ -245,30 +245,48 @@ export default React.createClass({
     }
   },
 
-  singleLineInvitation(invitation) {
-    let namedPeople = [];
-    let extras = 0;
+  renderNames(invitation) {
+    let renderedNames = this.peopleInInvitation(invitation).map((person, i) => {
+      let answers = this.questionsAnsweredBy(person).map((question, j) => (
+        <span key={j} className="comment">({person[question.name].trim()})</span>
+      ));
 
-    let people = _.chain(invitation.people).values().sortBy(person => person.index).value();
-    people.forEach(person => {
-      if (person.name || person.accept) {
-        namedPeople.push(person)
-      } else {
-        extras++;
-      }
+      return (
+        <div key={i} className="invitation-name">
+          <Lozenge label={person.name} type={person.accept} />
+          {answers}
+        </div>
+      );
     });
 
-    let renderedNames = namedPeople.map((person, i) => (
-      <span key={i}>
-        {i > 0 ? (<span>, </span>) : null}
-        <Lozenge label={person.name} type={person.accept} />
-      </span>
-    ));
-
+    let extras = this.extrasInInvitation(invitation);
     if (extras > 0) {
       renderedNames.push(<span key="extras"> +{extras}</span>)
     }
 
+    return renderedNames;
+  },
+
+  singleLineResponse(invitation) {
+    let people = this.peopleInInvitation(invitation);
+
+    return (
+      <div key={invitation.index} className="single-line-invitation" data-invite-id={invitation.inviteId}>
+        <div className="invitation-names">
+          {this.renderNames(invitation)}
+        </div>
+        <div className="invitation-response">
+          <span className="comment">{invitation.comments.trim()}</span>
+        </div>
+        <div className="invitation-actions">
+          <div className="horizontal-actions">
+          </div>
+        </div>
+      </div>
+    );
+  },
+
+  singleLineInvitation(invitation) {
     let bounced = this.state.event.bouncedEmails
 
     let emailClass, emailNote;
@@ -283,25 +301,19 @@ export default React.createClass({
     return (
       <div key={invitation.index} className="single-line-invitation" data-invite-id={invitation.inviteId}>
         <div className="invitation-names">
-          {renderedNames}
+          {this.renderNames(invitation)}
         </div>
         <div className="invitation-email">
           <span className={emailClass}>{invitation.email}</span>&nbsp;<b>{emailNote}</b>
         </div>
         <div className="invitation-actions">
-          {invitation.responseDates ? (
-            <div className="horizontal-actions">
-              <a href="#" onClick={this.viewResponse.bind(this, invitation.inviteId)}>View response</a>
-            </div>
-          ) : (
-            <div className="horizontal-actions">
-              <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
-              <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
-              {invitation.email ? (
-                <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
-              ) : (<span className="disabled-link">Send</span>)}
-            </div>
-          )}
+          <div className="horizontal-actions">
+            <a href="#" onClick={this.editInvitation.bind(this, invitation.inviteId)}>Edit</a>
+            <a href="#" onClick={this.deleteInvitation.bind(this, invitation.inviteId)} className="warning-link">Delete</a>
+            {invitation.email ? (
+              <a href="#" onClick={this.sendOneEmail.bind(this, invitation.inviteId)} className="major-link">Send</a>
+            ) : (<span className="disabled-link">Send</span>)}
+          </div>
         </div>
       </div>
     );
@@ -313,6 +325,30 @@ export default React.createClass({
       .toArray()
       .sortBy(invitation => invitation.index)
       .value();
+  },
+
+  peopleInInvitation(invitation) {
+    return _.chain(invitation.people).values()
+    .filter(person => person.name || person.accept)
+    .sortBy(person => person.index).value();
+  },
+
+  extrasInInvitation(invitation) {
+    return _.chain(invitation.people).values()
+    .filter(person => !person.name && !person.accept)
+    .value().length;
+  },
+
+  individualQuestions() {
+    return _.chain(this.state.event.card.individualQuestions)
+    .filter(question => question.name !== 'accept')
+    .value();
+  },
+
+  questionsAnsweredBy(person) {
+    return _.chain(this.individualQuestions())
+    .filter(question => person[question.name])
+    .value();
   },
 
   render() {
@@ -337,7 +373,11 @@ export default React.createClass({
             <div className="guestbook-header">
             </div>
             <div className="guestbook">
-              {this.invitationsArray().map(invitation => this.singleLineInvitation(invitation))}
+              {this.invitationsArray().map(invitation => {
+                return invitation.responseDates ?
+                  this.singleLineResponse(invitation) :
+                  this.singleLineInvitation(invitation);
+              })}
             </div>
             <div className="event-manager-controls">
               <a className="insert-invitation" href="#" onClick={this.addInvitation}>&#8627; Add Invitation</a>
