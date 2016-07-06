@@ -102,6 +102,7 @@ td.comments-review {
 
 .guestbook-header div {
   padding: 20px;
+  padding-bottom: 0px;
 }
 
 .modal-container {

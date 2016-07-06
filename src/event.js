@@ -12,7 +12,7 @@ import Lozenge from './lozenge';
 
 export default React.createClass({
   getInitialState: function() {
-    return { items: {}, loaded: false };
+    return { items: {}, loaded: false, sort: 'index' };
   },
 
   componentWillMount: function() {
@@ -47,6 +47,7 @@ export default React.createClass({
     this.eventRef.on("value", eventSnapshot => {
 
       let event = eventSnapshot.val();
+      //let exportData = JSON.stringify(event) // future export feature?
       let maxIndex = 0;
       _.keys(event.invitations).forEach(inviteId => {
         let invitation = event.invitations[inviteId];
@@ -323,8 +324,17 @@ export default React.createClass({
     return _.chain(this.state.event.invitations)
       .mapValues((invitation, inviteId) => _.extend(invitation, { inviteId }))
       .toArray()
-      .sortBy(invitation => invitation.index)
-      .value();
+      .sortBy(invitation => {
+        if (this.state.sort === 'date') {
+          return -(
+            invitation.responseDates && _.max(invitation.responseDates) ||
+            invitation.sentEmail && invitation.index + 1e6 ||
+            invitation.index
+          );
+        } else {
+          return invitation.index;
+        }
+      }).value();
   },
 
   peopleInInvitation(invitation) {
@@ -349,6 +359,14 @@ export default React.createClass({
     return _.chain(this.individualQuestions())
     .filter(question => person[question.name])
     .value();
+  },
+
+  sortReset() {
+    this.setState({ sort: 'index' });
+  },
+
+  sortNewest() {
+    this.setState({ sort: 'date' });
   },
 
   render() {
@@ -396,6 +414,7 @@ export default React.createClass({
           <div className="scrolling-body">
             <div className="guestbook-header">
               <div>{numPeopleEmailed} people emailed (including fill-ins)<br/>{numPeopleAccepted} accepted<br/>{numPeopleDeclined} declined (or left blank)<br/>{numPeopleNotResponded} not responded</div>
+              <div>Sort <a href="#" onClick={this.sortReset}>in original order</a> or <a href="#" onClick={this.sortNewest}>by response date</a></div>
             </div>
             <div className="guestbook">
               {this.invitationsArray().map(invitation => {
