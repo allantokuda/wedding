@@ -164,11 +164,11 @@ export default React.createClass({
     });
   },
 
-  rememberSentEmailAddresses(sentInvitations) {
+  rememberSentEmailAddresses(justSentInvitations) {
     let event = this.state.event;
 
-    _.keys(sentInvitations).forEach(inviteId => {
-      event.invitations[inviteId].sentEmail = sentInvitations[inviteId].email;
+    _.keys(justSentInvitations).forEach(inviteId => {
+      event.invitations[inviteId].sentEmail = justSentInvitations[inviteId].email;
     });
 
     this.eventRef.set(event);
@@ -364,6 +364,34 @@ export default React.createClass({
         modalMode = 'view';
       }
 
+      // Statistics
+      let numPeopleEmailed = 0;
+      let numPeopleAccepted = 0;
+      let numPeopleDeclined = 0;
+      let numPeopleNotResponded = 0;
+      this.invitationsArray().forEach(invitation => {
+        let numAcceptedInGroup = 0;
+        let anyAnsweredInGroup = false;
+        let people = _.values(invitation.people)
+        if (invitation.sentEmail) {
+          numPeopleEmailed += people.length;
+        }
+        people.forEach(person => {
+          if (person.accept !== undefined) {
+            anyAnsweredInGroup = true;
+            if (person.accept === 'yes') {
+              numAcceptedInGroup++;
+            }
+          }
+        });
+        if (anyAnsweredInGroup) {
+          numPeopleAccepted += numAcceptedInGroup;
+          numPeopleDeclined += people.length - numAcceptedInGroup;
+        } else if (invitation.sentEmail) {
+          numPeopleNotResponded += people.length;
+        }
+      });
+
       return (
         <div>
           <div className="user-header">
@@ -371,6 +399,7 @@ export default React.createClass({
           </div>
           <div className="scrolling-body">
             <div className="guestbook-header">
+              <div>{numPeopleEmailed} people emailed (including fill-ins)<br/>{numPeopleAccepted} accepted<br/>{numPeopleDeclined} declined (or left blank)<br/>{numPeopleNotResponded} not responded</div>
             </div>
             <div className="guestbook">
               {this.invitationsArray().map(invitation => {
