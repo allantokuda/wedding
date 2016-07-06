@@ -371,20 +371,16 @@ export default React.createClass({
       let numPeopleNotResponded = 0;
       this.invitationsArray().forEach(invitation => {
         let numAcceptedInGroup = 0;
-        let anyAnsweredInGroup = false;
         let people = _.values(invitation.people)
         if (invitation.sentEmail) {
           numPeopleEmailed += people.length;
         }
         people.forEach(person => {
-          if (person.accept !== undefined) {
-            anyAnsweredInGroup = true;
-            if (person.accept === 'yes') {
-              numAcceptedInGroup++;
-            }
+          if (person.accept === 'yes') {
+            numAcceptedInGroup++;
           }
         });
-        if (anyAnsweredInGroup) {
+        if (invitation.responseDates) {
           numPeopleAccepted += numAcceptedInGroup;
           numPeopleDeclined += people.length - numAcceptedInGroup;
         } else if (invitation.sentEmail) {
